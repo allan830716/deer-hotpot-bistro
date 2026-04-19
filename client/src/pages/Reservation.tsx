@@ -1,134 +1,142 @@
-/**
- * Design Philosophy Reminder — 正式訂位資訊頁
- * 訂位頁應以清楚、得體且正式的語氣說明預約方式、適用場合與慶祝服務安排。
+/*
+ * 初衷小鹿 — 訂位資訊 Reservation.tsx
  */
-import { Button } from "@/components/ui/button";
-import { SiteLayout } from "@/components/site-layout";
-import {
-  celebrationService,
-  celebrationSteps,
-  cremUrl,
-  mapsUrl,
-  reservationInfo,
-  reservationUrl,
-  socialUrl,
-} from "@/lib/brandData";
+import { useEffect, useRef } from "react";
 
-const bookingScenes = [
-  {
-    label: "Date Night",
-    title: "雙人約會",
-    body: "適合重視空間氣質、餐敘節奏與整體氛圍之雙人晚餐安排。",
-  },
-  {
-    label: "Celebration",
-    title: "紀念日與慶祝",
-    body: "主餐、甜點與蛋糕服務可連續安排，使重要時刻自訂位起即維持完整性。",
-  },
-  {
-    label: "Hosting",
-    title: "正式聚會與款待",
-    body: "空間尺度、服務節奏與菜單結構皆適合需兼顧體面與品質的宴聚場合。",
-  },
+function useFadeIn(delay = 0) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
+    observer.observe(el); return () => observer.disconnect();
+  }, [delay]);
+  return ref;
+}
+
+const INFO_ITEMS = [
+  { en: "Location", zh: "地址", content: "台北市信義區\n忠孝東路四段 553 巷 6 弄 15 號" },
+  { en: "Hours", zh: "營業時間", content: "週二至週日\n午餐 11:30 — 14:30\n晚餐 17:30 — 22:00\n（週一公休）" },
+  { en: "Minimum", zh: "最低消費", content: "晚餐時段每位 NT$600\n另加一成服務費" },
+];
+
+const CELEBRATION_STEPS = [
+  { step: "01", title: "訂位時告知", desc: "於線上訂位備注欄填寫慶祝需求，包含慶祝對象與日期。" },
+  { step: "02", title: "選擇蛋糕", desc: "我們將為您介紹 CRÈM 鮮奶油專門店的當季蛋糕選項。" },
+  { step: "03", title: "餐廳協助配送", desc: "蛋糕由餐廳代為安排配送，並在適當時機為您上桌。" },
 ];
 
 export default function Reservation() {
+  const heroRef = useFadeIn(0);
+  const infoRef = useFadeIn(0);
+  const celebRef = useFadeIn(0);
+
   return (
-    <SiteLayout
-      eyebrow="Reservation"
-      title="建議預先安排席次，以保留更完整而從容的餐敘節奏。"
-      intro="初衷小鹿適合約會、週年紀念、生日餐敘、正式聚會與重視氛圍品質的晚餐場合。若已確認日期與人數，建議提早訂位，以利同步安排席位需求與慶祝服務。"
-    >
-      <section className="section-shell pt-0">
-        <div className="container grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-10">
-          <div className="feature-panel">
-            <p className="section-label">Reservation Guidance</p>
-            <h2 className="section-title max-w-sm">訂位不僅為保留席次，亦是展開整體用餐安排的起點。</h2>
-            <p className="body-copy mt-5">
-              對於重視約會氛圍、紀念日儀式或正式聚會品質的賓客而言，事先完成訂位有助於保留更理想的時段與完整體驗，
-              亦便於同步安排蛋糕服務、席位需求與來店節奏。
+    <main style={{ paddingTop: "80px" }}>
+      <section style={{ backgroundColor: "var(--deer-dark)", padding: "8rem 0 7rem" }}>
+        <div className="container">
+          <div ref={heroRef} className="fade-up" style={{ maxWidth: "560px" }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "1.5rem" }}>Reservation</p>
+            <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--deer-dark-text)", letterSpacing: "0.08em", lineHeight: 1.5, marginBottom: "2rem" }}>預約一場餐桌</h1>
+            <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.6)", marginBottom: "2rem" }} />
+            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "rgba(240,233,223,0.6)", lineHeight: 2, letterSpacing: "0.05em" }}>
+              把時間，留給重要的人。
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button asChild className="rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-                <a href={reservationUrl} target="_blank" rel="noreferrer">
-                  查詢可訂位時段
-                </a>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <a href={mapsUrl} target="_blank" rel="noreferrer">
-                  查看位置與交通
-                </a>
-              </Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-lg" style={{ backgroundColor: "var(--deer-bg)" }}>
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+            <div>
+              <div ref={infoRef} className="fade-up">
+                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "2rem" }}>Visit Information</p>
+                <div className="flex flex-col gap-10">
+                  {INFO_ITEMS.map((item, i) => (
+                    <InfoItem key={i} {...item} delay={i * 80} />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "2rem" }}>Online Booking</p>
+              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: "var(--deer-sub)", lineHeight: 2, marginBottom: "2.5rem" }}>
+                建議提前 3–7 天預約，以確保您偏好的時段與席位。
+                如有特殊需求（包廂、慶祝佈置、飲食限制），請於備注欄說明。
+              </p>
+              <a href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf" target="_blank" rel="noopener noreferrer" className="btn-deer">立即預約</a>
+              <p style={{ fontSize: "0.75rem", color: "var(--deer-muted)", marginTop: "1.5rem", lineHeight: 1.8 }}>
+                如需電話預約，請撥打 02-2345-6789
+              </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid gap-4">
-            {reservationInfo.map((item) => (
-              <div key={item.label} className="review-card">
-                <p className="section-label">{item.label}</p>
-                <p className="body-copy mt-4">{item.value}</p>
-              </div>
+      <section className="section" style={{ backgroundColor: "var(--deer-bg-dark)" }}>
+        <div className="container">
+          <div ref={celebRef} className="fade-up text-center mb-16">
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Celebration Service</p>
+            <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", color: "var(--deer-text)", letterSpacing: "0.1em", marginBottom: "1rem" }}>慶祝蛋糕一條龍服務</h2>
+            <p style={{ fontSize: "0.875rem", color: "var(--deer-sub)", lineHeight: 2 }}>與 CRÈM 鮮奶油專門店合作，讓甜點成為這個時刻的完整收尾。</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-3xl mx-auto">
+            {CELEBRATION_STEPS.map((step, i) => (
+              <CelebrationStep key={i} {...step} delay={i * 100} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
-          <div className="feature-panel">
-            <p className="section-label">Celebration Service</p>
-            <h2 className="section-title max-w-sm">{celebrationService.title}</h2>
-            <p className="body-copy mt-5">{celebrationService.body}</p>
-            <p className="body-copy mt-5">{celebrationService.note}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild className="rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-                <a href={reservationUrl} target="_blank" rel="noreferrer">
-                  先行完成訂位
-                </a>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <a href={cremUrl} target="_blank" rel="noreferrer">
-                  參考 CREM 蛋糕款式
-                </a>
-              </Button>
-            </div>
-          </div>
-          <div className="grid gap-4">
-            {celebrationSteps.map((step) => (
-              <div key={step.index} className="pillar-card min-h-[14rem]">
-                <p className="section-label">Step {step.index}</p>
-                <h2 className="mt-5 font-display text-[1.85rem] text-stone-50">{step.title}</h2>
-                <p className="body-copy mt-4">{step.body}</p>
+      <section className="section-lg" style={{ backgroundColor: "var(--deer-dark)" }}>
+        <div className="container-narrow text-center">
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.6)", marginBottom: "2rem" }}>Suitable For</p>
+          <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", color: "var(--deer-dark-text)", letterSpacing: "0.1em", marginBottom: "3rem" }}>適合的時刻</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {["約會", "週年紀念", "生日餐敘", "重要聚會"].map((label, i) => (
+              <div key={i} style={{ padding: "1.5rem 1rem", border: "1px solid rgba(255,255,255,0.08)", textAlign: "center" }}>
+                <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: "rgba(240,233,223,0.7)", letterSpacing: "0.08em" }}>{label}</p>
               </div>
             ))}
           </div>
+          <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.4)", margin: "3rem auto" }} />
+          <a href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf" target="_blank" rel="noopener noreferrer" className="btn-deer-light">預約一場餐桌</a>
         </div>
       </section>
+    </main>
+  );
+}
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-5 lg:grid-cols-3">
-          {bookingScenes.map((scene) => (
-            <div key={scene.title} className="pillar-card min-h-[16rem]">
-              <p className="section-label">{scene.label}</p>
-              <h2 className="mt-5 font-display text-[1.9rem] text-stone-50">{scene.title}</h2>
-              <p className="body-copy mt-4">{scene.body}</p>
-            </div>
-          ))}
-        </div>
+function InfoItem({ en, zh, content, delay }: { en: string; zh: string; content: string; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
+    observer.observe(el); return () => observer.disconnect();
+  }, [delay]);
+  return (
+    <div ref={ref} className="fade-up">
+      <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "0.5rem" }}>{en}</p>
+      <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>{zh}</h3>
+      <div style={{ width: "16px", height: "1px", backgroundColor: "var(--deer-gold)", marginBottom: "0.75rem" }} />
+      <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-sub)", lineHeight: 2, whiteSpace: "pre-line" }}>{content}</p>
+    </div>
+  );
+}
 
-        <div className="container mt-8 flex flex-wrap gap-3">
-          <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-            <a href={socialUrl} target="_blank" rel="noreferrer">
-              瀏覽近期影像與餐桌呈現
-            </a>
-          </Button>
-          <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-            <a href={mapsUrl} target="_blank" rel="noreferrer">
-              開啟導航路線
-            </a>
-          </Button>
-        </div>
-      </section>
-    </SiteLayout>
+function CelebrationStep({ step, title, desc, delay }: { step: string; title: string; desc: string; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
+    observer.observe(el); return () => observer.disconnect();
+  }, [delay]);
+  return (
+    <div ref={ref} className="fade-up">
+      <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "2.5rem", color: "rgba(197,151,109,0.4)", lineHeight: 1, marginBottom: "1rem" }}>{step}</p>
+      <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>{title}</h3>
+      <div style={{ width: "16px", height: "1px", backgroundColor: "var(--deer-gold)", marginBottom: "0.75rem" }} />
+      <p style={{ fontSize: "0.8125rem", color: "var(--deer-sub)", lineHeight: 1.9 }}>{desc}</p>
+    </div>
   );
 }

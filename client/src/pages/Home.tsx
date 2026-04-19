@@ -1,303 +1,759 @@
-/**
- * Design Philosophy Reminder — 高端品牌首頁
- * 首頁文字應優先建立品牌定位、款待氣質與用餐價值，以正式而節制的語氣傳達品牌形象。
+/*
+ * 初衷小鹿 — 首頁 Home.tsx
+ * ─────────────────────────────────────────────
+ * 設計語言：暖灰底 #F5F3EF · 深棕黑 #1A1210 · 木質棕 #6B4A32
+ * 字體：Noto Serif TC 300 · Cormorant Garamond 300
+ * 原則：大量留白、短句、克制、不推銷
+ *
+ * Section 結構：
+ * 1. Hero — 全版空間照 + 主句
+ * 2. 品牌轉折 — 我們不做熱鬧的火鍋
+ * 3. 三核心 — 湯 · 肉 · 甜點
+ * 4. 體驗敘事 — 節奏鋪陳
+ * 5. 空間 — 為了那些不該被打擾的時刻
+ * 6. 信任 — 4.6 顆星
+ * 7. CTA — 預約一場餐桌
  */
-import { motion } from "framer-motion";
-import { ArrowRight, CakeSlice, Clock3, MapPin, Quote } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SiteLayout } from "@/components/site-layout";
-import {
-  brandStatement,
-  brandStats,
-  celebrationHighlights,
-  celebrationService,
-  cremUrl,
-  experiencePillars,
-  galleryImages,
-  heroImage,
-  keyMemories,
-  mapsUrl,
-  reservationUrl,
-  reviews,
-} from "@/lib/brandData";
+
+import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 
-const occasionCards = [
-  {
-    label: "Date Night",
-    title: "約會晚餐",
-    body: "以成熟而安定的空間氣質承接雙人晚餐，使對話、節奏與用餐體驗得以維持恰當的從容。",
-  },
-  {
-    label: "Celebration",
-    title: "紀念日與慶祝",
-    body: "從主餐、甜點至蛋糕服務皆可連續安排，使重要時刻保有完整儀式感與得體收尾。",
-  },
-  {
-    label: "Gathering",
-    title: "正式宴聚",
-    body: "以穩定菜單結構、成熟場域與節制服務，承接重視品質與氛圍的聚餐與款待場合。",
-  },
-];
+// ── 空間照片（已上傳至 CDN）────────────────────────────────────────────────
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=80";
+const SPACE_IMG =
+  "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1400&q=80";
+const SOUP_IMG =
+  "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80";
+const MEAT_IMG =
+  "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80";
+const DESSERT_IMG =
+  "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&q=80";
 
-const quickFacts = [
-  {
-    icon: MapPin,
-    label: "地點",
-    value: "台北市信義區忠孝東路四段553巷6弄15號",
-  },
-  {
-    icon: Clock3,
-    label: "訂位建議",
-    value: "熱門晚餐時段、紀念日與正式聚會建議提前安排席次",
-  },
-  {
-    icon: CakeSlice,
-    label: "慶祝服務",
-    value: "可整合 CREM 鮮奶油蛋糕預訂、配送與上桌安排",
-  },
-];
+// ── Intersection Observer Hook ────────────────────────────────────────────
+function useFadeIn(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.unobserve(el);
+        }
+      },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
 
-export default function Home() {
+// ── 細分隔線元件 ──────────────────────────────────────────────────────────
+function GoldLine({ width = 40 }: { width?: number }) {
   return (
-    <SiteLayout
-      eyebrow="Original Deer’s Hotpot Bistro"
-      title="一處以鍋物為形式，延伸完整晚餐體驗的餐敘場域。"
-      intro="初衷小鹿以天然上湯、穩定食材、成熟空間與節制服務為基礎，構成更適合約會、慶祝與正式聚會的晚餐安排。品牌所呈現的，不只是餐點本身，而是一場自入座至收尾皆維持完成度的用餐經驗。"
-      showPageIntro={false}
+    <div
+      style={{
+        width: `${width}px`,
+        height: "1px",
+        backgroundColor: "var(--deer-gold)",
+        margin: "2rem 0",
+      }}
+    />
+  );
+}
+
+function GoldLineCentered({ width = 40 }: { width?: number }) {
+  return (
+    <div
+      style={{
+        width: `${width}px`,
+        height: "1px",
+        backgroundColor: "var(--deer-gold)",
+        margin: "2rem auto",
+      }}
+    />
+  );
+}
+
+// ── Section 1: Hero ───────────────────────────────────────────────────────
+function HeroSection() {
+  return (
+    <section
+      style={{
+        position: "relative",
+        height: "100vh",
+        minHeight: "600px",
+        overflow: "hidden",
+      }}
     >
-      <section className="section-shell pt-0">
-        <div className="container grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="hero-frame min-h-[38rem] overflow-hidden"
+      {/* 背景圖 */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: `url(${HERO_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
+        }}
+      />
+      {/* 漸層遮罩 */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to right, rgba(10,8,7,0.78) 0%, rgba(10,8,7,0.45) 55%, rgba(10,8,7,0.15) 100%)",
+        }}
+      />
+
+      {/* 文字 */}
+      <div
+        className="container"
+        style={{
+          position: "relative",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ maxWidth: "480px" }}>
+          <p
+            className="font-display"
+            style={{
+              color: "rgba(197,151,109,0.85)",
+              fontSize: "0.7rem",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              marginBottom: "1.5rem",
+            }}
           >
-            <img src={heroImage} alt="初衷小鹿首頁品牌主視覺" className="hero-image" />
-            <div className="hero-overlay" />
-            <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8 lg:p-10">
-              <div className="flex flex-wrap gap-3">
-                <span className="ember-tag">精緻鍋物晚餐</span>
-                <span className="ember-tag">約會與紀念時刻</span>
-                <span className="ember-tag">慶祝整合服務</span>
-              </div>
-              <div className="max-w-3xl">
-                <p className="hero-kicker">A Night Worth Reserving</p>
-                <h2 className="mt-4 hero-title max-w-3xl text-white">
-                  席次所預留的，
-                  <br />
-                  不僅是位置，亦是一場完整晚餐的展開。
-                </h2>
-                <p className="mt-5 max-w-2xl text-sm leading-7 text-stone-200/82 md:text-base">
-                  初衷小鹿以清澈上湯為起點，延伸至主餐、甜點、酒感與慶祝安排，
-                  使整體體驗更適合約會、週年紀念、正式聚會與重視餐敘品質的重要時刻。
-                </p>
-              </div>
-            </div>
-          </motion.div>
+            Deer's Hotpot Bistro · Taipei Xinyi
+          </p>
 
-          <div className="grid gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="feature-panel"
-            >
-              <p className="section-label">Brand Position</p>
-              <h3 className="mt-4 font-display text-[2.4rem] leading-[0.95] text-stone-50 md:text-[3rem]">
-                以鍋物為形式，呈現更完整的晚餐體驗。
-              </h3>
-              <p className="body-copy mt-5">{brandStatement}</p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Button asChild className="rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-                  <a href={reservationUrl} target="_blank" rel="noreferrer">
-                    線上訂位 <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                  <Link href="/menu">瀏覽菜單與價格</Link>
-                </Button>
-              </div>
-              <div className="mt-7 grid gap-3">
-                {quickFacts.map((fact) => {
-                  const Icon = fact.icon;
-                  return (
-                    <div key={fact.label} className="info-strip">
-                      <div className="info-strip-label">
-                        <Icon className="h-4 w-4 text-primary" />
-                        <span>{fact.label}</span>
-                      </div>
-                      <p className="text-sm leading-7 text-stone-200/82">{fact.value}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
+          <h1
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(2rem, 4vw, 3.25rem)",
+              lineHeight: 1.35,
+              color: "#F0E9DF",
+              letterSpacing: "0.06em",
+              marginBottom: "2.5rem",
+            }}
+          >
+            不是一頓火鍋，
+            <br />
+            是一場有節奏的
+            <br />
+            餐桌體驗。
+          </h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.18 }}
-              className="grid gap-4 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3"
-            >
-              {brandStats.map((stat) => (
-                <div key={stat.label} className="stat-card min-h-[10.5rem]">
-                  <span className="font-display text-[1.9rem] leading-tight text-stone-50">{stat.value}</span>
-                  <p className="mt-3 text-sm leading-7 text-stone-300">{stat.label}</p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
+          <a
+            href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-deer-light"
+            style={{ fontSize: "0.8rem" }}
+          >
+            預約一場餐桌
+          </a>
         </div>
-      </section>
+      </div>
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-7 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
-          <div>
-            <p className="section-label">Dining Occasions</p>
-            <h2 className="section-title max-w-sm">品牌所關注的，是不同時刻都能被妥善承接的晚餐品質。</h2>
-          </div>
-          <p className="body-copy max-w-2xl">
-            初衷小鹿的價值並不侷限於單一用餐情境。無論是雙人約會、紀念日晚餐，或重視氛圍與體面的正式聚會，
-            皆可在餐點、空間與服務之間獲得一致且安定的體驗。
+      {/* 向下箭頭 */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "2.5rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+      >
+        <div
+          style={{
+            width: "1px",
+            height: "48px",
+            background:
+              "linear-gradient(to bottom, transparent, rgba(197,151,109,0.6))",
+          }}
+        />
+      </div>
+    </section>
+  );
+}
+
+// ── Section 2: 品牌轉折 ───────────────────────────────────────────────────
+function BrandPivotSection() {
+  const ref = useFadeIn();
+  return (
+    <section
+      className="section-lg"
+      style={{ backgroundColor: "var(--deer-bg)" }}
+    >
+      <div className="container-narrow text-center">
+        <div ref={ref} className="fade-up">
+          <p
+            className="font-label mb-8"
+            style={{ color: "var(--deer-gold)" }}
+          >
+            Our Philosophy
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+              lineHeight: 1.7,
+              color: "var(--deer-text)",
+              letterSpacing: "0.08em",
+            }}
+          >
+            我們不做熱鬧的火鍋。
+            <br />
+            <br />
+            我們在意的，
+            <br />
+            是一場餐桌的節奏。
+          </h2>
+          <GoldLineCentered width={32} />
+          <p
+            style={{
+              color: "var(--deer-sub)",
+              fontSize: "0.875rem",
+              lineHeight: 2,
+              letterSpacing: "0.06em",
+            }}
+          >
+            前菜、湯底、熟成肉品、酒搭配、甜點收尾。
+            <br />
+            每一個環節，都是節奏的一部分。
           </p>
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="container mt-8 grid gap-5 lg:grid-cols-3">
-          {occasionCards.map((card) => (
-            <article key={card.title} className="pillar-card min-h-[18rem]">
-              <p className="section-label">{card.label}</p>
-              <h3 className="mt-5 font-display text-[2rem] text-stone-50">{card.title}</h3>
-              <p className="body-copy mt-4">{card.body}</p>
-            </article>
+// ── Section 3: 三核心 ─────────────────────────────────────────────────────
+const CORES = [
+  {
+    img: SOUP_IMG,
+    zh: "湯",
+    en: "The Broth",
+    line1: "湯，不是背景。",
+    line2: "是整場餐桌的開始。",
+    desc: "天然蔬果、乾貨慢熬，清澈不搶味，讓食材說話。",
+  },
+  {
+    img: MEAT_IMG,
+    zh: "肉",
+    en: "The Cut",
+    line1: "不是火鍋肉。",
+    line2: "是經過處理的料理食材。",
+    desc: "熟成、部位、厚切，不需要過度調味。",
+  },
+  {
+    img: DESSERT_IMG,
+    zh: "甜點",
+    en: "The Finale",
+    line1: "最後一道，",
+    line2: "才是記住的原因。",
+    desc: "與 CRÈM 合作，把甜點做成餐桌的完整收尾。",
+  },
+];
+
+function CoreSection() {
+  const ref = useFadeIn(0.1);
+  return (
+    <section
+      className="section"
+      style={{ backgroundColor: "var(--deer-bg-dark)" }}
+    >
+      <div className="container">
+        <div ref={ref} className="fade-up text-center mb-16">
+          <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
+            What We Do
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+              color: "var(--deer-text)",
+              letterSpacing: "0.1em",
+            }}
+          >
+            三個核心，構成一場完整的餐桌。
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
+          {CORES.map((core, i) => (
+            <CoreCard key={i} {...core} delay={i * 120} />
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-6 lg:grid-cols-[0.96fr_1.04fr] lg:gap-10">
-          <div className="feature-panel flex h-full flex-col justify-between">
-            <div>
-              <p className="section-label">Celebration Service</p>
-              <h2 className="section-title max-w-md">{celebrationService.title}</h2>
-              <p className="body-copy mt-5">{celebrationService.body}</p>
-              <p className="body-copy mt-5">{celebrationService.note}</p>
-            </div>
-            <div className="mt-8 grid gap-3">
-              {celebrationHighlights.map((item) => (
-                <div key={item} className="info-strip">
-                  <div className="info-strip-label">
-                    <CakeSlice className="h-4 w-4 text-primary" />
-                    <span>Celebration Detail</span>
-                  </div>
-                  <p className="text-sm leading-7 text-stone-200/82">{item}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-                <Link href="/reservation">
-                  查看慶祝安排 <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <a href={cremUrl} target="_blank" rel="noreferrer">
-                  參考 CREM 蛋糕款式
-                </a>
-              </Button>
-            </div>
-          </div>
-          <div className="grid gap-5 md:grid-cols-[1.04fr_0.96fr]">
-            <img src={galleryImages.ritual} alt="初衷小鹿靠窗席位與夜晚氛圍" className="gallery-wide min-h-[22rem] md:min-h-[34rem]" />
-            <div className="grid gap-5">
-              <img src={galleryImages.corner} alt="初衷小鹿約會角落座位" className="gallery-large min-h-[16rem]" />
-              <img src={galleryImages.exterior} alt="初衷小鹿招牌與到店識別" className="gallery-large min-h-[16rem]" />
-            </div>
-          </div>
+function CoreCard({
+  img,
+  zh,
+  en,
+  line1,
+  line2,
+  desc,
+  delay,
+}: (typeof CORES)[0] & { delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            el.classList.add("visible");
+            observer.unobserve(el);
+          }, delay);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return (
+    <div ref={ref} className="fade-up">
+      {/* 圖片 */}
+      <div
+        style={{
+          aspectRatio: "4/3",
+          overflow: "hidden",
+          marginBottom: "2rem",
+        }}
+      >
+        <img
+          src={img}
+          alt={zh}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transition: "transform 0.8s ease",
+          }}
+          onMouseEnter={(e) =>
+            ((e.target as HTMLImageElement).style.transform = "scale(1.04)")
+          }
+          onMouseLeave={(e) =>
+            ((e.target as HTMLImageElement).style.transform = "scale(1)")
+          }
+        />
+      </div>
+
+      {/* 文字 */}
+      <p className="font-label mb-3" style={{ color: "var(--deer-gold)" }}>
+        {en}
+      </p>
+      <h3
+        style={{
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 300,
+          fontSize: "1.75rem",
+          color: "var(--deer-text)",
+          letterSpacing: "0.1em",
+          marginBottom: "0.75rem",
+        }}
+      >
+        {zh}
+      </h3>
+      <GoldLine width={24} />
+      <p
+        style={{
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 300,
+          fontSize: "0.9375rem",
+          color: "var(--deer-text)",
+          lineHeight: 1.8,
+          marginBottom: "0.75rem",
+        }}
+      >
+        {line1}
+        <br />
+        {line2}
+      </p>
+      <p
+        style={{
+          fontSize: "0.8125rem",
+          color: "var(--deer-sub)",
+          lineHeight: 1.9,
+        }}
+      >
+        {desc}
+      </p>
+    </div>
+  );
+}
+
+// ── Section 4: 體驗敘事 ───────────────────────────────────────────────────
+const NARRATIVE = [
+  {
+    step: "01",
+    title: "前菜，讓味蕾開始",
+    body: "不是填飽，是鋪陳。\n一道前菜，讓整場餐桌的節奏慢慢展開。",
+  },
+  {
+    step: "02",
+    title: "湯開始後，節奏慢了下來",
+    body: "清澈的上湯，不搶食材的味道。\n讓每一口都有它應有的位置。",
+  },
+  {
+    step: "03",
+    title: "肉，不需要調味",
+    body: "熟成的肉品，自己就是答案。\n只需要湯，只需要時間。",
+  },
+  {
+    step: "04",
+    title: "最後，留一點時間給甜點",
+    body: "一場好的餐桌，不應該在主食結束後就散場。\n甜點，是把時間留給彼此的方式。",
+  },
+];
+
+function NarrativeSection() {
+  return (
+    <section
+      className="section-lg"
+      style={{ backgroundColor: "var(--deer-dark)" }}
+    >
+      <div className="container">
+        <div className="text-center mb-20">
+          <p
+            className="font-label mb-4"
+            style={{ color: "rgba(197,151,109,0.7)" }}
+          >
+            The Experience
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+              color: "var(--deer-dark-text)",
+              letterSpacing: "0.1em",
+            }}
+          >
+            一場餐桌的節奏，是這樣展開的。
+          </h2>
         </div>
-      </section>
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-6 lg:grid-cols-[0.78fr_1.22fr] lg:gap-14">
-          <div>
-            <p className="section-label">Guest Impressions</p>
-            <h2 className="section-title max-w-sm">最終被記住的，往往是整體體驗所形成的完整印象。</h2>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {keyMemories.map((memory) => (
-              <div key={memory} className="memory-card">
-                <span className="memory-dot" />
-                <p>{memory}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-5 lg:grid-cols-3">
-          {experiencePillars.map((pillar) => (
-            <article key={pillar.index} className="feature-panel min-h-[21rem]">
-              <span className="section-label">{pillar.index}</span>
-              <h3 className="mt-5 font-display text-3xl text-stone-50">{pillar.title}</h3>
-              <p className="body-copy mt-4">{pillar.body}</p>
-            </article>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-16 max-w-3xl mx-auto">
+          {NARRATIVE.map((item, i) => (
+            <NarrativeItem key={i} {...item} delay={i * 100} />
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-8">
-          <div className="grid gap-5 md:grid-cols-2">
-            <img src={galleryImages.dining} alt="初衷小鹿內用座位空間" className="gallery-large" />
-            <img src={galleryImages.counter} alt="初衷小鹿主要用餐區與開放式空間" className="gallery-large md:translate-y-10" />
-          </div>
-          <div className="feature-panel flex flex-col justify-between">
-            <div>
-              <p className="section-label">Menu & Space</p>
-              <h2 className="section-title max-w-md">菜單結構、空間質地與慶祝服務，共同構成品牌所重視的晚餐完成度。</h2>
-              <p className="body-copy mt-5">
-                菜單清楚呈現套餐架構、價格帶與主餐方向；空間則以深色材質與內斂光線營造適合久坐與對話的氛圍。
-                若需安排紀念日或生日蛋糕，亦可於訂位階段一併規劃，使整體體驗更為連續。
-              </p>
-            </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <Link href="/menu">瀏覽完整菜單</Link>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <Link href="/space">
-                  查看空間影像 <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+function NarrativeItem({
+  step,
+  title,
+  body,
+  delay,
+}: (typeof NARRATIVE)[0] & { delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            el.classList.add("visible");
+            observer.unobserve(el);
+          }, delay);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return (
+    <div ref={ref} className="fade-up">
+      <p
+        className="font-display"
+        style={{
+          color: "rgba(197,151,109,0.5)",
+          fontSize: "2.5rem",
+          lineHeight: 1,
+          marginBottom: "1rem",
+        }}
+      >
+        {step}
+      </p>
+      <h3
+        style={{
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 300,
+          fontSize: "1.0625rem",
+          color: "var(--deer-dark-text)",
+          letterSpacing: "0.08em",
+          marginBottom: "1rem",
+        }}
+      >
+        {title}
+      </h3>
+      <div
+        style={{
+          width: "24px",
+          height: "1px",
+          backgroundColor: "rgba(197,151,109,0.5)",
+          marginBottom: "1rem",
+        }}
+      />
+      <p
+        style={{
+          fontSize: "0.8125rem",
+          color: "rgba(240,233,223,0.5)",
+          lineHeight: 2,
+          whiteSpace: "pre-line",
+        }}
+      >
+        {body}
+      </p>
+    </div>
+  );
+}
+
+// ── Section 5: 空間 ───────────────────────────────────────────────────────
+function SpaceSection() {
+  const ref = useFadeIn(0.1);
+  return (
+    <section style={{ position: "relative", overflow: "hidden" }}>
+      {/* 圖片 */}
+      <div style={{ position: "relative", height: "80vh", minHeight: "500px" }}>
+        <img
+          src={SPACE_IMG}
+          alt="初衷小鹿空間"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(to bottom, rgba(10,8,7,0.1) 0%, rgba(10,8,7,0.6) 100%)",
+          }}
+        />
+        <div
+          ref={ref}
+          className="fade-up"
+          style={{
+            position: "absolute",
+            bottom: "4rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            textAlign: "center",
+            width: "100%",
+            padding: "0 2rem",
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+              color: "#F0E9DF",
+              letterSpacing: "0.1em",
+              marginBottom: "1.5rem",
+            }}
+          >
+            為了那些不該被打擾的時刻。
+          </h2>
+          <Link href="/space">
+            <span className="btn-deer-light" style={{ fontSize: "0.8rem" }}>
+              探索空間
+            </span>
+          </Link>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-8 lg:grid-cols-[0.82fr_1.18fr]">
-          <div>
-            <p className="section-label">Guest Reviews</p>
-            <h2 className="section-title max-w-sm">空間、服務與食材品質，通常會一同構成賓客對品牌的記憶。</h2>
-            <Button asChild variant="outline" className="mt-6 rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-              <a href={mapsUrl} target="_blank" rel="noreferrer">
-                查看 Google 評論
-              </a>
-            </Button>
-          </div>
-          <div className="grid gap-4">
-            {reviews.map((review) => (
-              <div key={review.quote} className="review-card">
-                <Quote className="h-6 w-6 text-primary" />
-                <p className="mt-5 font-serif text-2xl leading-relaxed text-stone-100">“{review.quote}”</p>
-                <p className="mt-4 text-sm uppercase tracking-[0.18em] text-stone-400">{review.source}</p>
-              </div>
+// ── Section 6: 信任 ───────────────────────────────────────────────────────
+function TrustSection() {
+  const ref = useFadeIn();
+  return (
+    <section
+      className="section-lg"
+      style={{ backgroundColor: "var(--deer-bg)" }}
+    >
+      <div className="container-narrow text-center">
+        <div ref={ref} className="fade-up">
+          <p className="font-label mb-8" style={{ color: "var(--deer-gold)" }}>
+            Google Reviews
+          </p>
+
+          {/* 星評 */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "0.375rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            {[...Array(5)].map((_, i) => (
+              <span
+                key={i}
+                style={{
+                  color: i < 4 ? "var(--deer-gold)" : "var(--deer-muted)",
+                  fontSize: "1.25rem",
+                }}
+              >
+                ★
+              </span>
             ))}
           </div>
+
+          <p
+            className="font-display"
+            style={{
+              fontSize: "clamp(3rem, 8vw, 5rem)",
+              color: "var(--deer-text)",
+              lineHeight: 1,
+              marginBottom: "0.5rem",
+            }}
+          >
+            4.6
+          </p>
+          <p
+            style={{
+              fontSize: "0.8rem",
+              color: "var(--deer-sub)",
+              letterSpacing: "0.1em",
+              marginBottom: "3rem",
+            }}
+          >
+            1,593 則 Google 評論
+          </p>
+
+          <GoldLineCentered width={32} />
+
+          <p
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 300,
+              fontSize: "1rem",
+              color: "var(--deer-text)",
+              lineHeight: 2,
+              letterSpacing: "0.06em",
+            }}
+          >
+            我們不送禮換評論，
+            <br />
+            也不請客人留下評價。
+          </p>
+          <p
+            style={{
+              fontSize: "0.8125rem",
+              color: "var(--deer-sub)",
+              marginTop: "1rem",
+              lineHeight: 1.9,
+            }}
+          >
+            每一則評論，都是真實的用餐記憶。
+          </p>
         </div>
-      </section>
-    </SiteLayout>
+      </div>
+    </section>
+  );
+}
+
+// ── Section 7: CTA ────────────────────────────────────────────────────────
+function CTASection() {
+  const ref = useFadeIn();
+  return (
+    <section
+      className="section-lg"
+      style={{ backgroundColor: "var(--deer-dark)" }}
+    >
+      <div className="container-narrow text-center">
+        <div ref={ref} className="fade-up">
+          <p
+            className="font-label mb-8"
+            style={{ color: "rgba(197,151,109,0.7)" }}
+          >
+            Reservation
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(1.75rem, 4vw, 3rem)",
+              color: "var(--deer-dark-text)",
+              letterSpacing: "0.1em",
+              marginBottom: "1.5rem",
+            }}
+          >
+            預約一場餐桌
+          </h2>
+          <p
+            style={{
+              fontSize: "0.875rem",
+              color: "rgba(240,233,223,0.45)",
+              lineHeight: 2,
+              marginBottom: "3rem",
+              letterSpacing: "0.06em",
+            }}
+          >
+            把時間，留給重要的人。
+            <br />
+            晚餐時段每位最低消費 NT$600 + 10% 服務費
+          </p>
+          <a
+            href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-deer-light"
+          >
+            立即預約
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── 主元件 ────────────────────────────────────────────────────────────────
+export default function Home() {
+  return (
+    <main>
+      <HeroSection />
+      <BrandPivotSection />
+      <CoreSection />
+      <NarrativeSection />
+      <SpaceSection />
+      <TrustSection />
+      <CTASection />
+    </main>
   );
 }

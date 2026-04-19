@@ -1,159 +1,109 @@
-/**
- * Design Philosophy Reminder — 空間形象頁
- * 空間頁應以正式、沉著的語氣說明場域特質，使影像與文字共同建立品牌氣質。
+/*
+ * 初衷小鹿 — 空間體驗 Space.tsx
  */
-import { ArrowRight, CakeSlice } from "lucide-react";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { SiteLayout } from "@/components/site-layout";
-import { celebrationService, galleryImages } from "@/lib/brandData";
+import { useEffect, useRef } from "react";
 
-const scenarios = [
-  {
-    title: "約會晚餐",
-    body: "柔和光線、適度桌距與安定材質，使雙人餐敘能在較為私密而舒展的氛圍中展開。",
-  },
-  {
-    title: "紀念日與慶祝",
-    body: "空間具備內斂而完整的儀式感，適合生日、週年與重視細節安排的重要時刻。",
-  },
-  {
-    title: "正式聚會",
-    body: "在人聲密度、動線與座席尺度之間維持良好平衡，使款待與聚會皆能保有應有的從容。",
-  },
+function useFadeIn(delay = 0) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
+    observer.observe(el); return () => observer.disconnect();
+  }, [delay]);
+  return ref;
+}
+
+const SPACE_IMAGES = [
+  { src: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&q=80", alt: "用餐空間全景", span: "col-span-2" },
+  { src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80", alt: "餐桌設置" },
+  { src: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80", alt: "吧台區域" },
+  { src: "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80", alt: "私人包廂" },
+  { src: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&q=80", alt: "甜點展示" },
 ];
 
-const photoNotes = [
-  {
-    label: "Main Dining",
-    title: "主用餐區呈現安定而完整的餐敘尺度",
-    body: "桌距、光線與動線經過妥善配置，使整體空間在視覺與實際體驗上皆維持一致秩序。",
-    image: galleryImages.dining,
-    alt: "初衷小鹿主用餐區真實空間照片",
-  },
-  {
-    label: "Window Side",
-    title: "靠窗席位保留更為凝聚的夜間氛圍",
-    body: "夜色、木質與暖色照明形成較為安靜的景深，適合雙人餐敘與較具儀式感的安排。",
-    image: galleryImages.ritual,
-    alt: "初衷小鹿靠窗座位與夜晚氛圍照片",
-  },
-  {
-    label: "Private Corner",
-    title: "角落席位提供更內斂的親密感受",
-    body: "在不刻意區隔的前提下，仍保有足夠的完整性，使談話與慶祝時刻更顯安定。",
-    image: galleryImages.corner,
-    alt: "初衷小鹿角落座位與暖燈照片",
-  },
+const SPACE_FEATURES = [
+  { en: "Ambience", zh: "氛圍", desc: "低照度、暖銅燈光，讓整個空間在夜晚呈現出最適合重要時刻的質地。" },
+  { en: "Privacy", zh: "距離感", desc: "桌距設計讓每一組客人都有足夠的空間，不被打擾，只有彼此。" },
+  { en: "Detail", zh: "細節", desc: "訂製抽屜式餐具收納、手工陶瓷器皿，每一個接觸點都是設計的一部分。" },
 ];
 
 export default function Space() {
+  const heroRef = useFadeIn(0);
+  const featRef = useFadeIn(0);
+
   return (
-    <SiteLayout
-      eyebrow="Space Experience"
-      title="空間以沉著而節制的方式，承接每一次值得被細緻安排的晚餐。"
-      intro="初衷小鹿的空間設計並非僅為營造視覺印象，而是為了承接完整晚餐所需的節奏與尺度。從門面識別、進場視線、座席安排至光線層次，皆以同一標準回應品牌所重視的用餐品質。"
-    >
-      <section className="section-shell pt-0">
-        <div className="container grid gap-5 lg:grid-cols-[1.18fr_0.82fr] lg:grid-rows-[1fr_auto]">
-          <img src={galleryImages.dining} alt="初衷小鹿主用餐區全景" className="gallery-wide min-h-[30rem] lg:row-span-2 lg:min-h-[42rem]" />
-          <img src={galleryImages.ritual} alt="初衷小鹿靠窗席位與夜晚餐桌氛圍" className="gallery-large min-h-[18rem]" />
-          <div className="feature-panel flex flex-col justify-between">
-            <div>
-              <p className="section-label">Atmosphere</p>
-              <h2 className="section-title max-w-sm">品牌所重視的，不只是場景美感，而是空間能否使一場晚餐維持應有的分寸。</h2>
-              <p className="body-copy mt-5">
-                對於約會、紀念日與正式聚會而言，真正重要的往往是桌距、光線、材質與人聲之間是否維持恰當平衡。
-                初衷小鹿以此作為空間安排的核心，使整體氛圍足以承接長時間用餐與深度交談。
-              </p>
-            </div>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-                <Link href="/reservation">
-                  查看訂位資訊 <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <Link href="/menu">瀏覽菜單</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-5 lg:grid-cols-3">
-          {scenarios.map((scenario, index) => (
-            <article key={scenario.title} className="pillar-card min-h-[18rem]">
-              <p className="section-label">Scene 0{index + 1}</p>
-              <h2 className="mt-5 font-display text-[2rem] leading-tight text-stone-50">{scenario.title}</h2>
-              <p className="body-copy mt-4">{scenario.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-5 lg:grid-cols-3">
-          {photoNotes.map((photo) => (
-            <article key={photo.title} className="overflow-hidden rounded-[2rem] border border-white/8 bg-[#17120f] shadow-[0_28px_80px_rgba(0,0,0,0.32)]">
-              <img src={photo.image} alt={photo.alt} className="h-[18rem] w-full object-cover" />
-              <div className="p-6">
-                <p className="section-label">{photo.label}</p>
-                <h2 className="mt-4 font-display text-[1.85rem] leading-tight text-stone-50">{photo.title}</h2>
-                <p className="body-copy mt-4">{photo.body}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
-          <div className="feature-panel">
-            <p className="section-label">Celebration Ambience</p>
-            <h2 className="section-title max-w-sm">慶祝的完整性，不僅來自安排本身，也來自空間是否足以承接那份儀式感。</h2>
-            <p className="body-copy mt-5">{celebrationService.body}</p>
-            <p className="body-copy mt-5">
-              當蛋糕、祝福與晚餐節奏被妥善銜接，空間的成熟度與穩定性亦成為整體體驗的一部分，使重要時刻得以自然展開。
+    <main style={{ paddingTop: "80px" }}>
+      <section style={{ backgroundColor: "var(--deer-dark)", padding: "8rem 0 7rem" }}>
+        <div className="container">
+          <div ref={heroRef} className="fade-up" style={{ maxWidth: "560px" }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "1.5rem" }}>Space</p>
+            <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--deer-dark-text)", letterSpacing: "0.08em", lineHeight: 1.5, marginBottom: "2rem" }}>空間體驗</h1>
+            <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.6)", marginBottom: "2rem" }} />
+            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "rgba(240,233,223,0.6)", lineHeight: 2, letterSpacing: "0.05em" }}>
+              為了那些不該被打擾的時刻。
             </p>
-            <div className="mt-7 info-strip">
-              <div className="info-strip-label">
-                <CakeSlice className="h-4 w-4 text-primary" />
-                <span>Celebration Note</span>
-              </div>
-              <p className="text-sm leading-7 text-stone-200/82">若為生日、週年紀念或需事先安排驚喜之場合，建議於訂位時同步說明需求。</p>
-            </div>
-          </div>
-          <div className="grid gap-5 md:grid-cols-[0.94fr_1.06fr]">
-            <img src={galleryImages.table} alt="初衷小鹿單桌與角落燈光氛圍" className="gallery-large min-h-[20rem]" />
-            <img src={galleryImages.counter} alt="初衷小鹿店內整體視角與長桌動線" className="gallery-wide min-h-[20rem]" />
           </div>
         </div>
       </section>
 
-      <section className="section-shell border-t border-white/6">
-        <div className="container grid gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10">
-          <img src={galleryImages.exterior} alt="初衷小鹿招牌與門面識別" className="gallery-wide min-h-[22rem]" />
-          <div className="feature-panel flex flex-col justify-between">
-            <div>
-              <p className="section-label">Arrival</p>
-              <h2 className="section-title max-w-sm">品牌印象自抵達門前即已展開，並延續至整場晚餐的收尾。</h2>
-              <p className="body-copy mt-5">
-                對重視用餐品質的賓客而言，真正值得記住的往往不只是餐桌本身，而是自抵達、入座至離席之間，整體氣氛是否維持一致而得體。
-              </p>
+      <section className="section-lg" style={{ backgroundColor: "var(--deer-bg)" }}>
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div style={{ aspectRatio: "16/9", overflow: "hidden", gridColumn: "1 / -1" }}>
+              <img src={SPACE_IMAGES[0].src} alt={SPACE_IMAGES[0].alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-                <Link href="/reservation">線上訂位</Link>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full border-white/14 bg-white/0 px-6 text-stone-100 hover:bg-white/6">
-                <Link href="/reservation">查看慶祝服務</Link>
-              </Button>
-            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {SPACE_IMAGES.slice(1).map((img, i) => (
+              <div key={i} style={{ aspectRatio: "1/1", overflow: "hidden" }}>
+                <img src={img.src} alt={img.alt} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.6s ease" }}
+                  onMouseEnter={(e) => ((e.target as HTMLImageElement).style.transform = "scale(1.05)")}
+                  onMouseLeave={(e) => ((e.target as HTMLImageElement).style.transform = "scale(1)")} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
-    </SiteLayout>
+
+      <section className="section" style={{ backgroundColor: "var(--deer-bg-dark)" }}>
+        <div className="container">
+          <div ref={featRef} className="fade-up text-center mb-16">
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Space Design</p>
+            <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", color: "var(--deer-text)", letterSpacing: "0.1em" }}>空間的每一個細節，都是設計。</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {SPACE_FEATURES.map((f, i) => (
+              <SpaceFeatureCard key={i} {...f} delay={i * 100} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-lg" style={{ backgroundColor: "var(--deer-dark)" }}>
+        <div className="container-narrow text-center">
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.6)", marginBottom: "2rem" }}>Visit Us</p>
+          <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2.25rem)", color: "var(--deer-dark-text)", letterSpacing: "0.1em", marginBottom: "1.5rem" }}>把時間，留給重要的人。</h2>
+          <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2, marginBottom: "3rem", letterSpacing: "0.06em" }}>台北市信義區忠孝東路四段 553 巷 6 弄 15 號</p>
+          <a href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf" target="_blank" rel="noopener noreferrer" className="btn-deer-light" style={{ fontSize: "0.8rem" }}>預約一場餐桌</a>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function SpaceFeatureCard({ en, zh, desc, delay }: { en: string; zh: string; desc: string; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
+    observer.observe(el); return () => observer.disconnect();
+  }, [delay]);
+  return (
+    <div ref={ref} className="fade-up">
+      <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "0.75rem" }}>{en}</p>
+      <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1.5rem", color: "var(--deer-text)", letterSpacing: "0.1em", marginBottom: "1rem" }}>{zh}</h3>
+      <div style={{ width: "20px", height: "1px", backgroundColor: "var(--deer-gold)", marginBottom: "1rem" }} />
+      <p style={{ fontSize: "0.8125rem", color: "var(--deer-sub)", lineHeight: 1.9 }}>{desc}</p>
+    </div>
   );
 }
