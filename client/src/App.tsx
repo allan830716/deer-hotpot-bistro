@@ -13,6 +13,7 @@ import Brand from "./pages/Brand";
 import Menu from "./pages/Menu";
 import Space from "./pages/Space";
 import Reservation from "./pages/Reservation";
+import Experience from "./pages/Experience";
 import NotFound from "./pages/NotFound";
 
 const NAV_LINKS = [
@@ -21,6 +22,7 @@ const NAV_LINKS = [
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
   { href: "/reservation", label: "訂位" },
+  { href: "/experience", label: "品牌體驗" },
 ];
 
 function Navbar() {
@@ -179,6 +181,7 @@ function Router() {
       <Route path="/menu" component={Menu} />
       <Route path="/space" component={Space} />
       <Route path="/reservation" component={Reservation} />
+      <Route path="/experience" component={Experience} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
