@@ -220,6 +220,34 @@ export default function App() {
     );
   }
 
+  // /menu-embed 路由：不含導覽列與頁尾，供 EasyStore iframe 嵌入使用
+  if (location === "/menu-embed") {
+    return (
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="dark">
+          <TooltipProvider>
+            <Toaster />
+            <Menu />
+          </TooltipProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
+    );
+  }
+
+  // /reservation-embed 路由：不含導覽列與頁尾，供 EasyStore iframe 嵌入使用
+  if (location === "/reservation-embed") {
+    return (
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="dark">
+          <TooltipProvider>
+            <Toaster />
+            <Reservation />
+          </TooltipProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
