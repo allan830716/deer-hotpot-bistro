@@ -19,8 +19,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 
 // ── 空間照片（已上傳至 CDN）────────────────────────────────────────────────
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=80";
+const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
 const SPACE_IMG =
   "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1400&q=80";
 const SOUP_IMG =

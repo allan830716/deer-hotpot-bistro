@@ -1,8 +1,8 @@
 /*
  * 初衷小鹿 — 菜單 Menu.tsx
- * 圖片輪播版：PDF 菜單轉圖片，支援分類切換與 Lightbox 放大
+ * 圖片輪播版：PDF 菜單轉圖片，支援分類切換、鍵盤方向鍵、Lightbox 放大（含讀取動畫）
  */
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 const MENU_PAGES = [
@@ -54,37 +54,103 @@ const CATEGORIES = [
   { key: "drinks",  label: "酒水飲品" },
 ];
 
+/* ── Lightbox 精緻讀取動畫 ──────────────────────────────────────────────── */
 function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) {
+  const [loaded, setLoaded] = useState(false);
+
   return createPortal(
     <div
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, zIndex: 99999,
-        backgroundColor: "rgba(0,0,0,0.95)",
+        backgroundColor: "rgba(10,8,7,0.97)",
         display: "flex", alignItems: "center", justifyContent: "center",
         cursor: "zoom-out",
+        animation: "lbFadeIn 0.25s ease forwards",
       }}
     >
+      <style>{`
+        @keyframes lbFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes lbImgIn {
+          from { opacity: 0; transform: scale(0.97); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes spinnerRing {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+
+      {/* 讀取動畫：圖片未載入前顯示 */}
+      {!loaded && (
+        <div style={{
+          position: "absolute",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem",
+        }}>
+          {/* 細環形 spinner */}
+          <div style={{
+            width: "40px", height: "40px",
+            border: "1px solid rgba(197,151,109,0.15)",
+            borderTop: "1px solid rgba(197,151,109,0.7)",
+            borderRadius: "50%",
+            animation: "spinnerRing 1.2s linear infinite",
+          }} />
+          <p style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "0.65rem",
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "rgba(197,151,109,0.45)",
+          }}>Loading</p>
+        </div>
+      )}
+
+      {/* 圖片本體 */}
       <img
         src={src}
         alt="菜單"
+        onLoad={() => setLoaded(true)}
         style={{
           maxWidth: "min(90vw, 700px)",
           maxHeight: "92vh",
           objectFit: "contain",
-          boxShadow: "0 0 80px rgba(0,0,0,0.6)",
+          boxShadow: "0 0 80px rgba(0,0,0,0.7)",
+          opacity: loaded ? 1 : 0,
+          animation: loaded ? "lbImgIn 0.35s ease forwards" : "none",
+          transition: "opacity 0.35s ease",
         }}
         onClick={(e) => e.stopPropagation()}
       />
+
+      {/* 關閉按鈕 */}
       <button
         onClick={onClose}
         style={{
           position: "absolute", top: "1.5rem", right: "2rem",
           background: "none", border: "none", cursor: "pointer",
-          color: "rgba(240,233,223,0.7)", fontSize: "2rem", lineHeight: 1,
-          zIndex: 100000,
+          color: "rgba(240,233,223,0.5)", fontSize: "1.5rem", lineHeight: 1,
+          zIndex: 100000, transition: "color 0.2s ease",
+          fontFamily: "'Cormorant Garamond', serif",
+          letterSpacing: "0.1em",
         }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.9)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.5)"; }}
       >✕</button>
+
+      {/* 底部提示 */}
+      {loaded && (
+        <p style={{
+          position: "absolute", bottom: "1.5rem",
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: "0.6rem", letterSpacing: "0.18em",
+          color: "rgba(197,151,109,0.3)",
+          pointerEvents: "none",
+        }}>
+          CLICK ANYWHERE TO CLOSE
+        </p>
+      )}
     </div>,
     document.body
   );
@@ -112,6 +178,20 @@ export default function Menu() {
     setCurrentIndex((i) => (i + 1) % filtered.length);
   }, [filtered.length]);
 
+  /* ── 鍵盤方向鍵操作 ── */
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (lightboxSrc) {
+        if (e.key === "Escape") setLightboxSrc(null);
+        return;
+      }
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [prev, next, lightboxSrc]);
+
   const current = filtered[Math.min(currentIndex, filtered.length - 1)];
 
   return (
@@ -131,7 +211,7 @@ export default function Menu() {
           </h1>
           <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", marginBottom: "1.5rem" }} />
           <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.45)", letterSpacing: "0.06em" }}>
-            點擊圖片可放大查看 · 價格均加收一成服務費
+            點擊圖片可放大查看 · 使用 ← → 方向鍵翻頁 · 價格均加收一成服務費
           </p>
         </div>
       </section>
@@ -179,6 +259,7 @@ export default function Menu() {
             <button
               onClick={prev}
               disabled={filtered.length <= 1}
+              aria-label="上一頁"
               style={{
                 flexShrink: 0,
                 width: "44px", height: "44px",
@@ -191,6 +272,8 @@ export default function Menu() {
                 transition: "all 0.2s ease",
                 opacity: filtered.length <= 1 ? 0.3 : 1,
               }}
+              onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
             >
               ‹
             </button>
@@ -215,6 +298,7 @@ export default function Menu() {
                     height: "auto",
                     display: "block",
                     boxShadow: "0 8px 48px rgba(0,0,0,0.5)",
+                    transition: "opacity 0.25s ease",
                   }}
                 />
                 <div style={{
@@ -237,6 +321,7 @@ export default function Menu() {
             <button
               onClick={next}
               disabled={filtered.length <= 1}
+              aria-label="下一頁"
               style={{
                 flexShrink: 0,
                 width: "44px", height: "44px",
@@ -249,6 +334,8 @@ export default function Menu() {
                 transition: "all 0.2s ease",
                 opacity: filtered.length <= 1 ? 0.3 : 1,
               }}
+              onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
             >
               ›
             </button>
@@ -274,6 +361,7 @@ export default function Menu() {
                   <button
                     key={i}
                     onClick={() => setCurrentIndex(i)}
+                    aria-label={`第 ${i + 1} 頁`}
                     style={{
                       width: "36px", height: "36px",
                       padding: 0,
@@ -315,7 +403,7 @@ export default function Menu() {
             本餐廳僅提供 NATURA 微礦水或微礦氣泡水。每份套餐均含一份前菜、綜合菜盤、副餐及甜點。
             低消一人為 600 元（以單人獨立計算），以上價格均加收一成服務費。
             部分餐點可能會因供貨短缺及品質等因素而無法正常供應。
-            本餐廳禁止飲用烈酒，自備酒水酌收開瓶費葡萄酒每瓶 200 元。
+            本餐廳禁止飲用烈酒，自備酒水酌收開瓶費葡萄酒每瓶 500 元。
           </p>
         </div>
       </section>

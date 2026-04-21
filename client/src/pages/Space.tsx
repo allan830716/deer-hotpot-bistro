@@ -341,40 +341,43 @@ export default function Space() {
       {/* CTA */}
       <section className="sp-cta">
         <div ref={ctaRef} className="sp-fade">
-          <p style={{ ...T.label, color: "rgba(197,151,109,0.6)", marginBottom: "1.75rem" }}>Reservation</p>
-          <h2 style={{
+          <p style={{ ...T.label, color: "rgba(197,151,109,0.4)", marginBottom: "2.5rem" }}>2019 &mdash; Taipei Xinyi</p>
+          <blockquote style={{
             fontFamily: "'Noto Serif TC', serif", fontWeight: 200,
-            fontSize: "clamp(1.4rem, 3vw, 2.4rem)",
-            color: "rgba(240,233,223,0.85)", letterSpacing: "0.1em", marginBottom: "1.25rem",
+            fontSize: "clamp(1.1rem, 2.2vw, 1.6rem)",
+            color: "rgba(240,233,223,0.75)", letterSpacing: "0.1em",
+            lineHeight: 1.9, margin: "0 0 2rem",
+            borderLeft: "none", padding: 0,
           }}>
-            親自來感受
-          </h2>
-          <p style={{
-            fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
-            fontSize: "0.9rem", color: "rgba(240,233,223,0.38)",
-            lineHeight: 2.1, letterSpacing: "0.05em",
-            maxWidth: "340px", margin: "0 auto 2.5rem",
-          }}>
-            照片只能傳遞一部分。<br />
-            那個燈光的溫度，那個空間的氛圍，<br />
-            需要你親自來感受。
-          </p>
+            有些氛圍，
+            <br />
+            是照片說不清楚的。
+          </blockquote>
+          <div style={{ width: "22px", height: "1px", backgroundColor: "rgba(197,151,109,0.3)", margin: "0 auto 2.5rem" }} />
           <a
             href="/reservation"
             style={{
               display: "inline-block",
-              padding: "0.9rem 2.5rem",
-              border: "1px solid rgba(197,151,109,0.6)",
+              padding: "0.75rem 2rem",
+              border: "1px solid rgba(197,151,109,0.35)",
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "0.72rem",
+              fontSize: "0.68rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "rgba(197,151,109,0.85)",
+              color: "rgba(197,151,109,0.6)",
               textDecoration: "none",
               transition: "all 0.3s ease",
             }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.65)";
+              (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)";
+              (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.6)";
+            }}
           >
-            立即訂位
+            Reserve a Table
           </a>
         </div>
       </section>
