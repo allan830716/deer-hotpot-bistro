@@ -1,6 +1,7 @@
 /*
  * 初衷小鹿 — App.tsx
  * 全站路由與導覽列、頁尾
+ * /space-embed 路由不含導覽列與頁尾，供 EasyStore iframe 嵌入使用
  */
 import { useState, useEffect } from "react";
 import { Route, Switch, Link, useLocation } from "wouter";
@@ -189,6 +190,22 @@ function Router() {
 }
 
 export default function App() {
+  const [location] = useLocation();
+
+  // /space-embed 路由：不含導覽列與頁尾，純內容，供 EasyStore iframe 嵌入使用
+  if (location === "/space-embed") {
+    return (
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="dark">
+          <TooltipProvider>
+            <Toaster />
+            <Space />
+          </TooltipProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">

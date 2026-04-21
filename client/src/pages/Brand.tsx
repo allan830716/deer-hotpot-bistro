@@ -41,26 +41,26 @@ function GoldLine() {
   );
 }
 
-const BRAND_VALUES = [
+const BRAND_COMMITMENTS = [
   {
-    en: "Restraint",
-    zh: "克制",
-    desc: "不張揚，不過度推銷。讓食材、空間、服務說話。",
+    en: "Broth First",
+    zh: "天然上湯",
+    desc: "每鍋湯底以大量食材長時熬製，不添加人工調味。湯是主角，不是背景。",
   },
   {
-    en: "Craft",
-    zh: "講究",
-    desc: "從湯底工序到肉品部位，每一個細節都是選擇的結果。",
+    en: "Curated Cuts",
+    zh: "嚴選肉品",
+    desc: "與專業肉商合作，依部位特性搭配涮燙方式，每一片都有它應在的位置。",
   },
   {
-    en: "Warmth",
-    zh: "溫柔",
-    desc: "照顧場面與節奏，讓每一位客人感受到被好好款待。",
+    en: "Quiet Service",
+    zh: "克制服務",
+    desc: "服務不打擾對話，不催促節奏。在場，但不佔據。讓餐桌屬於你們。",
   },
   {
-    en: "Maturity",
-    zh: "成熟",
-    desc: "適合重要的人、重要的時刻，不是熱鬧，是陪伴。",
+    en: "CRÈM Dessert",
+    zh: "甜點收尾",
+    desc: "與 CRÈM 甜點工作室合作，以細緻甜點為每一頓飯畫下完整的句點。",
   },
 ];
 
@@ -121,12 +121,12 @@ function StatItem({
   );
 }
 
-function ValueCard({
+function CommitmentCard({
   en,
   zh,
   desc,
   delay,
-}: (typeof BRAND_VALUES)[0] & { delay: number }) {
+}: (typeof BRAND_COMMITMENTS)[0] & { delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -147,7 +147,14 @@ function ValueCard({
   }, [delay]);
 
   return (
-    <div ref={ref} className="fade-up">
+    <div
+      ref={ref}
+      className="fade-up"
+      style={{
+        borderTop: "1px solid rgba(107,74,50,0.25)",
+        paddingTop: "2rem",
+      }}
+    >
       <p
         style={{
           fontFamily: "'Cormorant Garamond', serif",
@@ -165,27 +172,19 @@ function ValueCard({
         style={{
           fontFamily: "'Noto Serif TC', serif",
           fontWeight: 300,
-          fontSize: "1.5rem",
+          fontSize: "1.375rem",
           color: "var(--deer-text)",
           letterSpacing: "0.1em",
-          marginBottom: "1rem",
+          marginBottom: "1.25rem",
         }}
       >
         {zh}
       </h3>
-      <div
-        style={{
-          width: "20px",
-          height: "1px",
-          backgroundColor: "var(--deer-gold)",
-          marginBottom: "1rem",
-        }}
-      />
       <p
         style={{
           fontSize: "0.8125rem",
           color: "var(--deer-sub)",
-          lineHeight: 1.9,
+          lineHeight: 2,
           fontFamily: "'Noto Serif TC', serif",
           fontWeight: 300,
         }}
@@ -199,7 +198,7 @@ function ValueCard({
 export default function Brand() {
   const heroRef = useFadeIn(0);
   const storyRef = useFadeIn(100);
-  const valuesRef = useFadeIn(0);
+  const commitmentsRef = useFadeIn(0);
   const quoteRef = useFadeIn(0);
 
   return (
@@ -351,13 +350,13 @@ export default function Brand() {
         </div>
       </section>
 
-      {/* ── 品牌個性 ── */}
+      {/* ── 我們的堅持 ── */}
       <section
         className="section"
         style={{ backgroundColor: "var(--deer-bg-dark)" }}
       >
         <div className="container">
-          <div ref={valuesRef} className="fade-up text-center mb-16">
+          <div ref={commitmentsRef} className="fade-up mb-16">
             <p
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -369,7 +368,7 @@ export default function Brand() {
                 marginBottom: "1rem",
               }}
             >
-              Brand Character
+              Our Commitment
             </p>
             <h2
               style={{
@@ -380,13 +379,13 @@ export default function Brand() {
                 letterSpacing: "0.1em",
               }}
             >
-              我們的個性
+              我們的堅持
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-            {BRAND_VALUES.map((v, i) => (
-              <ValueCard key={i} {...v} delay={i * 100} />
+            {BRAND_COMMITMENTS.map((v, i) => (
+              <CommitmentCard key={i} {...v} delay={i * 100} />
             ))}
           </div>
         </div>

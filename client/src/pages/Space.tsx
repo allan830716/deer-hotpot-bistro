@@ -4,6 +4,7 @@
  * 響應式：手機單欄 / 平板雙欄 / 桌機非對稱格局
  */
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const PHOTOS = {
   A: "/manus-storage/space_A_signage_9eef2174.jpg",
@@ -128,32 +129,42 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
     };
   }, [onClose]);
 
-  return (
+  const overlay = (
     <div
       onClick={onClose}
       style={{
-        position: "fixed", inset: 0, zIndex: 1000,
-        backgroundColor: "rgba(0,0,0,0.93)",
+        position: "fixed", inset: 0, zIndex: 99999,
+        backgroundColor: "rgba(0,0,0,0.95)",
         display: "flex", alignItems: "center", justifyContent: "center",
         cursor: "zoom-out",
+        pointerEvents: "all",
       }}
     >
       <img
         src={src}
         alt=""
-        style={{ maxWidth: "90vw", maxHeight: "90vh", objectFit: "contain" }}
+        style={{
+          maxWidth: "92vw", maxHeight: "88vh",
+          objectFit: "contain",
+          boxShadow: "0 0 60px rgba(0,0,0,0.5)",
+          display: "block",
+        }}
         onClick={(e) => e.stopPropagation()}
+        onLoad={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "1"; }}
       />
       <button
         onClick={onClose}
         style={{
           position: "absolute", top: "1.5rem", right: "2rem",
           background: "none", border: "none", cursor: "pointer",
-          color: "rgba(240,233,223,0.5)", fontSize: "1.5rem", lineHeight: 1,
+          color: "rgba(240,233,223,0.7)", fontSize: "2rem", lineHeight: 1,
+          zIndex: 100000,
         }}
       >✕</button>
     </div>
   );
+
+  return createPortal(overlay, document.body);
 }
 
 function Photo({
