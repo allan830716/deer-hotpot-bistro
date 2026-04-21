@@ -206,6 +206,20 @@ export default function App() {
     );
   }
 
+  // /brand-embed 路由：不含導覽列與頁尾，供 EasyStore iframe 嵌入使用
+  if (location === "/brand-embed") {
+    return (
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="dark">
+          <TooltipProvider>
+            <Toaster />
+            <Brand />
+          </TooltipProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">

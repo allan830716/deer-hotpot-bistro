@@ -1,162 +1,322 @@
 /*
  * 初衷小鹿 — 菜單 Menu.tsx
+ * 圖片輪播版：PDF 菜單轉圖片，支援分類切換與 Lightbox 放大
  */
-import { useEffect, useRef, useState } from "react";
+import { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 
-function useFadeIn(delay = 0) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
-  return ref;
-}
-
-const MENU_CATEGORIES = [
-  {
-    id: "beef", label: "牛肉套餐", en: "Beef",
-    items: [
-      { name: "精選牛肉套餐", desc: "美國 USDA Choice 牛肉，搭配天然蔬果上湯", price: "NT$920", tag: "" },
-      { name: "頂級牛肉套餐", desc: "美國 SRF 雪花牛，熟成處理，細緻油花", price: "NT$1,380", tag: "推薦" },
-      { name: "和牛套餐", desc: "A5 和牛，極致油花，不需要任何調味", price: "NT$1,980", tag: "限量" },
-    ],
-  },
-  {
-    id: "pork", label: "豬肉套餐", en: "Pork",
-    items: [
-      { name: "精選豬肉套餐", desc: "台灣在地豬，搭配柴魚昆布上湯", price: "NT$920", tag: "" },
-      { name: "伊比利豬套餐", desc: "西班牙伊比利黑豬，橡果飼養，油脂細膩", price: "NT$1,380", tag: "推薦" },
-    ],
-  },
-  {
-    id: "seafood", label: "海鮮套餐", en: "Seafood",
-    items: [
-      { name: "精選海鮮套餐", desc: "時令海鮮，搭配清澈蔬果上湯", price: "NT$1,380", tag: "" },
-      { name: "頂級海鮮套餐", desc: "龍蝦、干貝、鮮蝦，完整海味層次", price: "NT$2,580", tag: "推薦" },
-      { name: "豪華海鮮套餐", desc: "波士頓龍蝦、帝王蟹腳、頂級干貝", price: "NT$3,460", tag: "限量" },
-    ],
-  },
-  {
-    id: "combo", label: "海陸套餐", en: "Land & Sea",
-    items: [
-      { name: "海陸雙享套餐", desc: "精選牛肉 + 時令海鮮，一場完整的餐桌", price: "NT$1,780", tag: "推薦" },
-      { name: "頂級海陸套餐", desc: "和牛 + 龍蝦，為重要的時刻而設", price: "NT$2,580", tag: "限量" },
-    ],
-  },
+const MENU_PAGES = [
+  { src: "/manus-storage/menu-01_b93902b3.png", category: "intro",   label: "品牌理念" },
+  { src: "/manus-storage/menu-02_14251abf.png", category: "surf",    label: "海陸套餐" },
+  { src: "/manus-storage/menu-03_4120619c.png", category: "surf",    label: "海陸套餐" },
+  { src: "/manus-storage/menu-04_9375e636.png", category: "beef",    label: "牛肉套餐" },
+  { src: "/manus-storage/menu-05_89d4ef5b.png", category: "beef",    label: "牛肉套餐" },
+  { src: "/manus-storage/menu-06_2e47c5c8.png", category: "pork",    label: "豬肉套餐" },
+  { src: "/manus-storage/menu-07_6497a72d.png", category: "pork",    label: "豬肉套餐" },
+  { src: "/manus-storage/menu-08_fb439fd7.png", category: "chicken", label: "雞肉 / 蔬食" },
+  { src: "/manus-storage/menu-09_0b37a90a.png", category: "lamb",    label: "羊肉套餐" },
+  { src: "/manus-storage/menu-10_a5cb0d0d.png", category: "seafood", label: "海鮮套餐" },
+  { src: "/manus-storage/menu-11_a781fa3f.png", category: "sides",   label: "美味關係" },
+  { src: "/manus-storage/menu-12_3206377d.png", category: "sides",   label: "手工漿 / 餃" },
+  { src: "/manus-storage/menu-13_362300fa.png", category: "sides",   label: "雲吞 / 丸類" },
+  { src: "/manus-storage/menu-14_d346d1dd.png", category: "sides",   label: "海鮮單點" },
+  { src: "/manus-storage/menu-15_1181a977.png", category: "sides",   label: "魚類單點" },
+  { src: "/manus-storage/menu-16_db54608f.png", category: "sides",   label: "蔬菜副餐" },
+  { src: "/manus-storage/menu-17_1c0e3a01.png", category: "lunch",   label: "商業午餐" },
+  { src: "/manus-storage/menu-18_01a3f7e2.png", category: "lunch",   label: "午餐牛肉" },
+  { src: "/manus-storage/menu-19_3f2003c8.png", category: "lunch",   label: "午餐豬肉" },
+  { src: "/manus-storage/menu-20_0c245cb0.png", category: "lunch",   label: "午餐羊 / 海鮮" },
+  { src: "/manus-storage/menu-21_34e7b7f3.png", category: "lunch",   label: "午餐附餐甜點" },
+  { src: "/manus-storage/menu-22_aebcd897.png", category: "quote",   label: "品牌語句" },
+  { src: "/manus-storage/menu-23_55e5158c.png", category: "drinks",  label: "飲品" },
+  { src: "/manus-storage/menu-24_59cd65b6.png", category: "drinks",  label: "飲品" },
+  { src: "/manus-storage/menu-25_573ad6e1.png", category: "drinks",  label: "紅酒" },
+  { src: "/manus-storage/menu-26_15343df0.png", category: "drinks",  label: "紅酒" },
+  { src: "/manus-storage/menu-27_cf8a114d.png", category: "drinks",  label: "白酒" },
+  { src: "/manus-storage/menu-28_b938af18.png", category: "drinks",  label: "白酒" },
+  { src: "/manus-storage/menu-29_28a8f7d3.png", category: "drinks",  label: "氣泡酒" },
+  { src: "/manus-storage/menu-30_fcc4dd16.png", category: "drinks",  label: "啤酒" },
+  { src: "/manus-storage/menu-31_1aaca962.png", category: "drinks",  label: "啤酒" },
+  { src: "/manus-storage/menu-32_353a9d59.png", category: "drinks",  label: "飲料" },
+  { src: "/manus-storage/menu-33_92682d10.png", category: "drinks",  label: "飲料" },
 ];
 
-const EXTRAS = [
-  { name: "松露醬", desc: "義大利黑松露，少量即可提升整鍋層次", price: "NT$280" },
-  { name: "鮭魚卵", desc: "北海道鮭魚卵，鹹鮮爆裂，搭配肉片", price: "NT$180" },
-  { name: "手工漿料", desc: "每日現做，包含蝦漿、魚漿、豬肉漿", price: "NT$120" },
-  { name: "時令蔬菜盤", desc: "每日嚴選當季蔬菜，清甜不搶味", price: "NT$80" },
+const CATEGORIES = [
+  { key: "all",     label: "全部菜單" },
+  { key: "surf",    label: "海陸套餐" },
+  { key: "beef",    label: "牛肉套餐" },
+  { key: "pork",    label: "豬肉套餐" },
+  { key: "lamb",    label: "羊肉套餐" },
+  { key: "seafood", label: "海鮮套餐" },
+  { key: "chicken", label: "雞肉 / 蔬食" },
+  { key: "sides",   label: "單點配料" },
+  { key: "lunch",   label: "商業午餐" },
+  { key: "drinks",  label: "酒水飲品" },
 ];
 
-function MenuItemCard({ name, desc, price, tag, delay }: { name: string; desc: string; price: string; tag: string; delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
-    observer.observe(el); return () => observer.disconnect();
-  }, [delay]);
-  return (
-    <div ref={ref} className="fade-up" style={{ padding: "2rem", border: "1px solid rgba(26,18,16,0.08)", backgroundColor: "var(--deer-bg)", position: "relative" }}>
-      {tag && <span style={{ position: "absolute", top: "1.25rem", right: "1.25rem", fontFamily: "'Cormorant Garamond', serif", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--deer-gold)", border: "1px solid rgba(197,151,109,0.4)", padding: "0.2rem 0.6rem" }}>{tag}</span>}
-      <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1.0625rem", color: "var(--deer-text)", letterSpacing: "0.06em", marginBottom: "0.75rem" }}>{name}</h3>
-      <p style={{ fontSize: "0.8125rem", color: "var(--deer-sub)", lineHeight: 1.8, marginBottom: "1.5rem" }}>{desc}</p>
-      <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "1.25rem", color: "var(--deer-accent)" }}>{price}</p>
-    </div>
-  );
-}
-
-function ExtraCard({ name, desc, price, delay }: { name: string; desc: string; price: string; delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay); } }, { threshold: 0.1 });
-    observer.observe(el); return () => observer.disconnect();
-  }, [delay]);
-  return (
-    <div ref={ref} className="fade-up">
-      <div style={{ width: "20px", height: "1px", backgroundColor: "var(--deer-gold)", marginBottom: "1rem" }} />
-      <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.06em", marginBottom: "0.5rem" }}>{name}</h3>
-      <p style={{ fontSize: "0.8rem", color: "var(--deer-sub)", lineHeight: 1.8, marginBottom: "0.75rem" }}>{desc}</p>
-      <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "1.125rem", color: "var(--deer-accent)" }}>{price}</p>
-    </div>
+function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) {
+  return createPortal(
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 99999,
+        backgroundColor: "rgba(0,0,0,0.95)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        cursor: "zoom-out",
+      }}
+    >
+      <img
+        src={src}
+        alt="菜單"
+        style={{
+          maxWidth: "min(90vw, 700px)",
+          maxHeight: "92vh",
+          objectFit: "contain",
+          boxShadow: "0 0 80px rgba(0,0,0,0.6)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      />
+      <button
+        onClick={onClose}
+        style={{
+          position: "absolute", top: "1.5rem", right: "2rem",
+          background: "none", border: "none", cursor: "pointer",
+          color: "rgba(240,233,223,0.7)", fontSize: "2rem", lineHeight: 1,
+          zIndex: 100000,
+        }}
+      >✕</button>
+    </div>,
+    document.body
   );
 }
 
 export default function Menu() {
-  const [activeCategory, setActiveCategory] = useState("beef");
-  const heroRef = useFadeIn(0);
-  const currentCategory = MENU_CATEGORIES.find((c) => c.id === activeCategory)!;
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+
+  const filtered = activeCategory === "all"
+    ? MENU_PAGES
+    : MENU_PAGES.filter((p) => p.category === activeCategory);
+
+  const handleCategoryChange = (key: string) => {
+    setActiveCategory(key);
+    setCurrentIndex(0);
+  };
+
+  const prev = useCallback(() => {
+    setCurrentIndex((i) => (i - 1 + filtered.length) % filtered.length);
+  }, [filtered.length]);
+
+  const next = useCallback(() => {
+    setCurrentIndex((i) => (i + 1) % filtered.length);
+  }, [filtered.length]);
+
+  const current = filtered[Math.min(currentIndex, filtered.length - 1)];
 
   return (
-    <main style={{ paddingTop: "80px" }}>
-      <section style={{ backgroundColor: "var(--deer-dark)", padding: "8rem 0 7rem" }}>
+    <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
+      {lightboxSrc && (
+        <LightboxViewer src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
+      )}
+
+      {/* ── Hero ── */}
+      <section style={{ backgroundColor: "var(--deer-dark)", padding: "5rem 0 3rem" }}>
         <div className="container">
-          <div ref={heroRef} className="fade-up" style={{ maxWidth: "560px" }}>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "1.5rem" }}>Menu</p>
-            <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--deer-dark-text)", letterSpacing: "0.08em", lineHeight: 1.5, marginBottom: "2rem" }}>菜單</h1>
-            <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.6)", marginBottom: "2rem" }} />
-            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: "rgba(240,233,223,0.55)", lineHeight: 2, letterSpacing: "0.05em" }}>
-              每份套餐皆包含：前菜、天然上湯、主食材、配菜、<br />手工沾醬，以及甜點收尾。
-            </p>
-          </div>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.7)", marginBottom: "1rem" }}>
+            Menu
+          </p>
+          <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", color: "var(--deer-dark-text)", letterSpacing: "0.08em", marginBottom: "1rem" }}>
+            菜單
+          </h1>
+          <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", marginBottom: "1.5rem" }} />
+          <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.45)", letterSpacing: "0.06em" }}>
+            點擊圖片可放大查看 · 價格均加收一成服務費
+          </p>
         </div>
       </section>
 
-      <section className="section-lg" style={{ backgroundColor: "var(--deer-bg)" }}>
+      {/* ── 分類標籤 ── */}
+      <section style={{ backgroundColor: "var(--deer-dark)", paddingBottom: "2rem" }}>
         <div className="container">
-          <div className="flex flex-wrap gap-2 mb-16" style={{ borderBottom: "1px solid rgba(26,18,16,0.1)" }}>
-            {MENU_CATEGORIES.map((cat) => (
-              <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
-                style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", letterSpacing: "0.08em", padding: "0.75rem 1.5rem", border: "none", background: "transparent", cursor: "pointer", color: activeCategory === cat.id ? "var(--deer-accent)" : "var(--deer-sub)", borderBottom: activeCategory === cat.id ? "1px solid var(--deer-gold)" : "1px solid transparent", transition: "all 0.2s ease", marginBottom: "-1px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "0.5rem" }}>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.key}
+                onClick={() => handleCategoryChange(cat.key)}
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.08em",
+                  padding: "0.4rem 1rem",
+                  border: activeCategory === cat.key
+                    ? "1px solid rgba(197,151,109,0.8)"
+                    : "1px solid rgba(197,151,109,0.2)",
+                  backgroundColor: activeCategory === cat.key
+                    ? "rgba(197,151,109,0.12)"
+                    : "transparent",
+                  color: activeCategory === cat.key
+                    ? "var(--deer-gold)"
+                    : "rgba(240,233,223,0.4)",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
                 {cat.label}
               </button>
             ))}
           </div>
-          <div>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "2.5rem" }}>{currentCategory.en}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {currentCategory.items.map((item, i) => <MenuItemCard key={i} {...item} delay={i * 80} />)}
-            </div>
-          </div>
         </div>
       </section>
 
-      <section className="section" style={{ backgroundColor: "var(--deer-bg-dark)" }}>
+      {/* ── 輪播主體 ── */}
+      <section style={{ backgroundColor: "var(--deer-dark)", paddingBottom: "5rem" }}>
         <div className="container">
-          <div className="text-center mb-14">
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Add-ons</p>
-            <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", color: "var(--deer-text)", letterSpacing: "0.1em" }}>加點</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", justifyContent: "center" }}>
+
+            {/* 上一頁 */}
+            <button
+              onClick={prev}
+              disabled={filtered.length <= 1}
+              style={{
+                flexShrink: 0,
+                width: "44px", height: "44px",
+                border: "1px solid rgba(197,151,109,0.3)",
+                backgroundColor: "transparent",
+                color: "rgba(197,151,109,0.7)",
+                cursor: filtered.length <= 1 ? "default" : "pointer",
+                fontSize: "1.5rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.2s ease",
+                opacity: filtered.length <= 1 ? 0.3 : 1,
+              }}
+            >
+              ‹
+            </button>
+
+            {/* 圖片主體 */}
+            {current && (
+              <div
+                style={{
+                  flex: 1,
+                  maxWidth: "640px",
+                  cursor: "zoom-in",
+                  position: "relative" as const,
+                }}
+                onClick={() => setLightboxSrc(current.src)}
+              >
+                <img
+                  key={current.src}
+                  src={current.src}
+                  alt={current.label}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                    boxShadow: "0 8px 48px rgba(0,0,0,0.5)",
+                  }}
+                />
+                <div style={{
+                  position: "absolute" as const, bottom: "1rem", right: "1rem",
+                  backgroundColor: "rgba(26,18,16,0.75)",
+                  border: "1px solid rgba(197,151,109,0.3)",
+                  padding: "0.3rem 0.7rem",
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.12em",
+                  color: "rgba(197,151,109,0.8)",
+                  pointerEvents: "none" as const,
+                }}>
+                  ZOOM
+                </div>
+              </div>
+            )}
+
+            {/* 下一頁 */}
+            <button
+              onClick={next}
+              disabled={filtered.length <= 1}
+              style={{
+                flexShrink: 0,
+                width: "44px", height: "44px",
+                border: "1px solid rgba(197,151,109,0.3)",
+                backgroundColor: "transparent",
+                color: "rgba(197,151,109,0.7)",
+                cursor: filtered.length <= 1 ? "default" : "pointer",
+                fontSize: "1.5rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.2s ease",
+                opacity: filtered.length <= 1 ? 0.3 : 1,
+              }}
+            >
+              ›
+            </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {EXTRAS.map((item, i) => <ExtraCard key={i} {...item} delay={i * 80} />)}
-          </div>
+
+          {/* 頁碼與縮圖 */}
+          {current && (
+            <div style={{ textAlign: "center" as const, marginTop: "1.5rem" }}>
+              <p style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+                fontSize: "0.8125rem",
+                color: "rgba(240,233,223,0.4)",
+                letterSpacing: "0.08em",
+                marginBottom: "1rem",
+              }}>
+                {current.label} &nbsp;·&nbsp; {currentIndex + 1} / {filtered.length}
+              </p>
+
+              {/* 縮圖列 */}
+              <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", flexWrap: "wrap" as const }}>
+                {filtered.map((page, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentIndex(i)}
+                    style={{
+                      width: "36px", height: "36px",
+                      padding: 0,
+                      border: i === currentIndex
+                        ? "1px solid rgba(197,151,109,0.8)"
+                        : "1px solid rgba(197,151,109,0.15)",
+                      cursor: "pointer",
+                      overflow: "hidden",
+                      opacity: i === currentIndex ? 1 : 0.45,
+                      transition: "all 0.2s ease",
+                      flexShrink: 0,
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <img
+                      src={page.src}
+                      alt=""
+                      style={{ width: "100%", height: "100%", objectFit: "cover" as const, display: "block" }}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="section" style={{ backgroundColor: "var(--deer-dark)" }}>
-        <div className="container-narrow text-center">
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.6)", marginBottom: "2rem" }}>Please Note</p>
-          <div style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.45)", lineHeight: 2.2, letterSpacing: "0.05em" }}>
-            <p>晚餐時段每位最低消費 NT$600，另加一成服務費。</p>
-            <p>菜單內容依季節與食材供應調整，以當日為準。</p>
-            <p>如有食物過敏或特殊飲食需求，請於訂位時告知。</p>
-          </div>
-          <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.4)", margin: "2.5rem auto" }} />
-          <a href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf" target="_blank" rel="noopener noreferrer" className="btn-deer-light" style={{ fontSize: "0.8rem" }}>預約一場餐桌</a>
+      {/* ── 備注 ── */}
+      <section style={{ backgroundColor: "rgba(26,18,16,0.6)", borderTop: "1px solid rgba(197,151,109,0.08)", padding: "3rem 0" }}>
+        <div className="container">
+          <p style={{
+            fontFamily: "'Noto Serif TC', serif",
+            fontWeight: 300,
+            fontSize: "0.8125rem",
+            color: "rgba(240,233,223,0.3)",
+            lineHeight: 2,
+            letterSpacing: "0.04em",
+          }}>
+            本餐廳僅提供 NATURA 微礦水或微礦氣泡水。每份套餐均含一份前菜、綜合菜盤、副餐及甜點。
+            低消一人為 600 元（以單人獨立計算），以上價格均加收一成服務費。
+            部分餐點可能會因供貨短缺及品質等因素而無法正常供應。
+            本餐廳禁止飲用烈酒，自備酒水酌收開瓶費葡萄酒每瓶 200 元。
+          </p>
         </div>
       </section>
     </main>

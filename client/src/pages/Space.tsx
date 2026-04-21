@@ -274,7 +274,7 @@ export default function Space() {
             lineHeight: 2.1, letterSpacing: "0.05em",
           }}>
             黑磚、木質、暖銅燈具。<br />
-            每一處細節，都是刻意留下的安靜。
+            每一處細節，都是為了讓你專注於眼前的人。
           </p>
         </div>
       </section>
@@ -356,8 +356,8 @@ export default function Space() {
             maxWidth: "340px", margin: "0 auto 2.5rem",
           }}>
             照片只能傳遞一部分。<br />
-            那個燈光的溫度，那個空間的安靜，<br />
-            需要你親自來。
+            那個燈光的溫度，那個空間的氛圍，<br />
+            需要你親自來感受。
           </p>
           <a
             href="/reservation"

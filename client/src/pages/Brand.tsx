@@ -45,7 +45,7 @@ const BRAND_COMMITMENTS = [
   {
     en: "Broth First",
     zh: "天然上湯",
-    desc: "每鍋湯底以大量食材長時熬製，不添加人工調味。湯是主角，不是背景。",
+    desc: "以鰹節柴魚、多樣蔬果長時熬製，不添加人工甘味劑。湯底澄清透明，是食材本身的誠意。",
   },
   {
     en: "Curated Cuts",
@@ -53,9 +53,9 @@ const BRAND_COMMITMENTS = [
     desc: "與專業肉商合作，依部位特性搭配涮燙方式，每一片都有它應在的位置。",
   },
   {
-    en: "Quiet Service",
-    zh: "克制服務",
-    desc: "服務不打擾對話，不催促節奏。在場，但不佔據。讓餐桌屬於你們。",
+    en: "Present Service",
+    zh: "在場服務",
+    desc: "服務不催促節奏，不打擾對話。在場，但不佔據。讓餐桌屬於你們，讓時間屬於這一刻。",
   },
   {
     en: "CRÈM Dessert",
@@ -409,7 +409,7 @@ export default function Brand() {
                 marginBottom: "2.5rem",
               }}
             >
-              Our Promise
+              Our Philosophy
             </p>
             <blockquote
               style={{
@@ -436,10 +436,29 @@ export default function Brand() {
                 margin: "2.5rem auto",
               }}
             />
+            {/* 補充說明：讓引言有脈絡 */}
+            <p
+              style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+                fontSize: "0.9rem",
+                color: "rgba(240,233,223,0.5)",
+                lineHeight: 2,
+                letterSpacing: "0.06em",
+                maxWidth: "480px",
+                margin: "0 auto 2rem",
+              }}
+            >
+              我們以鰹節柴魚與天然蔬果長時熬製，
+              <br />
+              不添加人工甘味，只留食材本身的誠意。
+              <br />
+              每一口湯，都是這份初衷最直接的表達。
+            </p>
             <p
               style={{
                 fontSize: "0.8125rem",
-                color: "rgba(240,233,223,0.4)",
+                color: "rgba(240,233,223,0.3)",
                 letterSpacing: "0.12em",
               }}
             >

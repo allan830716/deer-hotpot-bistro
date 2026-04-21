@@ -475,7 +475,7 @@ export default function Experience() {
             marginBottom: "3rem",
           }}>
             黑磚、木質、暖銅燈具。<br />
-            每一處細節，都是刻意留下的安靜。<br /><br />
+            每一處細節，都是為了讓你專注於眼前的人。<br /><br />
             桌與桌之間的距離，是一種尊重。<br />
             讓你的對話，只屬於這張桌子。
           </p>
