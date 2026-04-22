@@ -710,6 +710,36 @@ function CremSection() {
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(197,151,109,0.3), transparent)" }} />
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(197,151,109,0.3), transparent)" }} />
 
+      {/* ── 聯名橫幅 — 照片上方獨立區塊 ── */}
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "clamp(1.5rem, 5vw, 4rem)",
+        padding: "3rem 2rem",
+        borderBottom: "1px solid rgba(197,151,109,0.18)",
+      }}>
+        <img
+          src={DEER_LOGO}
+          alt="初衷小鹿 Logo"
+          style={{ height: "clamp(56px, 10vw, 96px)", width: "auto", objectFit: "contain" }}
+        />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
+          <span style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            fontSize: "clamp(2rem, 6vw, 4rem)",
+            color: "rgba(197,151,109,0.9)",
+            lineHeight: 1,
+            letterSpacing: "0.05em",
+          }}>×</span>
+        </div>
+        <img
+          src={CREM_LOGO}
+          alt="CRÈM Logo"
+          style={{ height: "clamp(56px, 10vw, 96px)", width: "auto", objectFit: "contain" }}
+        />
+      </div>
       {/* 橫式全寬照片 */}
       <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
         {/* 手機版：完整顯示圖片（contain），電腦版：全寬填滿（cover） */}
@@ -734,37 +764,6 @@ function CremSection() {
           inset: 0,
           background: "linear-gradient(to bottom, rgba(10,8,7,0.1) 0%, rgba(10,8,7,0.0) 40%, rgba(10,8,7,0.75) 100%)",
         }} />
-        {/* 聯名 Logo 並排 — 置於圖片頂部中央，不壓到主體 */}
-        <div style={{
-          position: "absolute",
-          top: "1.5rem",
-          left: 0,
-          right: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "1.25rem",
-          pointerEvents: "none",
-        }}>
-          <img
-            src={DEER_LOGO}
-            alt="初衷小鹿 Logo"
-            style={{ height: "52px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
-          />
-          <span style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 300,
-            fontSize: "1.1rem",
-            color: "rgba(197,151,109,0.8)",
-            letterSpacing: "0.1em",
-            lineHeight: 1,
-          }}>×</span>
-          <img
-            src={CREM_LOGO}
-            alt="CRÈM Logo"
-            style={{ height: "52px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
-          />
-        </div>
         {/* 照片底部文字 — 電腦版顯示，手機版隱藏 */}
         <div className="crem-img-overlay-text" style={{
           position: "absolute",
