@@ -710,18 +710,22 @@ function CremSection() {
 
       {/* 橫式全寬照片 */}
       <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
-        <img
-          src={CREM_IMG}
-          alt="CRÈM 慶祝蛋糕"
-          style={{
-            width: "100%",
-            height: "clamp(320px, 45vw, 640px)",
-            objectFit: "cover",
-            objectPosition: "center 40%",
-            display: "block",
-          }}
-          loading="eager"
-        />
+        {/* 手機版：完整顯示圖片（contain），電腦版：全寬填滿（cover） */}
+        <picture>
+          <img
+            src={CREM_IMG}
+            alt="CRÈM 慶祝蛋糕"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              objectFit: "contain",
+              objectPosition: "center center",
+              backgroundColor: "var(--deer-dark)",
+            }}
+            loading="eager"
+          />
+        </picture>
         {/* 漸層遮罩 — 底部文字區 */}
         <div style={{
           position: "absolute",
