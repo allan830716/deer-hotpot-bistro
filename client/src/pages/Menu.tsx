@@ -404,19 +404,19 @@ export default function Menu() {
                     zIndex: 20,
                     width: "44px", height: "44px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    backgroundColor: "rgba(255,255,255,0.13)",
+                    border: "1px solid rgba(255,255,255,0.4)",
+                    backgroundColor: "#ababab",
                     backdropFilter: "blur(6px)",
                     WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.85)",
+                    color: "rgba(255,255,255,0.95)",
                     cursor: filtered.length <= 1 ? "default" : "pointer",
                     fontSize: "1.4rem",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.25 : 1,
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "#c8c8c8"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.7)"; } }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#ababab"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.4)"; }}
                 >
                   ‹
                 </button>
@@ -432,19 +432,19 @@ export default function Menu() {
                     zIndex: 20,
                     width: "44px", height: "44px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    backgroundColor: "rgba(255,255,255,0.13)",
+                    border: "1px solid rgba(255,255,255,0.4)",
+                    backgroundColor: "#ababab",
                     backdropFilter: "blur(6px)",
                     WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.85)",
+                    color: "rgba(255,255,255,0.95)",
                     cursor: filtered.length <= 1 ? "default" : "pointer",
                     fontSize: "1.4rem",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.25 : 1,
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)" ; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "#c8c8c8"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.7)"; } }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#ababab"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.4)"; }}
                 >
                   ›
                 </button>
