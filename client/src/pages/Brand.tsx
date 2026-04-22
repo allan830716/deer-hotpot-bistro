@@ -5,10 +5,7 @@
 
 import { useEffect, useRef } from "react";
 
-const SPACE_IMG = "/manus-storage/59301147_2179218135493270_2323651919307866112_o_06d161dd.jpg";
 const HERO_IMG  = "/manus-storage/hero-space_100d3e43.jpg";
-const SOUP_IMG  = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-soup-kD9yMfeQhWitk7LSxi895N.webp";
-const MEAT_IMG  = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-meat-HfC4JKdjgVn8nhL3rfu43S.webp";
 
 function useFadeIn(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
@@ -167,76 +164,7 @@ export default function Brand() {
         </div>
       </section>
 
-      {/* ── 空間圖片橫幅 ── */}
-      <section style={{ position: "relative", height: "55vh", minHeight: "380px", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${SPACE_IMG})`, backgroundSize: "cover", backgroundPosition: "center" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10,8,7,0.5) 0%, rgba(10,8,7,0.7) 100%)" }} />
-        <div className="container" style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div className="text-center">
-            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 3vw, 2rem)", color: "#F0E9DF", letterSpacing: "0.12em", lineHeight: 1.8 }}>
-              為了那些不該被打擾的時刻。
-            </p>
-            <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", margin: "1.5rem auto" }} />
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem", letterSpacing: "0.2em", color: "rgba(197,151,109,0.6)", textTransform: "uppercase" }}>
-              Taipei Xinyi · Since 2019
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* ── 料理圖片 + 文字 ── */}
-      <section className="section" style={{ backgroundColor: "var(--deer-dark)" }}>
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <img
-                src={MEAT_IMG}
-                alt="熟成肉品"
-                loading="lazy"
-                style={{ width: "100%", height: "340px", objectFit: "cover", display: "block" }}
-              />
-            </div>
-            <div style={{ padding: "2rem 0" }}>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "1.25rem" }}>
-                The Cut
-              </p>
-              <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1.5rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.1em", marginBottom: "1.5rem" }}>
-                熟成肉品
-              </h3>
-              <GoldLine />
-              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.5)", lineHeight: 2.1 }}>
-                經過濕式熟成處理，保留肉汁、脂肪香氣、提升柔嫩度，
-                適合火鍋這樣的短時間加熱方式，吃得到肉的原味。
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center" style={{ marginTop: "5rem" }}>
-            <div style={{ order: 2 }}>
-              <img
-                src={SOUP_IMG}
-                alt="日本頂級乾貨上湯"
-                loading="lazy"
-                style={{ width: "100%", height: "340px", objectFit: "cover", display: "block" }}
-              />
-            </div>
-            <div style={{ order: 1, padding: "2rem 0" }}>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "1.25rem" }}>
-                The Broth
-              </p>
-              <h3 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1.5rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.1em", marginBottom: "1.5rem" }}>
-                日本頂級乾貨上湯
-              </h3>
-              <GoldLine />
-              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.5)", lineHeight: 2.1 }}>
-                金黃透亮的乾貨上湯，經長時間熬煮而成。
-                鰹魚的煙燻深度、昆布、椎茸的溫潤菌香，
-                在口中層層展開，越喝越有鮮甜厚度。
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── 我們的堅持 ── */}
       <section className="section" style={{ backgroundColor: "rgba(18,12,10,0.8)", borderTop: "1px solid rgba(197,151,109,0.08)" }}>
