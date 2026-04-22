@@ -4,7 +4,7 @@
  * 避免貼文式對話口吻，改以品牌立場、用餐場景與體驗價值作為敘事主軸。
  */
 export const reservationUrl =
-  "https://inline.app/booking/-LQwYoWPmYj06JQfR5me:inline-live-2/-LQwYoc4E28Q7vv3f4dx?language=zh-tw";
+  "https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw";
 
 export const socialUrl = "https://www.instagram.com/originalpot_official/?hl=zh-tw";
 export const mapsUrl =

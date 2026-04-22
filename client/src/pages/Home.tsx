@@ -149,7 +149,7 @@ function HeroSection() {
           </h1>
 
           <a
-            href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf"
+            href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-deer-light"
@@ -725,7 +725,7 @@ function CTASection() {
             把時間，留給重要的人。
           </p>
           <a
-            href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf"
+            href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-deer-light"
