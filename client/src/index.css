@@ -299,18 +299,23 @@
 
 /* ── inline 訂位 iframe 響應式容器 ── */
 .inline-booking-container {
-  /* 桌機：固定高度 800px，讓整個訂位流程不需捲動 */
+  /* 桌機：固定高度 800px */
   height: 800px;
+}
+
+.inline-booking-container iframe {
+  height: 100%;
+  min-height: 800px;
 }
 
 @media (max-width: 768px) {
   .inline-booking-container {
-    /* 手機：使用動態視窗高度，確保可捲動瀏覽整頁 */
-    height: 100dvh;
-    min-height: 600px;
+    /* 手機：固定 580px，讓內容可在 iframe 內捐動，不會占滿整個畫面 */
+    height: 580px;
+    min-height: 480px;
   }
   .inline-booking-container iframe {
-    height: 100dvh;
-    min-height: 600px;
+    height: 580px;
+    min-height: 480px;
   }
 }

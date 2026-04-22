@@ -37,161 +37,186 @@ function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // 路由切換時關閉選單
+  useEffect(() => { setMenuOpen(false); }, [location]);
+
+  // 選單開啟時鎖定 body 捲動
   useEffect(() => {
-    setMenuOpen(false);
-  }, [location]);
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        height: "80px",
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: scrolled ? "rgba(26,18,16,0.96)" : "rgba(26,18,16,0.85)",
-        backdropFilter: "blur(12px)",
-        borderBottom: scrolled ? "1px solid rgba(197,151,109,0.15)" : "1px solid transparent",
-        transition: "all 0.3s ease",
-        padding: "0 2rem",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "1280px", margin: "0 auto" }}>
-        {/* Logo */}
-        <Link href="/">
-          <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "1rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.12em", cursor: "pointer" }}>
-            初衷小鹿
-          </span>
-        </Link>
+    <>
+      <header
+        style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+          height: "64px",
+          display: "flex", alignItems: "center",
+          backgroundColor: scrolled ? "rgba(26,18,16,0.97)" : "rgba(26,18,16,0.88)",
+          backdropFilter: "blur(14px)",
+          borderBottom: scrolled ? "1px solid rgba(197,151,109,0.15)" : "1px solid transparent",
+          transition: "all 0.3s ease",
+          padding: "0 1.25rem",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "1280px", margin: "0 auto" }}>
+          {/* Logo */}
+          <Link href="/">
+            <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "1rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.12em", cursor: "pointer" }}>
+              初衷小鹿
+            </span>
+          </Link>
 
-        {/* Desktop Nav */}
-        <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center" }} className="hidden md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <span
-                style={{
-                  fontFamily: "'Noto Serif TC', serif",
-                  fontWeight: 300,
-                  fontSize: "0.8125rem",
-                  letterSpacing: "0.1em",
-                  color: location === link.href ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
-                  cursor: "pointer",
-                  transition: "color 0.2s ease",
-                  borderBottom: location === link.href ? "1px solid rgba(197,151,109,0.6)" : "1px solid transparent",
-                  paddingBottom: "2px",
-                }}
-                onMouseEnter={(e) => { if (location !== link.href) (e.target as HTMLElement).style.color = "rgba(240,233,223,0.85)"; }}
-                onMouseLeave={(e) => { if (location !== link.href) (e.target as HTMLElement).style.color = "rgba(240,233,223,0.55)"; }}
-              >
-                {link.label}
-              </span>
-            </Link>
-          ))}
-          <a
-            href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 400,
-              fontSize: "0.7rem",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--deer-gold)",
-              border: "1px solid rgba(197,151,109,0.5)",
-              padding: "0.5rem 1.25rem",
-              transition: "all 0.2s ease",
-              textDecoration: "none",
-            }}
-            onMouseEnter={(e) => { (e.target as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
-            onMouseLeave={(e) => { (e.target as HTMLElement).style.backgroundColor = "transparent"; }}
+          {/* Desktop Nav — md 以上顯示 */}
+          <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center" }} className="hidden md:flex">
+            {NAV_LINKS.map((link) => (
+              <Link key={link.href} href={link.href}>
+                <span
+                  style={{
+                    fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem",
+                    letterSpacing: "0.1em",
+                    color: location === link.href ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
+                    cursor: "pointer", transition: "color 0.2s ease",
+                    borderBottom: location === link.href ? "1px solid rgba(197,151,109,0.6)" : "1px solid transparent",
+                    paddingBottom: "2px",
+                  }}
+                  onMouseEnter={(e) => { if (location !== link.href) (e.target as HTMLElement).style.color = "rgba(240,233,223,0.85)"; }}
+                  onMouseLeave={(e) => { if (location !== link.href) (e.target as HTMLElement).style.color = "rgba(240,233,223,0.55)"; }}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            ))}
+            <a
+              href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem",
+                letterSpacing: "0.18em", textTransform: "uppercase" as const,
+                color: "var(--deer-gold)", border: "1px solid rgba(197,151,109,0.5)",
+                padding: "0.5rem 1.25rem", transition: "all 0.2s ease", textDecoration: "none",
+              }}
+              onMouseEnter={(e) => { (e.target as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
+              onMouseLeave={(e) => { (e.target as HTMLElement).style.backgroundColor = "transparent"; }}
+            >
+              立即訂位
+            </a>
+          </nav>
+
+          {/* Mobile Hamburger — md 以下顯示 */}
+          <button
+            className="md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem", zIndex: 210 }}
+            aria-label={menuOpen ? "關閉選單" : "開啟選單"}
+            aria-expanded={menuOpen}
           >
-            立即訂位
-          </a>
-        </nav>
+            <div style={{ width: "22px", height: "16px", position: "relative" }}>
+              {/* 上橫線 — 開啟時旋轉 45° */}
+              <span style={{
+                position: "absolute", left: 0,
+                top: menuOpen ? "7px" : "0px",
+                display: "block", width: "22px", height: "1px",
+                backgroundColor: "rgba(240,233,223,0.85)",
+                transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), top 0.35s cubic-bezier(0.4,0,0.2,1)",
+                transform: menuOpen ? "rotate(45deg)" : "none",
+              }} />
+              {/* 中橫線 — 開啟時淡出 */}
+              <span style={{
+                position: "absolute", left: 0, top: "7px",
+                display: "block", width: "22px", height: "1px",
+                backgroundColor: "rgba(240,233,223,0.85)",
+                transition: "opacity 0.2s ease",
+                opacity: menuOpen ? 0 : 1,
+              }} />
+              {/* 下橫線 — 開啟時旋轉 -45° */}
+              <span style={{
+                position: "absolute", left: 0,
+                bottom: menuOpen ? "7px" : "0px",
+                display: "block", width: "22px", height: "1px",
+                backgroundColor: "rgba(240,233,223,0.85)",
+                transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), bottom 0.35s cubic-bezier(0.4,0,0.2,1)",
+                transform: menuOpen ? "rotate(-45deg)" : "none",
+              }} />
+            </div>
+          </button>
+        </div>
+      </header>
 
-        {/* Mobile Hamburger — md:hidden 確保只在手機顯示 */}
-        <button
-          className="md:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem", zIndex: 110 }}
-          aria-label={menuOpen ? "關閉選單" : "開啟選單"}
-          aria-expanded={menuOpen}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: "5px", width: "22px" }}>
-            <span style={{
-              display: "block", width: "22px", height: "1px",
-              backgroundColor: "rgba(240,233,223,0.8)",
-              transition: "transform 0.3s ease, opacity 0.3s ease",
-              transform: menuOpen ? "translateY(6px) rotate(45deg)" : "none",
-            }} />
-            <span style={{
-              display: "block", width: "22px", height: "1px",
-              backgroundColor: "rgba(240,233,223,0.8)",
-              transition: "opacity 0.3s ease",
-              opacity: menuOpen ? 0 : 1,
-            }} />
-            <span style={{
-              display: "block", width: "22px", height: "1px",
-              backgroundColor: "rgba(240,233,223,0.8)",
-              transition: "transform 0.3s ease, opacity 0.3s ease",
-              transform: menuOpen ? "translateY(-6px) rotate(-45deg)" : "none",
-            }} />
-          </div>
-        </button>
-      </div>
+      {/* ── 手機側邊抽屜遮罩 ── */}
+      <div
+        className="md:hidden"
+        onClick={() => setMenuOpen(false)}
+        style={{
+          position: "fixed", inset: 0, zIndex: 190,
+          backgroundColor: "rgba(0,0,0,0.55)",
+          backdropFilter: "blur(2px)",
+          opacity: menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? "auto" : "none",
+          transition: "opacity 0.35s ease",
+        }}
+      />
 
-      {/* Mobile Menu — 滑入動畫 */}
+      {/* ── 手機側邊抽屜本體 — 從右側滑入 ── */}
       <div
         className="md:hidden"
         style={{
-          position: "absolute", top: "80px", left: 0, right: 0,
-          backgroundColor: "rgba(20,14,12,0.98)",
-          backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(197,151,109,0.12)",
-          padding: menuOpen ? "2rem 2rem 2.5rem" : "0 2rem",
-          maxHeight: menuOpen ? "520px" : "0px",
-          overflow: "hidden",
-          transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease",
-          pointerEvents: menuOpen ? "auto" : "none",
+          position: "fixed", top: 0, right: 0, bottom: 0,
+          width: "72vw", maxWidth: "300px",
+          zIndex: 195,
+          backgroundColor: "rgba(18,12,10,0.98)",
+          backdropFilter: "blur(20px)",
+          borderLeft: "1px solid rgba(197,151,109,0.12)",
+          transform: menuOpen ? "translateX(0)" : "translateX(100%)",
+          transition: "transform 0.4s cubic-bezier(0.4,0,0.2,1)",
+          display: "flex", flexDirection: "column",
+          padding: "5rem 2rem 3rem",
+          overflowY: "auto",
         }}
       >
-        {NAV_LINKS.map((link, i) => (
-          <Link key={link.href} href={link.href}>
-            <div style={{
-              padding: "0.9rem 0",
-              borderBottom: "1px solid rgba(255,255,255,0.05)",
-              fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
-              fontSize: "0.9375rem",
-              color: location === link.href ? "var(--deer-gold)" : "rgba(240,233,223,0.6)",
-              letterSpacing: "0.1em", cursor: "pointer",
-              opacity: menuOpen ? 1 : 0,
-              transform: menuOpen ? "translateY(0)" : "translateY(-8px)",
-              transition: `opacity 0.3s ease ${i * 40}ms, transform 0.3s ease ${i * 40}ms`,
-            }}>
-              {link.label}
-            </div>
-          </Link>
-        ))}
+        {/* 品牌名 */}
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.5)", marginBottom: "2.5rem" }}>Deer's Hotpot Bistro</p>
+
+        {/* 導覽連結 */}
+        <nav style={{ flex: 1 }}>
+          {NAV_LINKS.map((link, i) => (
+            <Link key={link.href} href={link.href}>
+              <div style={{
+                padding: "1rem 0",
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
+                fontSize: "1rem",
+                color: location === link.href ? "var(--deer-gold)" : "rgba(240,233,223,0.65)",
+                letterSpacing: "0.1em", cursor: "pointer",
+                transform: menuOpen ? "translateX(0)" : "translateX(16px)",
+                opacity: menuOpen ? 1 : 0,
+                transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + i * 45}ms, opacity 0.35s ease ${60 + i * 45}ms`,
+              }}>
+                {link.label}
+              </div>
+            </Link>
+          ))}
+        </nav>
+
+        {/* 訂位按鈕 */}
         <a
           href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
           target="_blank" rel="noopener noreferrer"
           style={{
-            display: "block", marginTop: "1.5rem", textAlign: "center" as const,
+            display: "block", marginTop: "2rem", textAlign: "center" as const,
             fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
             letterSpacing: "0.18em", textTransform: "uppercase" as const,
             color: "var(--deer-gold)",
-            border: "1px solid rgba(197,151,109,0.4)",
-            padding: "0.85rem", textDecoration: "none",
+            border: "1px solid rgba(197,151,109,0.45)",
+            padding: "1rem", textDecoration: "none",
             opacity: menuOpen ? 1 : 0,
-            transition: "opacity 0.3s ease 240ms",
+            transform: menuOpen ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.35s ease 360ms, transform 0.4s ease 360ms",
           }}
         >立即訂位</a>
       </div>
-    </header>
+    </>
   );
 }
 
