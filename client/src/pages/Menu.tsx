@@ -312,15 +312,8 @@ export default function Menu() {
     return () => ro.disconnect();
   }, []);
 
-  // 分類筛選：先用 activeCategory，再用 activeDrink 子分類
-  const filtered = (() => {
-    let pages = activeCategory === "all" ? MENU_PAGES : MENU_PAGES.filter((p) => p.category === activeCategory);
-    // 如果目前分類包含 drinks，再用酒水子分類筛選
-    if (activeDrink !== "all") {
-      pages = pages.filter((p) => p.category === "drinks" && p.label === activeDrink);
-    }
-    return pages; // 無結果時回傳空陣列，由 UI 顯示空狀態
-  })();
+  // 所有圖片保留在輪播中，分類選單只做「跳頁」功能
+  const filtered = MENU_PAGES; // 永遠是全部圖片
 
   const safeIndex = Math.min(currentIndex, filtered.length - 1);
 
@@ -341,7 +334,13 @@ export default function Menu() {
   const handleCategoryChange = (key: string) => {
     setActiveCategory(key);
     setActiveDrink("all"); // 切換主分類時重置酒水子分類
-    setCurrentIndex(0);
+    // 跳頁：找到該分類第一張圖片的索引
+    if (key === "all") {
+      goTo(0);
+    } else {
+      const idx = MENU_PAGES.findIndex((p) => p.category === key);
+      if (idx >= 0) goTo(idx);
+    }
     setDragDelta(0);
     setIsDragging(false);
     setCategoryKey(k => k + 1);
@@ -349,11 +348,17 @@ export default function Menu() {
 
   const handleDrinkChange = (key: string) => {
     setActiveDrink(key);
-    // 選擇酒水子分類時，自動切換主分類為 drinks（除非選全部）
-    if (key !== "all") {
+    if (key === "all") {
+      // 選全部酒水：跳到 drinks 分類第一張
       setActiveCategory("drinks");
+      const idx = MENU_PAGES.findIndex((p) => p.category === "drinks");
+      if (idx >= 0) goTo(idx);
+    } else {
+      // 選具體子分類：跳到該 label 第一張
+      setActiveCategory("drinks");
+      const idx = MENU_PAGES.findIndex((p) => p.category === "drinks" && p.label === key);
+      if (idx >= 0) goTo(idx);
     }
-    setCurrentIndex(0);
     setDragDelta(0);
     setIsDragging(false);
     setCategoryKey(k => k + 1);
