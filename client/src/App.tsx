@@ -33,7 +33,6 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
-  { href: "/reservation", label: "訂位" },
   { href: "/experience", label: "品牌體驗" },
 ];
 
