@@ -48,11 +48,13 @@ function Navbar() {
 
   return (
     <>
+      {/* 桌機版 header — md 以上顯示 */}
       <header
+        className="hidden md:flex"
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
           height: "64px",
-          display: "flex", alignItems: "center",
+          alignItems: "center",
           backgroundColor: scrolled ? "rgba(26,18,16,0.97)" : "rgba(26,18,16,0.88)",
           backdropFilter: "blur(14px)",
           borderBottom: scrolled ? "1px solid rgba(197,151,109,0.15)" : "1px solid transparent",
@@ -61,17 +63,15 @@ function Navbar() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "1280px", margin: "0 auto" }}>
-          {/* Logo — 桌機顯示，手機隱藏 */}
-          <Link href="/" className="hidden md:block">
+          {/* Logo */}
+          <Link href="/">
             <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "1rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.12em", cursor: "pointer" }}>
               初衷小鹿
             </span>
           </Link>
-          {/* 手機版占位元素，保持漢堡按鈕在右側 */}
-          <div className="md:hidden" />
 
-          {/* Desktop Nav — md 以上顯示 */}
-          <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center" }} className="hidden md:flex">
+          {/* Desktop Nav */}
+          <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
             {NAV_LINKS.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span
@@ -106,45 +106,47 @@ function Navbar() {
             </a>
           </nav>
 
-          {/* Mobile Hamburger — md 以下顯示 */}
-          <button
-            className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem", zIndex: 210 }}
-            aria-label={menuOpen ? "關閉選單" : "開啟選單"}
-            aria-expanded={menuOpen}
-          >
-            <div style={{ width: "22px", height: "16px", position: "relative" }}>
-              {/* 上橫線 — 開啟時旋轉 45° */}
-              <span style={{
-                position: "absolute", left: 0,
-                top: menuOpen ? "7px" : "0px",
-                display: "block", width: "22px", height: "1px",
-                backgroundColor: "rgba(240,233,223,0.85)",
-                transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), top 0.35s cubic-bezier(0.4,0,0.2,1)",
-                transform: menuOpen ? "rotate(45deg)" : "none",
-              }} />
-              {/* 中橫線 — 開啟時淡出 */}
-              <span style={{
-                position: "absolute", left: 0, top: "7px",
-                display: "block", width: "22px", height: "1px",
-                backgroundColor: "rgba(240,233,223,0.85)",
-                transition: "opacity 0.2s ease",
-                opacity: menuOpen ? 0 : 1,
-              }} />
-              {/* 下橫線 — 開啟時旋轉 -45° */}
-              <span style={{
-                position: "absolute", left: 0,
-                bottom: menuOpen ? "7px" : "0px",
-                display: "block", width: "22px", height: "1px",
-                backgroundColor: "rgba(240,233,223,0.85)",
-                transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), bottom 0.35s cubic-bezier(0.4,0,0.2,1)",
-                transform: menuOpen ? "rotate(-45deg)" : "none",
-              }} />
-            </div>
-          </button>
         </div>
       </header>
+
+      {/* 手機版漢堡按鈕 — 独立固定定位，只在手機顯示 */}
+      <button
+        className="md:hidden"
+        onClick={() => setMenuOpen(!menuOpen)}
+        style={{
+          position: "fixed", top: "1rem", right: "1.25rem",
+          zIndex: 210, background: "none", border: "none",
+          cursor: "pointer", padding: "0.5rem",
+        }}
+        aria-label={menuOpen ? "關閉選單" : "開啟選單"}
+        aria-expanded={menuOpen}
+      >
+        <div style={{ width: "22px", height: "16px", position: "relative" }}>
+          <span style={{
+            position: "absolute", left: 0,
+            top: menuOpen ? "7px" : "0px",
+            display: "block", width: "22px", height: "1px",
+            backgroundColor: "rgba(240,233,223,0.85)",
+            transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), top 0.35s cubic-bezier(0.4,0,0.2,1)",
+            transform: menuOpen ? "rotate(45deg)" : "none",
+          }} />
+          <span style={{
+            position: "absolute", left: 0, top: "7px",
+            display: "block", width: "22px", height: "1px",
+            backgroundColor: "rgba(240,233,223,0.85)",
+            transition: "opacity 0.2s ease",
+            opacity: menuOpen ? 0 : 1,
+          }} />
+          <span style={{
+            position: "absolute", left: 0,
+            bottom: menuOpen ? "7px" : "0px",
+            display: "block", width: "22px", height: "1px",
+            backgroundColor: "rgba(240,233,223,0.85)",
+            transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), bottom 0.35s cubic-bezier(0.4,0,0.2,1)",
+            transform: menuOpen ? "rotate(-45deg)" : "none",
+          }} />
+        </div>
+      </button>
 
       {/* ── 手機側邊抽屜遮罩 ── */}
       <div

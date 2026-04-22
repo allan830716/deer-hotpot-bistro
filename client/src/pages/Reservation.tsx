@@ -205,8 +205,32 @@ export default function Reservation() {
               ))}
             </div>
 
-            {/* CRÈM 官網按鈕 */}
-            <div style={{ marginTop: "2.5rem" }}>
+            {/* CRÈM 官網按鈕 — 顯眼區塊 */}
+            <div style={{
+              marginTop: "2.5rem",
+              padding: "2rem",
+              border: "1px solid rgba(197,151,109,0.3)",
+              backgroundColor: "rgba(197,151,109,0.06)",
+              maxWidth: "480px",
+            }}>
+              <p style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+                fontSize: "0.75rem",
+                color: "rgba(197,151,109,0.7)",
+                letterSpacing: "0.12em",
+                marginBottom: "0.75rem",
+              }}>準備好了嗎？</p>
+              <p style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+                fontSize: "0.9rem",
+                color: "rgba(240,233,223,0.75)",
+                lineHeight: 1.8,
+                marginBottom: "1.5rem",
+              }}>
+                前往 CRÈM 官網選購蛋糕，備註訂位大名、日期與時間，其餘由我們幫您完成。
+              </p>
               <a
                 href="https://www.crem.tw"
                 target="_blank"
@@ -214,31 +238,30 @@ export default function Reservation() {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "0.6rem",
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 400,
-                  fontSize: "0.75rem",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase" as const,
-                  color: "var(--deer-gold)",
-                  border: "1px solid rgba(197,151,109,0.45)",
-                  padding: "0.75rem 2rem",
+                  gap: "0.75rem",
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.9rem",
+                  letterSpacing: "0.12em",
+                  color: "var(--deer-dark)",
+                  backgroundColor: "var(--deer-gold)",
+                  padding: "0.9rem 2rem",
                   textDecoration: "none",
                   transition: "all 0.25s ease",
+                  width: "100%",
+                  justifyContent: "center",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.backgroundColor = "rgba(197,151,109,0.1)";
-                  el.style.borderColor = "rgba(197,151,109,0.8)";
+                  el.style.backgroundColor = "#d4a96a";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.backgroundColor = "transparent";
-                  el.style.borderColor = "rgba(197,151,109,0.45)";
+                  el.style.backgroundColor = "var(--deer-gold)";
                 }}
               >
-                <span>前往 CRÈM 預訂蛋糕</span>
-                <span style={{ fontSize: "0.8rem", opacity: 0.7 }}>→</span>
+                <span>前往 CRÈM 預訂慶祝蛋糕</span>
+                <span style={{ fontSize: "1rem" }}>→</span>
               </a>
             </div>
           </div>
