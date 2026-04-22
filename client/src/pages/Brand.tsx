@@ -32,9 +32,9 @@ function GoldLine() {
 
 const BRAND_COMMITMENTS = [
   { en: "Broth First",    zh: "天然上湯",  desc: "以鰹節柴魚、多樣蔬果長時熬製，不添加人工甘味劑。湯底澄清透明，是食材本身的誠意。" },
-  { en: "Curated Cuts",  zh: "嚴選肉品",  desc: "與專業肉商合作，依部位特性搭配涮燙方式，每一片都有它應在的位置。" },
+  { en: "Curated Cuts",  zh: "嚴選肉品",  desc: "經過濕式熟成處理，保留肉汁、脂肪香氣、提升柔嫩度，依部位特性搭配涮燙方式，每一片都有它應在的位置。" },
   { en: "Present Service", zh: "在場服務", desc: "服務不催促節奏，不打擾對話。在場，但不佔據。讓餐桌屬於你們，讓時間屬於這一刻。" },
-  { en: "CRÈM Dessert",  zh: "慶祝蛋糕",  desc: "與 CRÈM 甜點工作室合作，提供一條龍慶祝服務，從餐桌到蛋糕，讓每個重要時刻都完整。" },
+  { en: "CRÈM Dessert",  zh: "慶祝蛋糕",  desc: "與 CRÈM 甜點品牌合作，提供一條龍慶祝服務，從餐桌到蛋糕，讓每個重要時刻都更加完整。" },
 ];
 
 function StatItem({ num, label, delay }: { num: string; label: string; delay: number }) {
@@ -197,12 +197,12 @@ export default function Brand() {
             </blockquote>
             <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.4)", margin: "2.5rem auto" }} />
             <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9rem", color: "rgba(240,233,223,0.4)", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "480px", margin: "0 auto 2rem" }}>
-              我們以鰹節柴魚與天然蔬果長時熬製，<br />
-              不添加人工甘味，只留食材本身的誠意。<br />
+              以日本頂級乾貨與天然蔬果長時熬製，<br />
+              將鮮味慢慢收進每一口之中，只留食材本身的誠意。<br />
               每一口湯，都是這份初衷最直接的表達。
             </p>
             <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.12em" }}>
-              初衷小鹿 Deer's Hotpot Bistro
+              Soul in every broth.
             </p>
           </div>
         </div>
