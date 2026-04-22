@@ -113,34 +113,84 @@ function Navbar() {
           </a>
         </nav>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Hamburger — md:hidden 確保只在手機顯示 */}
         <button
           className="md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
-          style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem" }}
-          aria-label="選單"
+          style={{ background: "none", border: "none", cursor: "pointer", padding: "0.5rem", zIndex: 110 }}
+          aria-label={menuOpen ? "關閉選單" : "開啟選單"}
+          aria-expanded={menuOpen}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-            {[0, 1, 2].map((i) => (
-              <span key={i} style={{ display: "block", width: "22px", height: "1px", backgroundColor: "rgba(240,233,223,0.7)", transition: "all 0.3s ease" }} />
-            ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: "5px", width: "22px" }}>
+            <span style={{
+              display: "block", width: "22px", height: "1px",
+              backgroundColor: "rgba(240,233,223,0.8)",
+              transition: "transform 0.3s ease, opacity 0.3s ease",
+              transform: menuOpen ? "translateY(6px) rotate(45deg)" : "none",
+            }} />
+            <span style={{
+              display: "block", width: "22px", height: "1px",
+              backgroundColor: "rgba(240,233,223,0.8)",
+              transition: "opacity 0.3s ease",
+              opacity: menuOpen ? 0 : 1,
+            }} />
+            <span style={{
+              display: "block", width: "22px", height: "1px",
+              backgroundColor: "rgba(240,233,223,0.8)",
+              transition: "transform 0.3s ease, opacity 0.3s ease",
+              transform: menuOpen ? "translateY(-6px) rotate(-45deg)" : "none",
+            }} />
           </div>
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div style={{ position: "absolute", top: "80px", left: 0, right: 0, backgroundColor: "rgba(26,18,16,0.98)", borderBottom: "1px solid rgba(197,151,109,0.15)", padding: "2rem" }}>
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <div style={{ padding: "1rem 0", borderBottom: "1px solid rgba(255,255,255,0.06)", fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: location === link.href ? "var(--deer-gold)" : "rgba(240,233,223,0.65)", letterSpacing: "0.1em", cursor: "pointer" }}>
-                {link.label}
-              </div>
-            </Link>
-          ))}
-          <a href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf" target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: "1.5rem", textAlign: "center", fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", border: "1px solid rgba(197,151,109,0.4)", padding: "0.75rem", textDecoration: "none" }}>立即訂位</a>
-        </div>
-      )}
+      {/* Mobile Menu — 滑入動畫 */}
+      <div
+        className="md:hidden"
+        style={{
+          position: "absolute", top: "80px", left: 0, right: 0,
+          backgroundColor: "rgba(20,14,12,0.98)",
+          backdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(197,151,109,0.12)",
+          padding: menuOpen ? "2rem 2rem 2.5rem" : "0 2rem",
+          maxHeight: menuOpen ? "520px" : "0px",
+          overflow: "hidden",
+          transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease",
+          pointerEvents: menuOpen ? "auto" : "none",
+        }}
+      >
+        {NAV_LINKS.map((link, i) => (
+          <Link key={link.href} href={link.href}>
+            <div style={{
+              padding: "0.9rem 0",
+              borderBottom: "1px solid rgba(255,255,255,0.05)",
+              fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
+              fontSize: "0.9375rem",
+              color: location === link.href ? "var(--deer-gold)" : "rgba(240,233,223,0.6)",
+              letterSpacing: "0.1em", cursor: "pointer",
+              opacity: menuOpen ? 1 : 0,
+              transform: menuOpen ? "translateY(0)" : "translateY(-8px)",
+              transition: `opacity 0.3s ease ${i * 40}ms, transform 0.3s ease ${i * 40}ms`,
+            }}>
+              {link.label}
+            </div>
+          </Link>
+        ))}
+        <a
+          href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+          target="_blank" rel="noopener noreferrer"
+          style={{
+            display: "block", marginTop: "1.5rem", textAlign: "center" as const,
+            fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
+            letterSpacing: "0.18em", textTransform: "uppercase" as const,
+            color: "var(--deer-gold)",
+            border: "1px solid rgba(197,151,109,0.4)",
+            padding: "0.85rem", textDecoration: "none",
+            opacity: menuOpen ? 1 : 0,
+            transition: "opacity 0.3s ease 240ms",
+          }}
+        >立即訂位</a>
+      </div>
     </header>
   );
 }
@@ -159,12 +209,20 @@ function Footer() {
         </div>
         <div>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Hours</p>
-          <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2 }}>週二至週日<br />午餐 11:30 — 14:30<br />晚餐 17:30 — 22:00</p>
+          <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2 }}>
+            星期日　11:30–15:00　17:30–22:30<br />
+            星期一　12:00–15:00　18:00–22:00<br />
+            星期二　12:00–15:00　18:00–22:00<br />
+            星期三　12:00–15:00　18:00–22:00<br />
+            星期四　12:00–15:00　18:00–22:00<br />
+            星期五　12:00–15:00　17:30–22:30<br />
+            星期六　11:30–15:00　17:30–22:30
+          </p>
         </div>
         <div>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Follow</p>
-          <a href="https://www.instagram.com/deers_hotpot_bistro/" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", display: "block", marginBottom: "0.5rem" }}>Instagram</a>
-          <a href="https://www.facebook.com/deershotpotbistro/" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none" }}>Facebook</a>
+          <a href="https://www.instagram.com/originalpot_official/?hl=zh-tw" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", display: "block", marginBottom: "0.5rem", transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>Instagram</a>
+          <a href="https://www.facebook.com/deershotpotbistro/?locale=zh_TW" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>Facebook</a>
         </div>
       </div>
       <div style={{ maxWidth: "1280px", margin: "3rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2rem", textAlign: "center" }}>

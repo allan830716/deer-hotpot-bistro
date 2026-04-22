@@ -87,20 +87,23 @@ export default function Reservation() {
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "var(--deer-gold)", marginBottom: "2rem" }}>
             Online Booking
           </p>
+          {/* 響應式 iframe 容器：手機 100vh，桌機自動擴展 */}
           <div style={{
             width: "100%",
-            minHeight: "700px",
-            border: "1px solid rgba(107,74,50,0.2)",
+            border: "1px solid rgba(107,74,50,0.15)",
             overflow: "hidden",
             backgroundColor: "#fff",
-          }}>
+            borderRadius: "2px",
+            /* 手機上使用 100dvh 確保可捲動瀏覽整頁 */
+          }} className="inline-booking-container">
             <iframe
               src="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
               width="100%"
-              height="700"
-              style={{ border: "none", display: "block" }}
+              height="100%"
+              style={{ border: "none", display: "block", minHeight: "100%" }}
               title="初衷小鹿線上訂位"
               allow="payment"
+              loading="lazy"
             />
           </div>
           <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "var(--deer-muted)", marginTop: "1rem", lineHeight: 1.8 }}>

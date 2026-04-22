@@ -20,14 +20,12 @@ import { Link } from "wouter";
 
 // ── 空間照片（已上傳至 CDN）────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
-const SPACE_IMG =
-  "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1400&q=80";
-const SOUP_IMG =
-  "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800&q=80";
-const MEAT_IMG =
-  "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80";
-const DESSERT_IMG =
-  "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&q=80";
+// 不該被打擾的時刻—全景用餐空間
+ const SPACE_IMG = "/manus-storage/59301147_2179218135493270_2323651919307866112_o_06d161dd.jpg";
+// 三核心圖片—均為初衷小鹿真實空間照
+ const SOUP_IMG = "/manus-storage/59350634_2179218345493249_3380575317096660992_o_4e94bb86.jpg";
+ const MEAT_IMG = "/manus-storage/59409685_2179218615493222_8552773285119524864_o_5bc7d043.jpg";
+ const DESSERT_IMG = "/manus-storage/triangler_DeersHotpotBistro19_753d6a7c.jpg";
 
 // ── Intersection Observer Hook ────────────────────────────────────────────
 function useFadeIn(threshold = 0.15) {
@@ -725,8 +723,6 @@ function CTASection() {
             }}
           >
             把時間，留給重要的人。
-            <br />
-            晚餐時段每位最低消費 NT$600 + 10% 服務費
           </p>
           <a
             href="https://inline.app/booking/-NKkKMkWVJnbMHHzxMxe:inline-live-2/-NKkKMkWVJnbMHHzxMxf"
