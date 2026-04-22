@@ -15,7 +15,17 @@ import Menu from "./pages/Menu";
 import Space from "./pages/Space";
 import Reservation from "./pages/Reservation";
 import Experience from "./pages/Experience";
+import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";
+import ShopSuccess from "./pages/ShopSuccess";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
+import AdminMembers from "./pages/AdminMembers";
 import NotFound from "./pages/NotFound";
+import { CartProvider } from "./contexts/CartContext";
+import { useCart } from "./contexts/CartContext";
+import { ShoppingCart } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "首頁" },
@@ -25,6 +35,26 @@ const NAV_LINKS = [
   { href: "/reservation", label: "訂位" },
   { href: "/experience", label: "品牌體驗" },
 ];
+
+function NavCartBtn() {
+  const { itemCount } = useCart();
+  const [, navigate] = useLocation();
+  return (
+    <button
+      onClick={() => navigate("/shop")}
+      className="nav-shop-link"
+      style={{ position: "relative", background: "transparent", border: "1px solid rgba(197,151,109,0.35)", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.375rem", padding: "0.375rem 0.875rem", fontSize: "0.75rem", letterSpacing: "0.08em", fontFamily: "'Noto Serif TC', serif" }}
+    >
+      <ShoppingCart size={14} />
+      商店
+      {itemCount > 0 && (
+        <span style={{ position: "absolute", top: "-6px", right: "-6px", background: "var(--deer-gold)", color: "var(--deer-dark)", fontSize: "0.6rem", fontWeight: 600, width: "16px", height: "16px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {itemCount}
+        </span>
+      )}
+    </button>
+  );
+}
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -90,6 +120,7 @@ function Navbar() {
                 </span>
               </Link>
             ))}
+            <NavCartBtn />
             <a
               href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
               target="_blank" rel="noopener noreferrer"
@@ -270,6 +301,13 @@ function Router() {
       <Route path="/space" component={Space} />
       <Route path="/reservation" component={Reservation} />
       <Route path="/experience" component={Experience} />
+      <Route path="/shop" component={Shop} />
+      <Route path="/shop/success" component={ShopSuccess} />
+      <Route path="/cart" component={Cart} />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/products" component={AdminProducts} />
+      <Route path="/admin/orders" component={AdminOrders} />
+      <Route path="/admin/members" component={AdminMembers} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -339,10 +377,12 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
-          <Toaster />
-          <Navbar />
-          <Router />
-          <Footer />
+          <CartProvider>
+            <Toaster />
+            <Navbar />
+            <Router />
+            <Footer />
+          </CartProvider>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
