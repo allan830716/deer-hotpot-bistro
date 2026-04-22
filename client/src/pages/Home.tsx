@@ -254,7 +254,7 @@ const CORES = [
     en: "The Broth",
     line1: "『日本頂級乾貨』上湯的層次底蘊",
     line2: "",
-    desc: "金黃透亮的乾貨上湯，經長時間熬煮而成。鰹魚的煙燻深度、昆布、椎茸的溫潤菌香，在口中層層展開，越喝越有鮮甜厚度。",
+    desc: "以日本靜岡百年老舖本枯節、北海道羅臼昆布、宮崎香信椎茸長時熬製。本枯節的煙燻發酵深度、昆布保留的海水鮮味、椎茸低溫慢乾的菌香，在口中層層展開，越喝越有鮮甜厚度。不添加人工甘味，只留食材本身的誠意。",
   },
   {
     img: DESSERT_IMG,
@@ -457,11 +457,25 @@ function NarrativeSection() {
             <NarrativeItem key={i} {...item} delay={i * 100} />
           ))}
         </div>
+
+        {/* 輕量 CTA */}
+        <div style={{ textAlign: "center", marginTop: "4rem", paddingTop: "3rem", borderTop: "1px solid rgba(197,151,109,0.15)" }}>
+          <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: "rgba(240,233,223,0.55)", letterSpacing: "0.06em", marginBottom: "1.5rem" }}>
+            準備好了嗎？
+          </p>
+          <a
+            href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-deer-outline"
+          >
+            預約一場餐桌
+          </a>
+        </div>
       </div>
     </section>
   );
 }
-
 function NarrativeItem({
   step,
   title,
@@ -679,6 +693,37 @@ function TrustSection() {
           >
             每一則評論，都是真實的用餐記憶。
           </p>
+
+          {/* 口碑金句 */}
+          <div style={{ marginTop: "3rem", padding: "1.75rem 2rem", borderTop: "1px solid rgba(197,151,109,0.2)", borderBottom: "1px solid rgba(197,151,109,0.2)" }}>
+            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "var(--deer-text)", lineHeight: 1.8, letterSpacing: "0.06em", marginBottom: "0.75rem" }}>
+              「被甜點耽誤的火鍋店。」
+            </p>
+            <p style={{ fontSize: "0.75rem", color: "var(--deer-sub)", letterSpacing: "0.1em" }}>
+              — 顧客評論
+            </p>
+          </div>
+
+          {/* 認證標章 */}
+          <div style={{ marginTop: "3rem" }}>
+            <p className="font-label mb-6" style={{ color: "var(--deer-gold)" }}>
+              Awards & Recognition
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.875rem", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1.75rem", border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(197,151,109,0.06)", width: "fit-content" }}>
+                <span style={{ color: "var(--deer-gold)", fontSize: "0.875rem" }}>✦</span>
+                <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-text)", letterSpacing: "0.08em" }}>台北鍋界十強</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1.75rem", border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(197,151,109,0.06)", width: "fit-content" }}>
+                <span style={{ color: "var(--deer-gold)", fontSize: "0.875rem" }}>✦</span>
+                <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-text)", letterSpacing: "0.08em" }}>台灣 30 大鍋物</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1.75rem", border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(197,151,109,0.06)", width: "fit-content" }}>
+                <span style={{ color: "var(--deer-gold)", fontSize: "0.875rem" }}>✦</span>
+                <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-text)", letterSpacing: "0.08em" }}>Vogue 推薦餐廳</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
