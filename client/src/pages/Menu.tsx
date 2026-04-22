@@ -352,7 +352,7 @@ export default function Menu() {
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
       <style>{`
         @keyframes categoryFadeIn {
-          from { opacity: 0; transform: translateY(10px); }
+          from { opacity: 0; transform: translateY(14px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         .menu-img-wrap {
@@ -398,18 +398,21 @@ export default function Menu() {
               disabled={filtered.length <= 1}
               aria-label="上一頁"
               style={{
-                flexShrink: 0, width: "44px", height: "44px",
-                border: "1px solid rgba(197,151,109,0.3)",
-                backgroundColor: "transparent",
-                color: "rgba(197,151,109,0.7)",
+                flexShrink: 0, width: "48px", height: "48px",
+                borderRadius: "50%",
+                border: "1px solid rgba(255,255,255,0.28)",
+                backgroundColor: "rgba(255,255,255,0.13)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+                color: "rgba(255,255,255,0.85)",
                 cursor: filtered.length <= 1 ? "default" : "pointer",
-                fontSize: "1.5rem",
+                fontSize: "1.4rem",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.2s ease",
-                opacity: filtered.length <= 1 ? 0.3 : 1,
+                opacity: filtered.length <= 1 ? 0.25 : 1,
               }}
-              onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+              onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.22)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.45)"; } }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
             >
               ‹
             </button>
@@ -445,13 +448,13 @@ export default function Menu() {
                 <div
                   key={categoryKey}
                   style={{
-                    animation: categoryKey > 0 ? "categoryFadeIn 0.4s ease forwards" : "none",
+                    animation: categoryKey > 0 ? "categoryFadeIn 0.55s ease forwards" : "none",
                   }}
                 >
                   <div
                     style={{
                       transform: `translateX(${totalOffset}%)`,
-                      transition: dragOffset !== 0 ? "none" : "transform 0.32s cubic-bezier(0.4,0,0.2,1)",
+                      transition: dragOffset !== 0 ? "none" : "transform 0.35s ease",
                       willChange: "transform",
                     }}
                   >
@@ -497,20 +500,23 @@ export default function Menu() {
             <button
               onClick={next}
               disabled={filtered.length <= 1}
-              aria-label="下一頁"
+              aria-label="下一張"
               style={{
-                flexShrink: 0, width: "44px", height: "44px",
-                border: "1px solid rgba(197,151,109,0.3)",
-                backgroundColor: "transparent",
-                color: "rgba(197,151,109,0.7)",
+                flexShrink: 0, width: "48px", height: "48px",
+                borderRadius: "50%",
+                border: "1px solid rgba(255,255,255,0.28)",
+                backgroundColor: "rgba(255,255,255,0.13)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+                color: "rgba(255,255,255,0.85)",
                 cursor: filtered.length <= 1 ? "default" : "pointer",
-                fontSize: "1.5rem",
+                fontSize: "1.4rem",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.2s ease",
-                opacity: filtered.length <= 1 ? 0.3 : 1,
+                opacity: filtered.length <= 1 ? 0.25 : 1,
               }}
-              onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+              onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.22)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.45)"; } }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
             >
               ›
             </button>

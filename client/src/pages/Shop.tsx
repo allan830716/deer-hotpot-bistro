@@ -241,14 +241,7 @@ export default function Shop() {
             母親節套餐 · 居家鍋底 · 頂級肉品 · 海鮮
           </p>
         </div>
-        <Link href="/cart">
-          <button className="shop-cart-float">
-            <ShoppingCart size={20} />
-            {itemCount > 0 && (
-              <span className="shop-cart-badge">{itemCount}</span>
-            )}
-          </button>
-        </Link>
+
       </div>
 
       {/* ── 分類下拉選單 — sticky 固定不動 ── */}

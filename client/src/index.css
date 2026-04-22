@@ -2386,3 +2386,11 @@
     position: static;
   }
 }
+
+/* ── CRÈM 雙欄響應式 ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .crem-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+}
