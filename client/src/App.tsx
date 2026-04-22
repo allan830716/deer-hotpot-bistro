@@ -41,19 +41,29 @@ function NavCartBtn() {
   const { itemCount } = useCart();
   const [, navigate] = useLocation();
   return (
-    <button
-      onClick={() => navigate("/shop")}
-      className="nav-shop-link"
-      style={{ position: "relative", background: "transparent", border: "1px solid rgba(197,151,109,0.35)", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.375rem", padding: "0.375rem 0.875rem", fontSize: "0.75rem", letterSpacing: "0.08em", fontFamily: "'Noto Serif TC', serif" }}
-    >
-      <ShoppingCart size={14} />
-      商店
+    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      {/* 商店文字連結 */}
+      <button
+        onClick={() => navigate("/shop")}
+        className="nav-shop-link"
+        style={{ background: "transparent", border: "1px solid rgba(197,151,109,0.35)", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.375rem", padding: "0.375rem 0.875rem", fontSize: "0.75rem", letterSpacing: "0.08em", fontFamily: "'Noto Serif TC', serif" }}
+      >
+        商店
+      </button>
+      {/* 購物車圖示：點擊跳到購物車頁面 */}
       {itemCount > 0 && (
-        <span style={{ position: "absolute", top: "-6px", right: "-6px", background: "var(--deer-gold)", color: "var(--deer-dark)", fontSize: "0.6rem", fontWeight: 600, width: "16px", height: "16px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {itemCount}
-        </span>
+        <button
+          onClick={() => navigate("/cart")}
+          style={{ position: "relative", background: "transparent", border: "none", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", padding: "0.375rem" }}
+          aria-label="購物車"
+        >
+          <ShoppingCart size={16} />
+          <span style={{ position: "absolute", top: "-2px", right: "-4px", background: "var(--deer-gold)", color: "var(--deer-dark)", fontSize: "0.6rem", fontWeight: 700, width: "16px", height: "16px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {itemCount}
+          </span>
+        </button>
       )}
-    </button>
+    </div>
   );
 }
 
@@ -99,7 +109,7 @@ function Navbar() {
             <img
               src="/manus-storage/deer-logo_88482511.webp"
               alt="初衷小鹿"
-              style={{ height: "48px", width: "auto", cursor: "pointer", display: "block", filter: "brightness(1.05)" }}
+              style={{ height: "64px", width: "auto", cursor: "pointer", display: "block", filter: "brightness(1.05)" }}
             />
           </Link>
 
@@ -142,6 +152,20 @@ function Navbar() {
 
         </div>
       </header>
+
+      {/* 手機版固定 Logo — 左上角顯示 */}
+      <Link href="/">
+        <img
+          src="/manus-storage/deer-logo_88482511.webp"
+          alt="初衷小鹿"
+          className="md:hidden"
+          style={{
+            position: "fixed", top: "0.6rem", left: "1rem",
+            zIndex: 210, height: "44px", width: "auto",
+            filter: "brightness(1.05)", cursor: "pointer",
+          }}
+        />
+      </Link>
 
       {/* 手機版漢堡按鈕 — 独立固定定位，只在手機顯示 */}
       <button
@@ -241,6 +265,23 @@ function Navbar() {
               </div>
             </Link>
           ))}
+          {/* 商店連結 */}
+          <Link href="/shop">
+            <div style={{
+              padding: "1rem 0",
+              borderBottom: "1px solid rgba(255,255,255,0.05)",
+              fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
+              fontSize: "1rem",
+              color: location === "/shop" ? "var(--deer-gold)" : "rgba(197,151,109,0.85)",
+              letterSpacing: "0.1em", cursor: "pointer",
+              transform: menuOpen ? "translateX(0)" : "translateX(16px)",
+              opacity: menuOpen ? 1 : 0,
+              transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + NAV_LINKS.length * 45}ms, opacity 0.35s ease ${60 + NAV_LINKS.length * 45}ms`,
+              display: "flex", alignItems: "center", gap: "0.5rem",
+            }}>
+              <ShoppingCart size={14} /> 商店
+            </div>
+          </Link>
         </nav>
 
         {/* 訂位按鈕 */}
@@ -300,27 +341,38 @@ function Footer() {
     </footer>
   );
 }
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location]);
+  return null;
+}
+
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/brand" component={Brand} />
-      <Route path="/menu" component={Menu} />
-      <Route path="/space" component={Space} />
-      <Route path="/reservation" component={Reservation} />
-      <Route path="/experience" component={Experience} />
-      <Route path="/shop" component={Shop} />
-      <Route path="/shop/success" component={ShopSuccess} />
-      <Route path="/shop/:id" component={ShopProduct} />
-      <Route path="/cart" component={Cart} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/products" component={AdminProducts} />
-      <Route path="/admin/orders" component={AdminOrders} />
-      <Route path="/admin/members" component={AdminMembers} />
-      <Route path="/404" component={NotFound} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/brand" component={Brand} />
+        <Route path="/menu" component={Menu} />
+        <Route path="/space" component={Space} />
+        <Route path="/reservation" component={Reservation} />
+        <Route path="/experience" component={Experience} />
+        <Route path="/shop" component={Shop} />
+        <Route path="/shop/success" component={ShopSuccess} />
+        <Route path="/shop/:id" component={ShopProduct} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/admin" component={AdminDashboard} />
+        <Route path="/admin/products" component={AdminProducts} />
+        <Route path="/admin/orders" component={AdminOrders} />
+        <Route path="/admin/members" component={AdminMembers} />
+        <Route path="/404" component={NotFound} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
   );
 }
 

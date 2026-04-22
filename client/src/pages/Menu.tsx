@@ -474,12 +474,59 @@ export default function Menu() {
             </button>
           </div>
 
-          {/* 頁碼與縮圖 */}
+          {/* 頁碼與白色點點導覽 */}
           {current && (
             <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
-              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", letterSpacing: "0.08em", marginBottom: "1rem" }}>
+              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", letterSpacing: "0.08em", marginBottom: "1.25rem" }}>
                 {current.label} &nbsp;·&nbsp; {safeIndex + 1} / {filtered.length}
               </p>
+
+              {/* 白色半透明點點導覽（最多顯示 15 點，超過則顯示段落） */}
+              <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", alignItems: "center", marginBottom: "1.5rem" }}>
+                {filtered.length <= 15 ? (
+                  filtered.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => goTo(i, i > safeIndex ? "left" : "right")}
+                      aria-label={`第 ${i + 1} 頁`}
+                      style={{
+                        width: i === safeIndex ? "20px" : "7px",
+                        height: "7px",
+                        borderRadius: "4px",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                        backgroundColor: i === safeIndex ? "rgba(197,151,109,0.9)" : "rgba(255,255,255,0.3)",
+                        transition: "all 0.3s ease",
+                        flexShrink: 0,
+                      }}
+                    />
+                  ))
+                ) : (
+                  // 超過 15 頁時顯示小段落（前中後各 2 點 + 當前中心）
+                  [-2, -1, 0, 1, 2].map((offset) => {
+                    const idx = safeIndex + offset;
+                    if (idx < 0 || idx >= filtered.length) return <span key={offset} style={{ width: "7px" }} />;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => goTo(idx, offset > 0 ? "left" : "right")}
+                        style={{
+                          width: offset === 0 ? "20px" : "7px",
+                          height: "7px",
+                          borderRadius: "4px",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: 0,
+                          backgroundColor: offset === 0 ? "rgba(197,151,109,0.9)" : "rgba(255,255,255,0.3)",
+                          transition: "all 0.3s ease",
+                          flexShrink: 0,
+                        }}
+                      />
+                    );
+                  })
+                )}
+              </div>
 
               {/* 縮圖列 */}
               <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", flexWrap: "wrap" }}>

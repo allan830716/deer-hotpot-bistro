@@ -251,8 +251,8 @@ export default function Shop() {
         </Link>
       </div>
 
-      {/* ── 分類下拉選單 ── */}
-      <div className="shop-filter-v2">
+      {/* ── 分類下拉選單 — sticky 固定不動 ── */}
+      <div className="shop-filter-v2 shop-filter-sticky">
         <div className="shop-filter-v2-inner">
           <div className="shop-dropdown-wrap" ref={dropdownRef}>
             <button

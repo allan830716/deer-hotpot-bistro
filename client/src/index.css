@@ -1601,9 +1601,16 @@
   padding: 1.5rem 0;
   background: #0e0c0b;
   border-bottom: 1px solid rgba(197, 151, 109, 0.08);
+}
+
+/* sticky 固定分類欄：考慮導覽列 64px 高度 */
+.shop-filter-sticky {
   position: sticky;
-  top: 0;
-  z-index: 10;
+  top: 64px;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(14, 12, 11, 0.97);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
 
 .shop-filter-v2-inner {

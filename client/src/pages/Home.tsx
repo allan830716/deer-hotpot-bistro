@@ -685,128 +685,12 @@ function TrustSection() {
   );
 }
 
-// ── Section 6.5: 甜點特色 ────────────────────────────────────────────
-const DESSERT_ITEMS = [
-  {
-    icon: "🍰",
-    title: "手工甜點，每日現做",
-    desc: "不是套餐配送的平常甜點。每天由師傅現做，數量有限，吃完就沒了。",
-  },
-  {
-    icon: "🍷",
-    title: "酒搭配甜點",
-    desc: "甜點與酒款共同設計。一口白酒、一口甜點，是整場餐桌最後的小驚喜。",
-  },
-  {
-    icon: "✨",
-    title: "CRÈM 甜點店合作",
-    desc: "與台北知名甜點店 CRÈM 合作，將法式甜點的細致帶進火鍋餐桌，讓每一餐都有完美的句點。",
-  },
-];
-
-function DessertSection() {
-  const ref = useFadeIn(0.1);
-  return (
-    <section
-      className="section-lg"
-      style={{ backgroundColor: "var(--deer-bg)" }}
-    >
-      <div className="container">
-        <div ref={ref} className="fade-up text-center mb-16">
-          <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
-            The Sweet Finale
-          </p>
-          <h2
-            style={{
-              fontFamily: "'Noto Serif TC', serif",
-              fontWeight: 200,
-              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
-              color: "var(--deer-text)",
-              letterSpacing: "0.1em",
-            }}
-          >
-            甜點，不是附贈。
-            <br />
-            是整場餐桌的句點。
-          </h2>
-          <GoldLineCentered width={32} />
-          <p
-            style={{
-              fontSize: "0.875rem",
-              color: "var(--deer-sub)",
-              lineHeight: 2,
-              letterSpacing: "0.06em",
-              maxWidth: "480px",
-              margin: "0 auto",
-            }}
-          >
-            我們相信，一場好的餐桌不應該在主食結束後就散場。
-            甜點是把時間留給彼此的方式。
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {DESSERT_ITEMS.map((item, i) => (
-            <DessertCard key={i} {...item} delay={i * 120} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function DessertCard({ icon, title, desc, delay }: (typeof DESSERT_ITEMS)[0] & { delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
-
-  return (
-    <div ref={ref} className="fade-up" style={{ textAlign: "center", padding: "2rem 1.5rem", border: "1px solid rgba(107,74,50,0.12)", backgroundColor: "rgba(245,243,239,0.5)" }}>
-      <div style={{ fontSize: "2rem", marginBottom: "1.25rem" }}>{icon}</div>
-      <h3
-        style={{
-          fontFamily: "'Noto Serif TC', serif",
-          fontWeight: 300,
-          fontSize: "1rem",
-          color: "var(--deer-text)",
-          letterSpacing: "0.08em",
-          marginBottom: "1rem",
-        }}
-      >
-        {title}
-      </h3>
-      <div style={{ width: "24px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", margin: "0 auto 1rem" }} />
-      <p
-        style={{
-          fontSize: "0.8125rem",
-          color: "var(--deer-sub)",
-          lineHeight: 1.9,
-        }}
-      >
-        {desc}
-      </p>
-    </div>
-  );
-}
-
 // ── Section 6.8: CRÈM 一條龍服務 ────────────────────────────────────────────
 const CREM_STEPS = [
-  { num: "01", label: "預訂", desc: "透過 Inline 線上預訂，確認人數與就餐時段" },
-  { num: "02", label: "入座", desc: "專屬服務帶位，介紹餐點節奏與當日選料" },
-  { num: "03", label: "餐中酒搭", desc: "由服務人員推薦搭配酒款，對應主菜與當晚節奏" },
-  { num: "04", label: "CRÈM 甜點", desc: "餐後由 CRÈM 師傅現做甜點，不是附贈，是專屬的封尾" },
+  { num: "01", label: "預訂座位", desc: "透過 Inline 線上預訂，備註慶祝人與就餐時段" },
+  { num: "02", label: "選擇蛋糕", desc: "至 CRÈM 官網挑選專屬慶祝蛋糕，備註小鹿訂位資訊" },
+  { num: "03", label: "小鹿代勞", desc: "我們全程跟進 CRÈM 確認，確保蛋糕按時就位" },
+  { num: "04", label: "餐桌驚喜", desc: "餐後蛋糕登場，不需擔心一切，只需就座享受這場慶祝" },
 ];
 
 function CremSection() {
@@ -852,9 +736,9 @@ function CremSection() {
                 marginBottom: "1.5rem",
               }}
             >
-              一條龍服務，
+              一條龍慶祝服務，
               <br />
-              從預訂到甜點。
+              從餐桌到蛋糕。
             </h2>
             <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", margin: "0 auto 2rem" }} />
             <p
@@ -869,10 +753,10 @@ function CremSection() {
                 margin: "0 auto",
               }}
             >
-              初衷小鹿與 CRÈM 甜點店合作，
-              將法式甜點的細致帶進火鍋餐桌。
+              初衷小鹿與 CRÈM 合作，
+              讓每一場慶祝都有專屬蛋糕。
               <br />
-              這不是兩家店的合作，而是一場餐桌體驗的完整設計。
+              這不是兩家店的合作，而是一場慶祝的完整設計。
             </p>
           </div>
 
@@ -904,7 +788,7 @@ function CremSection() {
                 marginBottom: "2rem",
               }}
             >
-              客人常說，這是一場不需要擐心的晚餐。
+              客人常說，這是一場不需要擔心任何事的慶祝。
             </p>
             <a
               href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
@@ -913,7 +797,7 @@ function CremSection() {
               className="btn-deer-light"
               style={{ fontSize: "0.8rem" }}
             >
-              預約體驗一條龍服務
+              預約一場慶祝餐桌
             </a>
           </div>
         </div>
@@ -1050,7 +934,6 @@ export default function Home() {
       <CoreSection />
       <NarrativeSection />
       <SpaceSection />
-      <DessertSection />
       <CremSection />
       <TrustSection />
       <CTASection />
