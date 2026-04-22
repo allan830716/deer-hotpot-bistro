@@ -200,7 +200,7 @@ export default function Cart() {
             >
               {isCheckingOut ? "處理中..." : "確認結帳"}
             </button>
-            <p className="checkout-note">示範模式：直接建立訂單，無需付款。如需啟用 Stripe 金流，請聯絡管理員。</p>
+            <p className="checkout-note">點擊結帳後將跳轉至 Stripe 安全付款頁面，支援信用卡付款。</p>
           </div>
         </div>
       )}
