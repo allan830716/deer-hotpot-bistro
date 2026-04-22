@@ -932,9 +932,8 @@ export default function Home() {
       <HeroSection />
       <BrandPivotSection />
       <CoreSection />
-      <NarrativeSection />
-      <SpaceSection />
       <CremSection />
+      <SpaceSection />
       <TrustSection />
       <CTASection />
     </main>

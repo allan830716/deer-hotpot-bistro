@@ -48,7 +48,7 @@ function NavCartBtn() {
         className="nav-shop-link"
         style={{ background: "transparent", border: "1px solid rgba(197,151,109,0.35)", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.375rem", padding: "0.375rem 0.875rem", fontSize: "0.75rem", letterSpacing: "0.08em", fontFamily: "'Noto Serif TC', serif" }}
       >
-        商店
+        生鮮商店
       </button>
       {/* 購物車圖示：點擊跳到購物車頁面 */}
       {itemCount > 0 && (
@@ -109,7 +109,7 @@ function Navbar() {
             <img
               src="/manus-storage/deer-logo_88482511.webp"
               alt="初衷小鹿"
-              style={{ height: "64px", width: "auto", cursor: "pointer", display: "block", filter: "brightness(1.05)" }}
+              style={{ height: "80px", width: "auto", cursor: "pointer", display: "block", filter: "brightness(1.05)" }}
             />
           </Link>
 
@@ -153,15 +153,15 @@ function Navbar() {
         </div>
       </header>
 
-      {/* 手機版固定 Logo — 左上角顯示 */}
+      {/* 手機版 Logo — 左上角，不固定（只在頂部時顯示） */}
       <Link href="/">
         <img
           src="/manus-storage/deer-logo_88482511.webp"
           alt="初衷小鹿"
           className="md:hidden"
           style={{
-            position: "fixed", top: "0.6rem", left: "1rem",
-            zIndex: 210, height: "44px", width: "auto",
+            position: "fixed", top: "0.5rem", left: "1rem",
+            zIndex: 210, height: "52px", width: "auto",
             filter: "brightness(1.05)", cursor: "pointer",
           }}
         />
@@ -279,7 +279,7 @@ function Navbar() {
               transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + NAV_LINKS.length * 45}ms, opacity 0.35s ease ${60 + NAV_LINKS.length * 45}ms`,
               display: "flex", alignItems: "center", gap: "0.5rem",
             }}>
-              <ShoppingCart size={14} /> 商店
+              <ShoppingCart size={14} /> 生鮮商店
             </div>
           </Link>
         </nav>
@@ -339,6 +339,66 @@ function Footer() {
         <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>© 2024 初衷小鹿 Deer's Hotpot Bistro. All rights reserved.</p>
       </div>
     </footer>
+  );
+}
+// ── 全站浮動購物車圓形按鈕 ────────────────────────────────────────────────────────────────────────────────
+function FloatingCartButton() {
+  const { itemCount } = useCart();
+  const [, navigate] = useLocation();
+  const [location] = useLocation();
+  // 在購物車頁面或結帳頁面不顯示
+  if (location === "/cart" || location === "/shop/success") return null;
+  if (itemCount === 0) return null;
+  return (
+    <button
+      onClick={() => navigate("/cart")}
+      aria-label={`購物車 (${itemCount})`}
+      style={{
+        position: "fixed",
+        bottom: "2rem",
+        right: "2rem",
+        zIndex: 300,
+        width: "68px",
+        height: "68px",
+        borderRadius: "50%",
+        backgroundColor: "var(--deer-gold)",
+        border: "none",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 4px 24px rgba(197,151,109,0.45), 0 2px 8px rgba(0,0,0,0.4)",
+        transition: "transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1.12)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(197,151,109,0.6), 0 4px 12px rgba(0,0,0,0.5)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(197,151,109,0.45), 0 2px 8px rgba(0,0,0,0.4)";
+      }}
+    >
+      <ShoppingCart size={26} color="#1A1210" strokeWidth={2} />
+      <span style={{
+        position: "absolute",
+        top: "8px",
+        right: "8px",
+        background: "#1A1210",
+        color: "var(--deer-gold)",
+        fontSize: "0.65rem",
+        fontWeight: 700,
+        width: "20px",
+        height: "20px",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        lineHeight: 1,
+      }}>
+        {itemCount > 9 ? "9+" : itemCount}
+      </span>
+    </button>
   );
 }
 function ScrollToTop() {
@@ -444,6 +504,7 @@ export default function App() {
             <Navbar />
             <Router />
             <Footer />
+            <FloatingCartButton />
           </CartProvider>
         </TooltipProvider>
       </ThemeProvider>

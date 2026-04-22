@@ -1,6 +1,6 @@
 /*
  * 初衷小鹿 — 菜單 Menu.tsx
- * 升級版：支援手機拖動切換、下拉分類選單、滑動動畫、放大鏡圖示
+ * v3：真實跟隨手指滑動、滑動時鎖定頁面滾動、分類切換 fade 動畫
  */
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -58,7 +58,6 @@ const CATEGORIES = [
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
 function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) {
   const [loaded, setLoaded] = useState(false);
-
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handleKey);
@@ -81,14 +80,12 @@ function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) 
         @keyframes lbImgIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
         @keyframes spinnerRing { to { transform: rotate(360deg); } }
       `}</style>
-
       {!loaded && (
         <div style={{ position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
           <div style={{ width: "40px", height: "40px", border: "1px solid rgba(197,151,109,0.15)", borderTop: "1px solid rgba(197,151,109,0.7)", borderRadius: "50%", animation: "spinnerRing 1.2s linear infinite" }} />
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(197,151,109,0.45)" }}>Loading</p>
         </div>
       )}
-
       <img
         src={src}
         alt="菜單"
@@ -96,14 +93,12 @@ function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) 
         style={{ maxWidth: "min(90vw, 700px)", maxHeight: "92vh", objectFit: "contain", boxShadow: "0 0 80px rgba(0,0,0,0.7)", opacity: loaded ? 1 : 0, animation: loaded ? "lbImgIn 0.35s ease forwards" : "none" }}
         onClick={(e) => e.stopPropagation()}
       />
-
       <button
         onClick={onClose}
-        style={{ position: "absolute", top: "1.5rem", right: "2rem", background: "none", border: "none", cursor: "pointer", color: "rgba(240,233,223,0.5)", fontSize: "1.5rem", lineHeight: 1, zIndex: 100000, transition: "color 0.2s ease", fontFamily: "'Cormorant Garamond', serif", letterSpacing: "0.1em" }}
+        style={{ position: "absolute", top: "1.5rem", right: "2rem", background: "none", border: "none", cursor: "pointer", color: "rgba(240,233,223,0.5)", fontSize: "1.5rem", lineHeight: 1, zIndex: 100000, transition: "color 0.2s ease", fontFamily: "'Cormorant Garamond', serif" }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.9)"; }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.5)"; }}
       >✕</button>
-
       {loaded && (
         <p style={{ position: "absolute", bottom: "1.5rem", fontFamily: "'Cormorant Garamond', serif", fontSize: "0.6rem", letterSpacing: "0.18em", color: "rgba(197,151,109,0.3)", pointerEvents: "none" }}>
           CLICK ANYWHERE TO CLOSE
@@ -148,13 +143,9 @@ function CategoryDropdown({ activeCategory, onChange }: { activeCategory: string
         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.08)"; }}
       >
         <span>{activeLabel}</span>
-        <ChevronDown
-          size={14}
-          style={{ transition: "transform 0.25s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
-        />
+        <ChevronDown size={14} style={{ transition: "transform 0.25s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }} />
       </button>
 
-      {/* Dropdown panel */}
       <div style={{
         position: "absolute", top: "calc(100% + 4px)", left: 0,
         minWidth: "160px", zIndex: 100,
@@ -202,14 +193,18 @@ export default function Menu() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  // slide direction: "left" = next, "right" = prev
-  const [slideDir, setSlideDir] = useState<"left" | "right" | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
+  // 動畫狀態
+  const [displayIndex, setDisplayIndex] = useState(0);
+  const [slideOffset, setSlideOffset] = useState(0);       // 0 = 靜止
+  const [dragOffset, setDragOffset] = useState(0);          // 拖動中的即時偏移
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [categoryKey, setCategoryKey] = useState(0);        // 分類切換動畫 key
 
-  // Touch/drag state
+  // 觸控/滑鼠狀態
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
-  const isDragging = useRef(false);
+  const isHorizontal = useRef<boolean | null>(null);        // null=未判斷, true=水平, false=垂直
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const filtered = activeCategory === "all"
     ? MENU_PAGES
@@ -217,16 +212,25 @@ export default function Menu() {
 
   const safeIndex = Math.min(currentIndex, filtered.length - 1);
 
+  // 切換到指定索引（帶滑動動畫）
   const goTo = useCallback((newIndex: number, dir: "left" | "right") => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setSlideDir(dir);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    // 先設定「滑出」偏移
+    setSlideOffset(dir === "left" ? -100 : 100);
     setTimeout(() => {
       setCurrentIndex(newIndex);
-      setSlideDir(null);
-      setIsAnimating(false);
-    }, 320);
-  }, [isAnimating]);
+      setDisplayIndex(newIndex);
+      setSlideOffset(dir === "left" ? 100 : -100);
+      // 下一幀重置到 0（滑入）
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setSlideOffset(0);
+          setTimeout(() => setIsTransitioning(false), 320);
+        });
+      });
+    }, 200);
+  }, [isTransitioning]);
 
   const prev = useCallback(() => {
     const newIndex = (safeIndex - 1 + filtered.length) % filtered.length;
@@ -241,11 +245,14 @@ export default function Menu() {
   const handleCategoryChange = (key: string) => {
     setActiveCategory(key);
     setCurrentIndex(0);
-    setSlideDir(null);
-    setIsAnimating(false);
+    setDisplayIndex(0);
+    setSlideOffset(0);
+    setDragOffset(0);
+    setIsTransitioning(false);
+    setCategoryKey(k => k + 1);
   };
 
-  /* ── 鍵盤方向鍵 ── */
+  // 鍵盤方向鍵
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (lightboxSrc) { if (e.key === "Escape") setLightboxSrc(null); return; }
@@ -256,36 +263,55 @@ export default function Menu() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [prev, next, lightboxSrc]);
 
-  /* ── Touch / Drag 手勢 ── */
+  // ── 觸控手勢（真實跟隨手指 + 鎖定頁面滾動）──
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-    isDragging.current = false;
+    isHorizontal.current = null;
+    setDragOffset(0);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
-    // Only mark as horizontal drag if horizontal movement dominates
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) {
-      isDragging.current = true;
+
+    // 第一次移動時判斷方向
+    if (isHorizontal.current === null) {
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+        isHorizontal.current = Math.abs(dx) > Math.abs(dy);
+      }
     }
+
+    if (isHorizontal.current === true) {
+      // 水平滑動：阻止頁面滾動，圖片跟隨手指
+      e.preventDefault();
+      const containerWidth = containerRef.current?.offsetWidth ?? 320;
+      const percent = (dx / containerWidth) * 100;
+      setDragOffset(percent);
+    }
+    // 垂直滑動：不阻止，讓頁面正常滾動
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (isDragging.current && Math.abs(dx) > 40) {
+
+    if (isHorizontal.current === true && Math.abs(dx) > 50) {
+      setDragOffset(0);
       if (dx < 0) next();
       else prev();
+    } else {
+      // 未達閾值，彈回
+      setDragOffset(0);
     }
+
     touchStartX.current = null;
     touchStartY.current = null;
-    isDragging.current = false;
+    isHorizontal.current = null;
   };
 
-  // Mouse drag (desktop)
+  // ── 滑鼠拖動（桌機）──
   const mouseStartX = useRef<number | null>(null);
   const isMouseDragging = useRef(false);
 
@@ -296,13 +322,20 @@ export default function Menu() {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (mouseStartX.current === null) return;
-    if (Math.abs(e.clientX - mouseStartX.current) > 8) isMouseDragging.current = true;
+    const dx = e.clientX - mouseStartX.current;
+    if (Math.abs(dx) > 8) {
+      isMouseDragging.current = true;
+      const containerWidth = containerRef.current?.offsetWidth ?? 640;
+      const percent = (dx / containerWidth) * 100;
+      setDragOffset(percent);
+    }
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
     if (mouseStartX.current === null) return;
     const dx = e.clientX - mouseStartX.current;
-    if (isMouseDragging.current && Math.abs(dx) > 40) {
+    setDragOffset(0);
+    if (isMouseDragging.current && Math.abs(dx) > 50) {
       if (dx < 0) next();
       else prev();
     }
@@ -312,39 +345,18 @@ export default function Menu() {
 
   const current = filtered[safeIndex];
 
-  /* ── Slide animation CSS ── */
-  const slideStyle: React.CSSProperties = {
-    flex: 1,
-    maxWidth: "640px",
-    cursor: "grab",
-    position: "relative",
-    userSelect: "none",
-    overflow: "hidden",
-  };
-
-  const imgWrapStyle: React.CSSProperties = {
-    width: "100%",
-    animation: slideDir === "left"
-      ? "slideInFromRight 0.32s cubic-bezier(0.4,0,0.2,1) forwards"
-      : slideDir === "right"
-      ? "slideInFromLeft 0.32s cubic-bezier(0.4,0,0.2,1) forwards"
-      : "none",
-  };
+  // 計算圖片的 transform（拖動偏移 + 切換動畫偏移）
+  const totalOffset = dragOffset + slideOffset;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
       <style>{`
-        @keyframes slideInFromRight {
-          from { transform: translateX(60px); opacity: 0; }
-          to   { transform: translateX(0);    opacity: 1; }
-        }
-        @keyframes slideInFromLeft {
-          from { transform: translateX(-60px); opacity: 0; }
-          to   { transform: translateX(0);     opacity: 1; }
-        }
         @keyframes categoryFadeIn {
-          from { opacity: 0; transform: translateY(8px); }
+          from { opacity: 0; transform: translateY(10px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        .menu-img-wrap {
+          touch-action: pan-y;
         }
       `}</style>
 
@@ -380,7 +392,7 @@ export default function Menu() {
         <div className="container">
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", justifyContent: "center" }}>
 
-            {/* 上一頁 */}
+            {/* 上一頁按鈕 */}
             <button
               onClick={prev}
               disabled={filtered.length <= 1}
@@ -402,30 +414,59 @@ export default function Menu() {
               ‹
             </button>
 
-            {/* 圖片主體 — 支援觸控拖動 */}
+            {/* 圖片主體 */}
             {current && (
               <div
-                style={slideStyle}
+                ref={containerRef}
+                className="menu-img-wrap"
+                style={{
+                  flex: 1,
+                  maxWidth: "640px",
+                  cursor: isMouseDragging.current ? "grabbing" : "grab",
+                  position: "relative",
+                  userSelect: "none",
+                  overflow: "hidden",
+                }}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
-                onMouseLeave={() => { mouseStartX.current = null; isMouseDragging.current = false; }}
+                onMouseLeave={() => {
+                  if (mouseStartX.current !== null) {
+                    setDragOffset(0);
+                    mouseStartX.current = null;
+                    isMouseDragging.current = false;
+                  }
+                }}
               >
-                <div style={imgWrapStyle}>
-                  <img
-                    key={current.src}
-                    src={current.src}
-                    alt={current.label}
+                {/* 分類切換時的 fade 動畫 wrapper */}
+                <div
+                  key={categoryKey}
+                  style={{
+                    animation: categoryKey > 0 ? "categoryFadeIn 0.4s ease forwards" : "none",
+                  }}
+                >
+                  <div
                     style={{
-                      width: "100%", height: "auto", display: "block",
-                      boxShadow: "0 8px 48px rgba(0,0,0,0.5)",
-                      pointerEvents: "none",
+                      transform: `translateX(${totalOffset}%)`,
+                      transition: dragOffset !== 0 ? "none" : "transform 0.32s cubic-bezier(0.4,0,0.2,1)",
+                      willChange: "transform",
                     }}
-                    draggable={false}
-                  />
+                  >
+                    <img
+                      key={`${current.src}-${displayIndex}`}
+                      src={current.src}
+                      alt={current.label}
+                      style={{
+                        width: "100%", height: "auto", display: "block",
+                        boxShadow: "0 8px 48px rgba(0,0,0,0.5)",
+                        pointerEvents: "none",
+                      }}
+                      draggable={false}
+                    />
+                  </div>
                 </div>
 
                 {/* 放大鏡圖示（右下角） */}
@@ -441,6 +482,7 @@ export default function Menu() {
                     cursor: "zoom-in",
                     transition: "all 0.2s ease",
                     color: "rgba(197,151,109,0.8)",
+                    zIndex: 10,
                   }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.2)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(26,18,16,0.75)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.3)"; }}
@@ -451,7 +493,7 @@ export default function Menu() {
               </div>
             )}
 
-            {/* 下一頁 */}
+            {/* 下一頁按鈕 */}
             <button
               onClick={next}
               disabled={filtered.length <= 1}
@@ -481,7 +523,7 @@ export default function Menu() {
                 {current.label} &nbsp;·&nbsp; {safeIndex + 1} / {filtered.length}
               </p>
 
-              {/* 白色半透明點點導覽（最多顯示 15 點，超過則顯示段落） */}
+              {/* 點點導覽 */}
               <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", alignItems: "center", marginBottom: "1.5rem" }}>
                 {filtered.length <= 15 ? (
                   filtered.map((_, i) => (
@@ -503,7 +545,6 @@ export default function Menu() {
                     />
                   ))
                 ) : (
-                  // 超過 15 頁時顯示小段落（前中後各 2 點 + 當前中心）
                   [-2, -1, 0, 1, 2].map((offset) => {
                     const idx = safeIndex + offset;
                     if (idx < 0 || idx >= filtered.length) return <span key={offset} style={{ width: "7px" }} />;
@@ -533,10 +574,7 @@ export default function Menu() {
                 {filtered.map((page, i) => (
                   <button
                     key={i}
-                    onClick={() => {
-                      const dir = i > safeIndex ? "left" : "right";
-                      goTo(i, dir);
-                    }}
+                    onClick={() => goTo(i, i > safeIndex ? "left" : "right")}
                     aria-label={`第 ${i + 1} 頁`}
                     style={{
                       width: "36px", height: "36px", padding: 0,

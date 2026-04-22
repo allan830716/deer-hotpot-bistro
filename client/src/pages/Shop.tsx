@@ -236,7 +236,7 @@ export default function Shop() {
           >
             Deer's Selection
           </p>
-          <h1 className="shop-hero-v2-title">精選商品</h1>
+          <h1 className="shop-hero-v2-title">生鮮商店</h1>
           <p className="shop-hero-v2-sub">
             母親節套餐 · 居家鍋底 · 頂級肉品 · 海鮮
           </p>
@@ -277,7 +277,6 @@ export default function Shop() {
                     setDropdownOpen(false);
                   }}
                 >
-                  <span className="shop-dropdown-emoji">🛍️</span>
                   <span>全部商品</span>
                 </button>
                 {categories?.map((cat) => {
@@ -294,7 +293,6 @@ export default function Shop() {
                         setDropdownOpen(false);
                       }}
                     >
-                      <span className="shop-dropdown-emoji">{meta.emoji}</span>
                       <span>{cat.name}</span>
                       {meta.en && (
                         <span className="shop-dropdown-en">{meta.en}</span>
