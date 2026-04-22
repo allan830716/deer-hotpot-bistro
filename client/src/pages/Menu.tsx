@@ -460,8 +460,8 @@ export default function Menu() {
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
       <style>{`
         @keyframes categoryFadeIn {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; }
+          to   { opacity: 1; }
         }
         .menu-img-wrap {
           touch-action: pan-y;
