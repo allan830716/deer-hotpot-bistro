@@ -685,6 +685,309 @@ function TrustSection() {
   );
 }
 
+// ── Section 6.5: 甜點特色 ────────────────────────────────────────────
+const DESSERT_ITEMS = [
+  {
+    icon: "🍰",
+    title: "手工甜點，每日現做",
+    desc: "不是套餐配送的平常甜點。每天由師傅現做，數量有限，吃完就沒了。",
+  },
+  {
+    icon: "🍷",
+    title: "酒搭配甜點",
+    desc: "甜點與酒款共同設計。一口白酒、一口甜點，是整場餐桌最後的小驚喜。",
+  },
+  {
+    icon: "✨",
+    title: "CRÈM 甜點店合作",
+    desc: "與台北知名甜點店 CRÈM 合作，將法式甜點的細致帶進火鍋餐桌，讓每一餐都有完美的句點。",
+  },
+];
+
+function DessertSection() {
+  const ref = useFadeIn(0.1);
+  return (
+    <section
+      className="section-lg"
+      style={{ backgroundColor: "var(--deer-bg)" }}
+    >
+      <div className="container">
+        <div ref={ref} className="fade-up text-center mb-16">
+          <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
+            The Sweet Finale
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Noto Serif TC', serif",
+              fontWeight: 200,
+              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+              color: "var(--deer-text)",
+              letterSpacing: "0.1em",
+            }}
+          >
+            甜點，不是附贈。
+            <br />
+            是整場餐桌的句點。
+          </h2>
+          <GoldLineCentered width={32} />
+          <p
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--deer-sub)",
+              lineHeight: 2,
+              letterSpacing: "0.06em",
+              maxWidth: "480px",
+              margin: "0 auto",
+            }}
+          >
+            我們相信，一場好的餐桌不應該在主食結束後就散場。
+            甜點是把時間留給彼此的方式。
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {DESSERT_ITEMS.map((item, i) => (
+            <DessertCard key={i} {...item} delay={i * 120} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DessertCard({ icon, title, desc, delay }: (typeof DESSERT_ITEMS)[0] & { delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return (
+    <div ref={ref} className="fade-up" style={{ textAlign: "center", padding: "2rem 1.5rem", border: "1px solid rgba(107,74,50,0.12)", backgroundColor: "rgba(245,243,239,0.5)" }}>
+      <div style={{ fontSize: "2rem", marginBottom: "1.25rem" }}>{icon}</div>
+      <h3
+        style={{
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 300,
+          fontSize: "1rem",
+          color: "var(--deer-text)",
+          letterSpacing: "0.08em",
+          marginBottom: "1rem",
+        }}
+      >
+        {title}
+      </h3>
+      <div style={{ width: "24px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", margin: "0 auto 1rem" }} />
+      <p
+        style={{
+          fontSize: "0.8125rem",
+          color: "var(--deer-sub)",
+          lineHeight: 1.9,
+        }}
+      >
+        {desc}
+      </p>
+    </div>
+  );
+}
+
+// ── Section 6.8: CRÈM 一條龍服務 ────────────────────────────────────────────
+const CREM_STEPS = [
+  { num: "01", label: "預訂", desc: "透過 Inline 線上預訂，確認人數與就餐時段" },
+  { num: "02", label: "入座", desc: "專屬服務帶位，介紹餐點節奏與當日選料" },
+  { num: "03", label: "餐中酒搭", desc: "由服務人員推薦搭配酒款，對應主菜與當晚節奏" },
+  { num: "04", label: "CRÈM 甜點", desc: "餐後由 CRÈM 師傅現做甜點，不是附贈，是專屬的封尾" },
+];
+
+function CremSection() {
+  const ref = useFadeIn(0.08);
+  return (
+    <section
+      style={{
+        backgroundColor: "var(--deer-dark)",
+        padding: "7rem 0",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* 裝飾性橫線 */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(197,151,109,0.3), transparent)" }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(197,151,109,0.3), transparent)" }} />
+
+      <div className="container">
+        <div ref={ref} className="fade-up">
+          {/* 標題區 */}
+          <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+            <p
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 400,
+                fontSize: "0.65rem",
+                letterSpacing: "0.28em",
+                textTransform: "uppercase",
+                color: "rgba(197,151,109,0.6)",
+                marginBottom: "1.5rem",
+              }}
+            >
+              CRÈM × Deer's Hotpot Bistro
+            </p>
+            <h2
+              style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 200,
+                fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
+                color: "var(--deer-dark-text)",
+                letterSpacing: "0.1em",
+                lineHeight: 1.5,
+                marginBottom: "1.5rem",
+              }}
+            >
+              一條龍服務，
+              <br />
+              從預訂到甜點。
+            </h2>
+            <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", margin: "0 auto 2rem" }} />
+            <p
+              style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+                fontSize: "0.9rem",
+                color: "rgba(240,233,223,0.5)",
+                lineHeight: 2,
+                letterSpacing: "0.06em",
+                maxWidth: "520px",
+                margin: "0 auto",
+              }}
+            >
+              初衷小鹿與 CRÈM 甜點店合作，
+              將法式甜點的細致帶進火鍋餐桌。
+              <br />
+              這不是兩家店的合作，而是一場餐桌體驗的完整設計。
+            </p>
+          </div>
+
+          {/* 步驟流程 */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "0",
+              maxWidth: "900px",
+              margin: "0 auto 4rem",
+              border: "1px solid rgba(197,151,109,0.12)",
+            }}
+          >
+            {CREM_STEPS.map((step, i) => (
+              <CremStep key={i} {...step} delay={i * 100} />
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div style={{ textAlign: "center" }}>
+            <p
+              style={{
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+                fontSize: "0.8125rem",
+                color: "rgba(240,233,223,0.35)",
+                letterSpacing: "0.06em",
+                marginBottom: "2rem",
+              }}
+            >
+              客人常說，這是一場不需要擐心的晚餐。
+            </p>
+            <a
+              href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-deer-light"
+              style={{ fontSize: "0.8rem" }}
+            >
+              預約體驗一條龍服務
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => { el.classList.add("visible"); observer.unobserve(el); }, delay);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return (
+    <div
+      ref={ref}
+      className="fade-up"
+      style={{
+        padding: "2.5rem 2rem",
+        borderRight: "1px solid rgba(197,151,109,0.12)",
+        borderBottom: "1px solid rgba(197,151,109,0.12)",
+        textAlign: "center",
+      }}
+    >
+      <p
+        style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontWeight: 300,
+          fontSize: "2.25rem",
+          color: "rgba(197,151,109,0.25)",
+          lineHeight: 1,
+          marginBottom: "1rem",
+        }}
+      >
+        {num}
+      </p>
+      <h3
+        style={{
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 300,
+          fontSize: "0.9375rem",
+          color: "var(--deer-dark-text)",
+          letterSpacing: "0.1em",
+          marginBottom: "0.75rem",
+        }}
+      >
+        {label}
+      </h3>
+      <div style={{ width: "20px", height: "1px", backgroundColor: "rgba(197,151,109,0.4)", margin: "0 auto 0.75rem" }} />
+      <p
+        style={{
+          fontSize: "0.8rem",
+          color: "rgba(240,233,223,0.4)",
+          lineHeight: 1.9,
+        }}
+      >
+        {desc}
+      </p>
+    </div>
+  );
+}
+
 // ── Section 7: CTA ────────────────────────────────────────────────────────
 function CTASection() {
   const ref = useFadeIn();
@@ -738,7 +1041,7 @@ function CTASection() {
   );
 }
 
-// ── 主元件 ────────────────────────────────────────────────────────────────
+// ── 主元件 ──────────────────// ── 主元件 ────────────────────────────────────────────
 export default function Home() {
   return (
     <main>
@@ -747,6 +1050,8 @@ export default function Home() {
       <CoreSection />
       <NarrativeSection />
       <SpaceSection />
+      <DessertSection />
+      <CremSection />
       <TrustSection />
       <CTASection />
     </main>

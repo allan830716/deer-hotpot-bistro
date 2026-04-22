@@ -18,6 +18,7 @@ import Experience from "./pages/Experience";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
 import ShopSuccess from "./pages/ShopSuccess";
+import ShopProduct from "./pages/ShopProduct";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
@@ -95,9 +96,11 @@ function Navbar() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "1280px", margin: "0 auto" }}>
           {/* Logo */}
           <Link href="/">
-            <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "1rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.12em", cursor: "pointer" }}>
-              初衷小鹿
-            </span>
+            <img
+              src="/manus-storage/deer-logo_88482511.webp"
+              alt="初衷小鹿"
+              style={{ height: "48px", width: "auto", cursor: "pointer", display: "block", filter: "brightness(1.05)" }}
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -210,8 +213,14 @@ function Navbar() {
           overflowY: "auto",
         }}
       >
-        {/* 品牌名 */}
-        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.5)", marginBottom: "2.5rem" }}>Deer's Hotpot Bistro</p>
+        {/* Logo */}
+        <div style={{ marginBottom: "2.5rem" }}>
+          <img
+            src="/manus-storage/deer-logo_88482511.webp"
+            alt="初衷小鹿"
+            style={{ height: "40px", width: "auto", display: "block", filter: "brightness(1.05)" }}
+          />
+        </div>
 
         {/* 導覽連結 */}
         <nav style={{ flex: 1 }}>
@@ -303,6 +312,7 @@ function Router() {
       <Route path="/experience" component={Experience} />
       <Route path="/shop" component={Shop} />
       <Route path="/shop/success" component={ShopSuccess} />
+      <Route path="/shop/:id" component={ShopProduct} />
       <Route path="/cart" component={Cart} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/products" component={AdminProducts} />
