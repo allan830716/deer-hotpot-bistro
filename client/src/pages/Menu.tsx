@@ -205,6 +205,21 @@ export default function Menu() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseStartX = useRef<number | null>(null);
   const isMouseDragging = useRef(false);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  // 監聴容器寬度
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    ro.observe(el);
+    setContainerWidth(el.offsetWidth);
+    return () => ro.disconnect();
+  }, []);
 
   const filtered = activeCategory === "all"
     ? MENU_PAGES
@@ -316,9 +331,14 @@ export default function Menu() {
 
   const current = filtered[safeIndex];
 
-  // Track 偏移：每張圖片寬度 100%，加上拖動偏移
-  // trackTranslate = -(safeIndex * 100%) + dragDelta(px)
-  const trackTranslate = `calc(-${safeIndex * 100}% + ${dragDelta}px)`;
+  // Track 偏移：用實際 px 寬度計算
+  // track 寬度 = filtered.length * containerWidth
+  // 每張圖片占 containerWidth px
+  // 所以偏移 = -(safeIndex * containerWidth) + dragDelta
+  const offsetPx = containerWidth > 0
+    ? -(safeIndex * containerWidth) + dragDelta
+    : 0;
+  const trackTranslate = `translateX(${offsetPx}px)`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
@@ -463,6 +483,7 @@ export default function Menu() {
                     width: `${filtered.length * 100}%`,
                     transform: trackTranslate,
                     transition: isDragging ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                    // trackTranslate 現在是 translateX(px)，跟圖片寬度正確對應
                     willChange: "transform",
                     animation: categoryKey > 0 ? "categoryFadeIn 0.55s ease forwards" : "none",
                   }}
