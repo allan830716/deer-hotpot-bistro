@@ -393,63 +393,7 @@ export default function Menu() {
                   maxWidth: "640px",
                 }}
               >
-                {/* 上一頁按鈕（圖片左側置中） */}
-                <button
-                  onClick={prev}
-                  disabled={filtered.length <= 1}
-                  aria-label="上一頁"
-                  style={{
-                    position: "absolute", left: "0.75rem", top: "50%",
-                    transform: "translateY(-50%)",
-                    zIndex: 20,
-                    width: "44px", height: "44px",
-                    borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    backgroundColor: "rgba(255,255,255,0.13)",
-                    backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.85)",
-                    cursor: filtered.length <= 1 ? "default" : "pointer",
-                    fontSize: "1.4rem",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all 0.2s ease",
-                    opacity: filtered.length <= 1 ? 0.25 : 1,
-                  }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
-                >
-                  ‹
-                </button>
-
-                {/* 下一頁按鈕（圖片右側置中） */}
-                <button
-                  onClick={next}
-                  disabled={filtered.length <= 1}
-                  aria-label="下一張"
-                  style={{
-                    position: "absolute", right: "0.75rem", top: "50%",
-                    transform: "translateY(-50%)",
-                    zIndex: 20,
-                    width: "44px", height: "44px",
-                    borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    backgroundColor: "rgba(255,255,255,0.13)",
-                    backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.85)",
-                    cursor: filtered.length <= 1 ? "default" : "pointer",
-                    fontSize: "1.4rem",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all 0.2s ease",
-                    opacity: filtered.length <= 1 ? 0.25 : 1,
-                  }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)" ; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
-                >
-                  ›
-                </button>
-
-                {/* 輪播圖片區域 */}
+                {/* 輪播圖片區域（左右按鈕在此容器內，top:50% 相對於圖片高度） */}
               <div
                 ref={containerRef}
                 className="menu-img-wrap"
@@ -507,6 +451,62 @@ export default function Menu() {
                     </div>
                   ))}
                 </div>
+
+                {/* 上一頁按鈕（圖片左側置中） */}
+                <button
+                  onClick={prev}
+                  disabled={filtered.length <= 1}
+                  aria-label="上一頁"
+                  style={{
+                    position: "absolute", left: "0.75rem", top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 20,
+                    width: "44px", height: "44px",
+                    borderRadius: "50%",
+                    border: "1px solid rgba(255,255,255,0.28)",
+                    backgroundColor: "rgba(255,255,255,0.13)",
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
+                    color: "rgba(255,255,255,0.85)",
+                    cursor: filtered.length <= 1 ? "default" : "pointer",
+                    fontSize: "1.4rem",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all 0.2s ease",
+                    opacity: filtered.length <= 1 ? 0.25 : 1,
+                  }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
+                >
+                  ‹
+                </button>
+
+                {/* 下一頁按鈕（圖片右側置中） */}
+                <button
+                  onClick={next}
+                  disabled={filtered.length <= 1}
+                  aria-label="下一張"
+                  style={{
+                    position: "absolute", right: "0.75rem", top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 20,
+                    width: "44px", height: "44px",
+                    borderRadius: "50%",
+                    border: "1px solid rgba(255,255,255,0.28)",
+                    backgroundColor: "rgba(255,255,255,0.13)",
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
+                    color: "rgba(255,255,255,0.85)",
+                    cursor: filtered.length <= 1 ? "default" : "pointer",
+                    fontSize: "1.4rem",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all 0.2s ease",
+                    opacity: filtered.length <= 1 ? 0.25 : 1,
+                  }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
+                >
+                  ›
+                </button>
 
                 {/* 放大鏡圖示（右下角） */}
                 <button
