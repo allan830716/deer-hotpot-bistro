@@ -744,8 +744,8 @@ function CremSection() {
         }}>
           <span style={{ fontFamily: "'Cormorant Garamond', serif", color: "rgba(197,151,109,0.9)", fontSize: "0.7rem", letterSpacing: "0.2em" }}>CRÈM × DEER'S</span>
         </div>
-        {/* 照片底部文字 */}
-        <div style={{
+        {/* 照片底部文字 — 電腦版顯示，手機版隱藏 */}
+        <div className="crem-img-overlay-text" style={{
           position: "absolute",
           bottom: "2.5rem",
           left: 0,
@@ -762,6 +762,19 @@ function CremSection() {
         </div>
       </div>
 
+      {/* 手機版圖片下方標題（電腦版隱藏） */}
+      <div className="crem-mobile-title" style={{
+        textAlign: "center",
+        padding: "2rem 1.5rem 0",
+        backgroundColor: "var(--deer-dark)",
+      }}>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "0.75rem" }}>
+          CRÈM × Deer's Hotpot Bistro
+        </p>
+        <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
+          一條龍慶祝服務，從餐桌到蛋糕。
+        </h2>
+      </div>
       {/* 文字說明 + 步驟 + CTA */}
       <div className="container" style={{ padding: "5rem 0" }}>
         <div ref={ref} className="fade-up">
@@ -775,7 +788,7 @@ function CremSection() {
           </div>
 
           {/* 步驟流程 */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0", marginBottom: "3rem", border: "1px solid rgba(197,151,109,0.12)", maxWidth: "860px", margin: "0 auto 3rem" }}>
+          <div className="crem-steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0", marginBottom: "3rem", border: "1px solid rgba(197,151,109,0.12)", maxWidth: "860px", margin: "0 auto 3rem" }}>
             {CREM_STEPS.map((step, i) => (
               <CremStep key={i} {...step} delay={i * 100} />
             ))}
@@ -822,7 +835,7 @@ function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay:
   return (
     <div
       ref={ref}
-      className="fade-up"
+      className="fade-up crem-step-item"
       style={{
         padding: "2.5rem 2rem",
         borderRight: "1px solid rgba(197,151,109,0.12)",
@@ -831,6 +844,7 @@ function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay:
       }}
     >
       <p
+        className="crem-step-num"
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontWeight: 300,
@@ -843,6 +857,7 @@ function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay:
         {num}
       </p>
       <h3
+        className="crem-step-label"
         style={{
           fontFamily: "'Noto Serif TC', serif",
           fontWeight: 300,
@@ -856,6 +871,7 @@ function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay:
       </h3>
       <div style={{ width: "20px", height: "1px", backgroundColor: "rgba(197,151,109,0.4)", margin: "0 auto 0.75rem" }} />
       <p
+        className="crem-step-desc"
         style={{
           fontSize: "0.8rem",
           color: "rgba(240,233,223,0.4)",

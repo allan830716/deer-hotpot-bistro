@@ -2394,3 +2394,39 @@
     gap: 2.5rem !important;
   }
 }
+
+/* ── CRÈM 步驟手機版：2欄排列 ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .crem-steps-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    max-width: 100% !important;
+  }
+  .crem-step-item {
+    padding: 2rem 1.25rem !important;
+  }
+  .crem-step-num {
+    font-size: 1.75rem !important;
+  }
+  .crem-step-label {
+    font-size: 1rem !important;
+  }
+  .crem-step-desc {
+    font-size: 0.8125rem !important;
+    line-height: 1.8 !important;
+    color: rgba(240,233,223,0.55) !important;
+  }
+  /* 圖片上的文字在手機版隱藏 */
+  .crem-img-overlay-text {
+    display: none !important;
+  }
+  /* 手機版圖片下方文字區塊顯示 */
+  .crem-mobile-title {
+    display: block !important;
+  }
+}
+@media (min-width: 641px) {
+  /* 電腦版隱藏手機版文字區塊 */
+  .crem-mobile-title {
+    display: none !important;
+  }
+}
