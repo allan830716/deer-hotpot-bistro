@@ -2430,3 +2430,13 @@
     display: none !important;
   }
 }
+
+/* ── CRÈM 說明文字手機版優化 ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .crem-collab-sub {
+    display: block;
+    font-size: 0.8rem !important;
+    color: rgba(240,233,223,0.35) !important;
+    margin-top: 0.5rem;
+  }
+}

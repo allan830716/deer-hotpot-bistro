@@ -696,6 +696,8 @@ const CREM_STEPS = [
 function CremSection() {
   const ref = useFadeIn(0.08);
   const CREM_IMG = "/manus-storage/crem-cake_7f5629d5.jpg";
+  const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
+  const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
   return (
     <section
       style={{
@@ -732,17 +734,36 @@ function CremSection() {
           inset: 0,
           background: "linear-gradient(to bottom, rgba(10,8,7,0.1) 0%, rgba(10,8,7,0.0) 40%, rgba(10,8,7,0.75) 100%)",
         }} />
-        {/* CRÈM 標誌 */}
+        {/* 聯名 Logo 並排 — 置於圖片頂部中央，不壓到主體 */}
         <div style={{
           position: "absolute",
           top: "1.5rem",
-          right: "1.5rem",
-          background: "rgba(10,8,7,0.65)",
-          backdropFilter: "blur(8px)",
-          padding: "0.5rem 1rem",
-          border: "1px solid rgba(197,151,109,0.3)",
+          left: 0,
+          right: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1.25rem",
+          pointerEvents: "none",
         }}>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", color: "rgba(197,151,109,0.9)", fontSize: "0.7rem", letterSpacing: "0.2em" }}>CRÈM × DEER'S</span>
+          <img
+            src={DEER_LOGO}
+            alt="初衷小鹿 Logo"
+            style={{ height: "52px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
+          />
+          <span style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            fontSize: "1.1rem",
+            color: "rgba(197,151,109,0.8)",
+            letterSpacing: "0.1em",
+            lineHeight: 1,
+          }}>×</span>
+          <img
+            src={CREM_LOGO}
+            alt="CRÈM Logo"
+            style={{ height: "52px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
+          />
         </div>
         {/* 照片底部文字 — 電腦版顯示，手機版隱藏 */}
         <div className="crem-img-overlay-text" style={{
@@ -753,9 +774,6 @@ function CremSection() {
           textAlign: "center",
           padding: "0 2rem",
         }}>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "0.75rem" }}>
-            CRÈM × Deer's Hotpot Bistro
-          </p>
           <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
             一條龍慶祝服務，從餐桌到蛋糕。
           </h2>
@@ -768,11 +786,10 @@ function CremSection() {
         padding: "2rem 1.5rem 0",
         backgroundColor: "var(--deer-dark)",
       }}>
-        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "0.75rem" }}>
-          CRÈM × Deer's Hotpot Bistro
-        </p>
         <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
-          一條龍慶祝服務，從餐桌到蛋糕。
+          一條龍慶祝服務，
+          <br />
+          從餐桌到蛋糕。
         </h2>
       </div>
       {/* 文字說明 + 步驟 + CTA */}
@@ -780,10 +797,12 @@ function CremSection() {
         <div ref={ref} className="fade-up">
           {/* 說明文字 */}
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9rem", color: "rgba(240,233,223,0.5)", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto 2rem" }}>
-              初衷小鹿與 CRÈM 合作，讓每一場慶祝都有專屬蛋糕。
+            <p className="crem-collab-desc" style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9rem", color: "rgba(240,233,223,0.5)", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto 2rem" }}>
+              初衷小鹿 × CRÈM 聯名，
               <br />
-              這不是兩家店的合作，而是一場慶祝的完整設計。
+              讓每一場慶祝都有專屬蛋糕。
+              <br />
+              <span className="crem-collab-sub">這不是兩家店的合作，而是一場慶祝的完整設計。</span>
             </p>
           </div>
 
