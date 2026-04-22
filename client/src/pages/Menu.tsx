@@ -491,7 +491,7 @@ export default function Menu() {
                   {filtered.map((page, i) => (
                     <div
                       key={i}
-                      style={{ width: `${100 / filtered.length}%`, flexShrink: 0 }}
+                      style={{ width: `${containerWidth}px`, flexShrink: 0 }}
                     >
                       <img
                         src={page.src}
