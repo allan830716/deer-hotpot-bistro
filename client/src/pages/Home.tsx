@@ -716,7 +716,7 @@ function CremSection() {
         alignItems: "center",
         justifyContent: "center",
         gap: "clamp(1.5rem, 5vw, 4rem)",
-        padding: "3rem 2rem",
+        padding: "0px 33px",
         borderBottom: "1px solid rgba(197,151,109,0.18)",
       }}>
         <img
