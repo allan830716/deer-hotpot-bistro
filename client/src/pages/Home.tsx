@@ -700,7 +700,6 @@ function CremSection() {
     <section
       style={{
         backgroundColor: "var(--deer-dark)",
-        padding: "7rem 0",
         position: "relative",
         overflow: "hidden",
       }}
@@ -709,136 +708,90 @@ function CremSection() {
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(197,151,109,0.3), transparent)" }} />
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(to right, transparent, rgba(197,151,109,0.3), transparent)" }} />
 
-      <div className="container">
+      {/* 橫式全寬照片 */}
+      <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+        <img
+          src={CREM_IMG}
+          alt="CRÈM 慶祝蛋糕"
+          style={{
+            width: "100%",
+            height: "clamp(320px, 45vw, 640px)",
+            objectFit: "cover",
+            objectPosition: "center 40%",
+            display: "block",
+          }}
+          loading="eager"
+        />
+        {/* 漸層遮罩 — 底部文字區 */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, rgba(10,8,7,0.1) 0%, rgba(10,8,7,0.0) 40%, rgba(10,8,7,0.75) 100%)",
+        }} />
+        {/* CRÈM 標誌 */}
+        <div style={{
+          position: "absolute",
+          top: "1.5rem",
+          right: "1.5rem",
+          background: "rgba(10,8,7,0.65)",
+          backdropFilter: "blur(8px)",
+          padding: "0.5rem 1rem",
+          border: "1px solid rgba(197,151,109,0.3)",
+        }}>
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", color: "rgba(197,151,109,0.9)", fontSize: "0.7rem", letterSpacing: "0.2em" }}>CRÈM × DEER'S</span>
+        </div>
+        {/* 照片底部文字 */}
+        <div style={{
+          position: "absolute",
+          bottom: "2.5rem",
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          padding: "0 2rem",
+        }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "0.75rem" }}>
+            CRÈM × Deer's Hotpot Bistro
+          </p>
+          <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
+            一條龍慶祝服務，從餐桌到蛋糕。
+          </h2>
+        </div>
+      </div>
+
+      {/* 文字說明 + 步驟 + CTA */}
+      <div className="container" style={{ padding: "5rem 0" }}>
         <div ref={ref} className="fade-up">
-          {/* 雙欄：左圖右文 */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5rem",
-            alignItems: "center",
-            marginBottom: "4rem",
-          }} className="crem-grid">
-            {/* 左側圖片 */}
-            <div style={{ position: "relative", overflow: "hidden" }}>
-              <img
-                src={CREM_IMG}
-                alt="CRÈM 慶祝蛋糕"
-                style={{
-                  width: "100%",
-                  height: "480px",
-                  objectFit: "cover",
-                  objectPosition: "center",
-                  display: "block",
-                }}
-                loading="eager"
-              />
-              {/* CRÈM 標誌疊加 */}
-              <div style={{
-                position: "absolute",
-                bottom: "1.5rem",
-                right: "1.5rem",
-                background: "rgba(10,8,7,0.75)",
-                backdropFilter: "blur(8px)",
-                padding: "0.5rem 1rem",
-                border: "1px solid rgba(197,151,109,0.3)",
-              }}>
-                <span style={{ fontFamily: "'Cormorant Garamond', serif", color: "rgba(197,151,109,0.9)", fontSize: "0.7rem", letterSpacing: "0.2em" }}>CRÈM × DEER'S</span>
-              </div>
-            </div>
-            {/* 右側文字 */}
-            <div>
-              {/* 標題區 */}
-              <div style={{ textAlign: "left", marginBottom: "3rem" }}>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 400,
-                fontSize: "0.65rem",
-                letterSpacing: "0.28em",
-                textTransform: "uppercase",
-                color: "rgba(197,151,109,0.6)",
-                marginBottom: "1.5rem",
-              }}
-            >
-              CRÈM × Deer's Hotpot Bistro
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 200,
-                fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
-                color: "var(--deer-dark-text)",
-                letterSpacing: "0.1em",
-                lineHeight: 1.5,
-                marginBottom: "1.5rem",
-              }}
-            >
-              一條龍慶祝服務，
-              <br />
-              從餐桌到蛋糕。
-            </h2>
-            <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.5)", margin: "0 auto 2rem" }} />
-            <p
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-                fontSize: "0.9rem",
-                color: "rgba(240,233,223,0.5)",
-                lineHeight: 2,
-                letterSpacing: "0.06em",
-                maxWidth: "520px",
-                margin: "0 auto",
-              }}
-            >
-              初衷小鹿與 CRÈM 合作，
-              讓每一場慶祝都有專屬蛋糕。
+          {/* 說明文字 */}
+          <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9rem", color: "rgba(240,233,223,0.5)", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto 2rem" }}>
+              初衷小鹿與 CRÈM 合作，讓每一場慶祝都有專屬蛋糕。
               <br />
               這不是兩家店的合作，而是一場慶祝的完整設計。
             </p>
-              </div>
+          </div>
 
-              {/* 步驟流程 */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "0",
-                  marginBottom: "3rem",
-                  border: "1px solid rgba(197,151,109,0.12)",
-                }}
-              >
-                {CREM_STEPS.map((step, i) => (
-                  <CremStep key={i} {...step} delay={i * 100} />
-                ))}
-              </div>
+          {/* 步驟流程 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0", marginBottom: "3rem", border: "1px solid rgba(197,151,109,0.12)", maxWidth: "860px", margin: "0 auto 3rem" }}>
+            {CREM_STEPS.map((step, i) => (
+              <CremStep key={i} {...step} delay={i * 100} />
+            ))}
+          </div>
 
-              {/* CTA */}
-              <div>
-                <p
-                  style={{
-                    fontFamily: "'Noto Serif TC', serif",
-                    fontWeight: 300,
-                    fontSize: "0.8125rem",
-                    color: "rgba(240,233,223,0.35)",
-                    letterSpacing: "0.06em",
-                    marginBottom: "2rem",
-                  }}
-                >
-                  客人常說，這是一場不需要擔心任何事的慶祝。
-                </p>
-                <a
-                  href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-deer-light"
-                  style={{ fontSize: "0.8rem" }}
-                >
-                  預約一場慶祝餐桌
-                </a>
-              </div>
-            </div>{/* end 右側文字 div */}
-          </div>{/* end 雙欄 grid div */}
+          {/* CTA */}
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.06em", marginBottom: "2rem" }}>
+              客人常說，這是一場不需要擔心任何事的慶祝。
+            </p>
+            <a
+              href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-deer-light"
+              style={{ fontSize: "0.8rem" }}
+            >
+              預約一場慶祝餐桌
+            </a>
+          </div>
         </div>
       </div>
     </section>

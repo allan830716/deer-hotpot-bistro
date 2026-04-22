@@ -193,18 +193,18 @@ export default function Menu() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  // 動畫狀態
-  const [displayIndex, setDisplayIndex] = useState(0);
-  const [slideOffset, setSlideOffset] = useState(0);       // 0 = 靜止
-  const [dragOffset, setDragOffset] = useState(0);          // 拖動中的即時偏移
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [categoryKey, setCategoryKey] = useState(0);        // 分類切換動畫 key
+  // 輪播 track 拖動偏移（像素）
+  const [dragDelta, setDragDelta] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [categoryKey, setCategoryKey] = useState(0);
 
   // 觸控/滑鼠狀態
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
-  const isHorizontal = useRef<boolean | null>(null);        // null=未判斷, true=水平, false=垂直
+  const isHorizontal = useRef<boolean | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mouseStartX = useRef<number | null>(null);
+  const isMouseDragging = useRef(false);
 
   const filtered = activeCategory === "all"
     ? MENU_PAGES
@@ -212,43 +212,25 @@ export default function Menu() {
 
   const safeIndex = Math.min(currentIndex, filtered.length - 1);
 
-  // 切換到指定索引（帶滑動動畫）
-  const goTo = useCallback((newIndex: number, dir: "left" | "right") => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    // 先設定「滑出」偏移
-    setSlideOffset(dir === "left" ? -100 : 100);
-    setTimeout(() => {
-      setCurrentIndex(newIndex);
-      setDisplayIndex(newIndex);
-      setSlideOffset(dir === "left" ? 100 : -100);
-      // 下一幀重置到 0（滑入）
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setSlideOffset(0);
-          setTimeout(() => setIsTransitioning(false), 320);
-        });
-      });
-    }, 200);
-  }, [isTransitioning]);
+  // 直接跳到指定索引（無動畫延遲，CSS transition 負責滑動感）
+  const goTo = useCallback((newIndex: number) => {
+    setCurrentIndex(Math.max(0, Math.min(newIndex, filtered.length - 1)));
+    setDragDelta(0);
+  }, [filtered.length]);
 
   const prev = useCallback(() => {
-    const newIndex = (safeIndex - 1 + filtered.length) % filtered.length;
-    goTo(newIndex, "right");
+    goTo((safeIndex - 1 + filtered.length) % filtered.length);
   }, [safeIndex, filtered.length, goTo]);
 
   const next = useCallback(() => {
-    const newIndex = (safeIndex + 1) % filtered.length;
-    goTo(newIndex, "left");
+    goTo((safeIndex + 1) % filtered.length);
   }, [safeIndex, filtered.length, goTo]);
 
   const handleCategoryChange = (key: string) => {
     setActiveCategory(key);
     setCurrentIndex(0);
-    setDisplayIndex(0);
-    setSlideOffset(0);
-    setDragOffset(0);
-    setIsTransitioning(false);
+    setDragDelta(0);
+    setIsDragging(false);
     setCategoryKey(k => k + 1);
   };
 
@@ -263,61 +245,50 @@ export default function Menu() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [prev, next, lightboxSrc]);
 
-  // ── 觸控手勢（真實跟隨手指 + 鎖定頁面滾動）──
+  // ── 觸控手勢 ──
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
     isHorizontal.current = null;
-    setDragOffset(0);
+    setDragDelta(0);
+    setIsDragging(false);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
-
-    // 第一次移動時判斷方向
     if (isHorizontal.current === null) {
       if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
         isHorizontal.current = Math.abs(dx) > Math.abs(dy);
       }
     }
-
     if (isHorizontal.current === true) {
-      // 水平滑動：阻止頁面滾動，圖片跟隨手指
       e.preventDefault();
-      const containerWidth = containerRef.current?.offsetWidth ?? 320;
-      const percent = (dx / containerWidth) * 100;
-      setDragOffset(percent);
+      setIsDragging(true);
+      setDragDelta(dx);
     }
-    // 垂直滑動：不阻止，讓頁面正常滾動
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
-
     if (isHorizontal.current === true && Math.abs(dx) > 50) {
-      setDragOffset(0);
-      if (dx < 0) next();
-      else prev();
+      if (dx < 0) next(); else prev();
     } else {
-      // 未達閾值，彈回
-      setDragOffset(0);
+      setDragDelta(0);
     }
-
+    setIsDragging(false);
     touchStartX.current = null;
     touchStartY.current = null;
     isHorizontal.current = null;
   };
 
-  // ── 滑鼠拖動（桌機）──
-  const mouseStartX = useRef<number | null>(null);
-  const isMouseDragging = useRef(false);
-
+  // ── 滑鼠拖動 ──
   const handleMouseDown = (e: React.MouseEvent) => {
     mouseStartX.current = e.clientX;
     isMouseDragging.current = false;
+    setDragDelta(0);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -325,28 +296,29 @@ export default function Menu() {
     const dx = e.clientX - mouseStartX.current;
     if (Math.abs(dx) > 8) {
       isMouseDragging.current = true;
-      const containerWidth = containerRef.current?.offsetWidth ?? 640;
-      const percent = (dx / containerWidth) * 100;
-      setDragOffset(percent);
+      setIsDragging(true);
+      setDragDelta(dx);
     }
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
     if (mouseStartX.current === null) return;
     const dx = e.clientX - mouseStartX.current;
-    setDragOffset(0);
     if (isMouseDragging.current && Math.abs(dx) > 50) {
-      if (dx < 0) next();
-      else prev();
+      if (dx < 0) next(); else prev();
+    } else {
+      setDragDelta(0);
     }
+    setIsDragging(false);
     mouseStartX.current = null;
     isMouseDragging.current = false;
   };
 
   const current = filtered[safeIndex];
 
-  // 計算圖片的 transform（拖動偏移 + 切換動畫偏移）
-  const totalOffset = dragOffset + slideOffset;
+  // Track 偏移：每張圖片寬度 100%，加上拖動偏移
+  // trackTranslate = -(safeIndex * 100%) + dragDelta(px)
+  const trackTranslate = `calc(-${safeIndex * 100}% + ${dragDelta}px)`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
@@ -438,38 +410,43 @@ export default function Menu() {
                 onMouseUp={handleMouseUp}
                 onMouseLeave={() => {
                   if (mouseStartX.current !== null) {
-                    setDragOffset(0);
+                    setDragDelta(0);
+                    setIsDragging(false);
                     mouseStartX.current = null;
                     isMouseDragging.current = false;
                   }
                 }}
               >
-                {/* 分類切換時的 fade 動畫 wrapper */}
+                {/* 輪播 track — 所有圖片並排在同一行，用 translateX 滑動 */}
                 <div
                   key={categoryKey}
                   style={{
+                    display: "flex",
+                    width: `${filtered.length * 100}%`,
+                    transform: trackTranslate,
+                    transition: isDragging ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                    willChange: "transform",
                     animation: categoryKey > 0 ? "categoryFadeIn 0.55s ease forwards" : "none",
                   }}
                 >
-                  <div
-                    style={{
-                      transform: `translateX(${totalOffset}%)`,
-                      transition: dragOffset !== 0 ? "none" : "transform 0.35s ease",
-                      willChange: "transform",
-                    }}
-                  >
-                    <img
-                      key={`${current.src}-${displayIndex}`}
-                      src={current.src}
-                      alt={current.label}
-                      style={{
-                        width: "100%", height: "auto", display: "block",
-                        boxShadow: "0 8px 48px rgba(0,0,0,0.5)",
-                        pointerEvents: "none",
-                      }}
-                      draggable={false}
-                    />
-                  </div>
+                  {filtered.map((page, i) => (
+                    <div
+                      key={i}
+                      style={{ width: `${100 / filtered.length}%`, flexShrink: 0 }}
+                    >
+                      <img
+                        src={page.src}
+                        alt={page.label}
+                        style={{
+                          width: "100%", height: "auto", display: "block",
+                          boxShadow: i === safeIndex ? "0 8px 48px rgba(0,0,0,0.5)" : "none",
+                          pointerEvents: "none",
+                        }}
+                        draggable={false}
+                        loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
+                      />
+                    </div>
+                  ))}
                 </div>
 
                 {/* 放大鏡圖示（右下角） */}
@@ -535,7 +512,7 @@ export default function Menu() {
                   filtered.map((_, i) => (
                     <button
                       key={i}
-                      onClick={() => goTo(i, i > safeIndex ? "left" : "right")}
+                      onClick={() => goTo(i)}
                       aria-label={`第 ${i + 1} 頁`}
                       style={{
                         width: i === safeIndex ? "20px" : "7px",
@@ -557,7 +534,7 @@ export default function Menu() {
                     return (
                       <button
                         key={idx}
-                        onClick={() => goTo(idx, offset > 0 ? "left" : "right")}
+                        onClick={() => goTo(idx)}
                         style={{
                           width: offset === 0 ? "20px" : "7px",
                           height: "7px",
@@ -580,7 +557,7 @@ export default function Menu() {
                 {filtered.map((page, i) => (
                   <button
                     key={i}
-                    onClick={() => goTo(i, i > safeIndex ? "left" : "right")}
+                    onClick={() => goTo(i)}
                     aria-label={`第 ${i + 1} 頁`}
                     style={{
                       width: "36px", height: "36px", padding: 0,

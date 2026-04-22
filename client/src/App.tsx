@@ -33,6 +33,8 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
+  { href: "/reservation", label: "訂位" },
+  { href: "/experience", label: "品牌體驗" },
 ];
 
 const RESERVATION_URL = "https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw";
@@ -133,38 +135,34 @@ function Navbar() {
                 </span>
               </Link>
             ))}
-            {/* 立即訂位 — 外部連結，頁簽樣式 */}
+            <NavCartBtn />
             <a
               href={RESERVATION_URL}
               target="_blank" rel="noopener noreferrer"
               style={{
-                fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem",
-                letterSpacing: "0.1em",
-                color: "rgba(240,233,223,0.55)",
-                cursor: "pointer", transition: "color 0.2s ease",
-                textDecoration: "none",
-                borderBottom: "1px solid transparent",
-                paddingBottom: "2px",
+                fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem",
+                letterSpacing: "0.18em", textTransform: "uppercase" as const,
+                color: "var(--deer-gold)", border: "1px solid rgba(197,151,109,0.5)",
+                padding: "0.5rem 1.25rem", transition: "all 0.2s ease", textDecoration: "none",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.85)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.55)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
             >
               立即訂位
             </a>
-            <NavCartBtn />
           </nav>
 
         </div>
       </header>
 
-      {/* 手機版 Logo — 左上角，絕對定位（隨頁面捲動） */}
+      {/* 手機版 Logo — 左上角，固定定位 */}
       <Link href="/">
         <img
           src="/manus-storage/deer-logo_88482511.webp"
           alt="初衷小鹿"
           className="md:hidden"
           style={{
-            position: "absolute", top: "0.5rem", left: "1rem",
+            position: "fixed", top: "0.5rem", left: "1rem",
             zIndex: 210, height: "52px", width: "auto",
             filter: "brightness(1.05)", cursor: "pointer",
           }}
@@ -274,30 +272,27 @@ function Navbar() {
               transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + NAV_LINKS.length * 45}ms, opacity 0.35s ease ${60 + NAV_LINKS.length * 45}ms`,
               display: "flex", alignItems: "center", gap: "0.5rem",
             }}>
-              生鮮商店
+              <ShoppingCart size={14} /> 生鮮商店
             </div>
           </Link>
-          {/* 立即訂位 — 外部連結 */}
-          <a
-            href={RESERVATION_URL}
-            target="_blank" rel="noopener noreferrer"
-            style={{
-              padding: "1rem 0",
-              borderBottom: "1px solid rgba(255,255,255,0.05)",
-              fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
-              fontSize: "1rem",
-              color: "rgba(197,151,109,0.85)",
-              letterSpacing: "0.1em", cursor: "pointer",
-              transform: menuOpen ? "translateX(0)" : "translateX(16px)",
-              opacity: menuOpen ? 1 : 0,
-              transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + (NAV_LINKS.length + 1) * 45}ms, opacity 0.35s ease ${60 + (NAV_LINKS.length + 1) * 45}ms`,
-              display: "block",
-              textDecoration: "none",
-            }}
-          >
-            立即訂位
-          </a>
         </nav>
+
+        {/* 訂位按鈕 */}
+        <a
+          href={RESERVATION_URL}
+          target="_blank" rel="noopener noreferrer"
+          style={{
+            display: "block", marginTop: "2rem", textAlign: "center" as const,
+            fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
+            letterSpacing: "0.18em", textTransform: "uppercase" as const,
+            color: "var(--deer-gold)",
+            border: "1px solid rgba(197,151,109,0.45)",
+            padding: "1rem", textDecoration: "none",
+            opacity: menuOpen ? 1 : 0,
+            transform: menuOpen ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.35s ease 360ms, transform 0.4s ease 360ms",
+          }}
+        >立即訂位</a>
       </div>
     </>
   );
