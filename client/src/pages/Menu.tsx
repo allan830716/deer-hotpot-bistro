@@ -55,6 +55,17 @@ const CATEGORIES = [
   { key: "drinks",  label: "酒水飲品" },
 ];
 
+// 酒水單子分類（對應 MENU_PAGES 中 category=drinks 的 label）
+const DRINK_SUBCATEGORIES = [
+  { key: "all",    label: "全部酒水" },
+  { key: "飲品",  label: "飲品" },
+  { key: "紅酒",  label: "紅酒" },
+  { key: "白酒",  label: "白酒" },
+  { key: "氣泡酒", label: "氣泡酒" },
+  { key: "啤酒",  label: "啤酒" },
+  { key: "飲料",  label: "飲料" },
+];
+
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
 function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) {
   const [loaded, setLoaded] = useState(false);
@@ -188,9 +199,89 @@ function CategoryDropdown({ activeCategory, onChange }: { activeCategory: string
   );
 }
 
-/* ── 主元件 ────────────────────────────────────────────────────────────── */
+/* ── 酒水单子分類下拉選單 ─────────────────────────────────────────────────────────── */
+function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChange: (key: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const activeLabel = DRINK_SUBCATEGORIES.find(c => c.key === activeDrink)?.label ?? "全部酒水";
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: "relative", display: "inline-block" }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          display: "flex", alignItems: "center", gap: "0.5rem",
+          fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
+          fontSize: "0.8125rem", letterSpacing: "0.1em",
+          padding: "0.55rem 1.25rem",
+          border: "1px solid rgba(197,151,109,0.5)",
+          backgroundColor: "rgba(197,151,109,0.08)",
+          color: "var(--deer-gold)",
+          cursor: "pointer",
+          transition: "all 0.2s ease",
+          minWidth: "140px", justifyContent: "space-between",
+        }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.15)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.08)"; }}
+      >
+        <span>{activeLabel}</span>
+        <ChevronDown size={14} style={{ transition: "transform 0.25s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }} />
+      </button>
+
+      <div style={{
+        position: "absolute", top: "calc(100% + 4px)", left: 0,
+        minWidth: "140px", zIndex: 100,
+        backgroundColor: "rgba(18,12,10,0.98)",
+        border: "1px solid rgba(197,151,109,0.2)",
+        backdropFilter: "blur(12px)",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+        overflow: "hidden",
+        maxHeight: open ? "400px" : "0px",
+        opacity: open ? 1 : 0,
+        transition: "max-height 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease",
+        pointerEvents: open ? "auto" : "none",
+      }}>
+        {DRINK_SUBCATEGORIES.map((cat) => (
+          <button
+            key={cat.key}
+            onClick={() => { onChange(cat.key); setOpen(false); }}
+            style={{
+              display: "block", width: "100%", textAlign: "left",
+              padding: "0.65rem 1.25rem",
+              fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
+              fontSize: "0.8rem", letterSpacing: "0.08em",
+              color: activeDrink === cat.key ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
+              backgroundColor: activeDrink === cat.key ? "rgba(197,151,109,0.1)" : "transparent",
+              border: "none", cursor: "pointer",
+              borderBottom: "1px solid rgba(197,151,109,0.06)",
+              transition: "all 0.15s ease",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.color = "var(--deer-gold)"; }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = activeDrink === cat.key ? "rgba(197,151,109,0.1)" : "transparent";
+              (e.currentTarget as HTMLElement).style.color = activeDrink === cat.key ? "var(--deer-gold)" : "rgba(240,233,223,0.55)";
+            }}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── 主元件 ──────────────────────────────────────────────────────────────────── */
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeDrink, setActiveDrink] = useState("all"); // 酒水单子分類
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   // 輪播 track 拖動偏移（像素）
@@ -221,9 +312,15 @@ export default function Menu() {
     return () => ro.disconnect();
   }, []);
 
-  const filtered = activeCategory === "all"
-    ? MENU_PAGES
-    : MENU_PAGES.filter((p) => p.category === activeCategory);
+  // 分類筛選：先用 activeCategory，再用 activeDrink 子分類
+  const filtered = (() => {
+    let pages = activeCategory === "all" ? MENU_PAGES : MENU_PAGES.filter((p) => p.category === activeCategory);
+    // 如果目前分類包含 drinks，再用酒水子分類筛選
+    if (activeDrink !== "all") {
+      pages = pages.filter((p) => p.category === "drinks" && p.label === activeDrink);
+    }
+    return pages; // 無結果時回傳空陣列，由 UI 顯示空狀態
+  })();
 
   const safeIndex = Math.min(currentIndex, filtered.length - 1);
 
@@ -243,6 +340,19 @@ export default function Menu() {
 
   const handleCategoryChange = (key: string) => {
     setActiveCategory(key);
+    setActiveDrink("all"); // 切換主分類時重置酒水子分類
+    setCurrentIndex(0);
+    setDragDelta(0);
+    setIsDragging(false);
+    setCategoryKey(k => k + 1);
+  };
+
+  const handleDrinkChange = (key: string) => {
+    setActiveDrink(key);
+    // 選擇酒水子分類時，自動切換主分類為 drinks（除非選全部）
+    if (key !== "all") {
+      setActiveCategory("drinks");
+    }
     setCurrentIndex(0);
     setDragDelta(0);
     setIsDragging(false);
@@ -372,10 +482,13 @@ export default function Menu() {
         </div>
       </section>
 
-      {/* ── 下拉分類選單 ── */}
+      {/* ── 下拉分類選單（主分類 + 酒水子分類） ── */}
       <section style={{ backgroundColor: "var(--deer-dark)", paddingBottom: "2rem" }}>
         <div className="container">
-          <CategoryDropdown activeCategory={activeCategory} onChange={handleCategoryChange} />
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+            <CategoryDropdown activeCategory={activeCategory} onChange={handleCategoryChange} />
+            <DrinkDropdown activeDrink={activeDrink} onChange={handleDrinkChange} />
+          </div>
         </div>
       </section>
 
