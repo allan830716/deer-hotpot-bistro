@@ -443,8 +443,10 @@ export default function Menu() {
                         style={{
                           width: "100%", height: "auto", display: "block",
                           boxShadow: i === safeIndex ? "0 8px 48px rgba(0,0,0,0.5)" : "none",
-                          pointerEvents: "none",
+                          pointerEvents: "auto",
+                          cursor: "zoom-in",
                         }}
+                        onClick={() => { if (!isMouseDragging.current) setLightboxSrc(page.src); }}
                         draggable={false}
                         loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
                       />
@@ -463,19 +465,19 @@ export default function Menu() {
                     zIndex: 20,
                     width: "44px", height: "44px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    backgroundColor: "rgba(255,255,255,0.13)",
-                    backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.85)",
+                    border: "none",
+                    backgroundColor: "rgba(30,20,15,0.72)",
+                    color: "#fff",
                     cursor: filtered.length <= 1 ? "default" : "pointer",
-                    fontSize: "1.4rem",
+                    fontSize: "1.6rem",
+                    lineHeight: 1,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all 0.2s ease",
-                    opacity: filtered.length <= 1 ? 0.25 : 1,
+                    transition: "background-color 0.2s ease",
+                    opacity: filtered.length <= 1 ? 0.3 : 1,
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
                 >
                   ‹
                 </button>
@@ -491,43 +493,21 @@ export default function Menu() {
                     zIndex: 20,
                     width: "44px", height: "44px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    backgroundColor: "rgba(255,255,255,0.13)",
-                    backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.85)",
+                    border: "none",
+                    backgroundColor: "rgba(30,20,15,0.72)",
+                    color: "#fff",
                     cursor: filtered.length <= 1 ? "default" : "pointer",
-                    fontSize: "1.4rem",
+                    fontSize: "1.6rem",
+                    lineHeight: 1,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all 0.2s ease",
-                    opacity: filtered.length <= 1 ? 0.25 : 1,
+                    transition: "background-color 0.2s ease",
+                    opacity: filtered.length <= 1 ? 0.3 : 1,
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
                 >
                   ›
-                </button>
-
-                {/* 放大鏡圖示（右下角） */}
-                <button
-                  onClick={() => { if (!isMouseDragging.current) setLightboxSrc(current.src); }}
-                  style={{
-                    position: "absolute", bottom: "0.75rem", right: "0.75rem",
-                    width: "32px", height: "32px",
-                    backgroundColor: "rgba(26,18,16,0.75)",
-                    border: "1px solid rgba(197,151,109,0.3)",
-                    borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: "zoom-in",
-                    transition: "all 0.2s ease",
-                    color: "rgba(197,151,109,0.8)",
-                    zIndex: 10,
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.2)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(26,18,16,0.75)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.3)"; }}
-                  aria-label="放大查看"
-                >
-                  <Search size={13} />
                 </button>
               </div>
               </div>
