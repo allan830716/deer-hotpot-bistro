@@ -61,12 +61,14 @@ function Navbar() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "1280px", margin: "0 auto" }}>
-          {/* Logo */}
-          <Link href="/">
+          {/* Logo — 桌機顯示，手機隱藏 */}
+          <Link href="/" className="hidden md:block">
             <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "1rem", color: "rgba(240,233,223,0.9)", letterSpacing: "0.12em", cursor: "pointer" }}>
               初衷小鹿
             </span>
           </Link>
+          {/* 手機版占位元素，保持漢堡按鈕在右側 */}
+          <div className="md:hidden" />
 
           {/* Desktop Nav — md 以上顯示 */}
           <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center" }} className="hidden md:flex">

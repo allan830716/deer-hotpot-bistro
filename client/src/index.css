@@ -310,12 +310,18 @@
 
 @media (max-width: 768px) {
   .inline-booking-container {
-    /* 手機：固定 580px，讓內容可在 iframe 內捐動，不會占滿整個畫面 */
-    height: 580px;
-    min-height: 480px;
+    /* 手機：容器高度用縮放後的實際高度 */
+    height: 480px;
+    min-height: 400px;
+    overflow: hidden;
   }
   .inline-booking-container iframe {
-    height: 580px;
-    min-height: 480px;
+    /* 將 inline 頁面縮放為 75%，同時擴展寬度补償，讓內容看起來更小巧 */
+    width: 133%;
+    height: 640px;
+    transform: scale(0.75);
+    transform-origin: top left;
+    border: none;
+    display: block;
   }
 }
