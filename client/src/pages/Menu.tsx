@@ -441,14 +441,15 @@ export default function Menu() {
 
   const current = filtered[safeIndex];
 
-  // Track 偏移：用實際 px 寬度計算
-  // track 寬度 = filtered.length * containerWidth
-  // 每張圖片占 containerWidth px
-  // 所以偏移 = -(safeIndex * containerWidth) + dragDelta
-  const offsetPx = containerWidth > 0
-    ? -(safeIndex * containerWidth) + dragDelta
-    : 0;
-  const trackTranslate = `translateX(${offsetPx}px)`;
+  // Track 偏移：用百分比計算（相對於 track 本身寬度）
+  // track 寬度 = filtered.length * 100%（相對於容器）
+  // 每個 slot 寬度 = 100% / filtered.length（相對於 track）= 1 / filtered.length * track寬度
+  // 所以對应第 i 張的 translateX = -(i / filtered.length) * 100%
+  // 拖動時需要將 dragDelta(px) 轉換為相對於 track 寬度的百分比
+  const trackWidthPx = containerWidth * filtered.length; // track 的實際寬度
+  const dragPercent = trackWidthPx > 0 ? (dragDelta / trackWidthPx) * 100 : 0;
+  const basePercent = filtered.length > 0 ? -(safeIndex / filtered.length) * 100 : 0;
+  const trackTranslate = `translateX(calc(${basePercent}% + ${dragDelta}px))`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
