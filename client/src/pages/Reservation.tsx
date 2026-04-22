@@ -204,6 +204,43 @@ export default function Reservation() {
                 </div>
               ))}
             </div>
+
+            {/* CRÈM 官網按鈕 */}
+            <div style={{ marginTop: "2.5rem" }}>
+              <a
+                href="https://www.crem.tw"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.6rem",
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 400,
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase" as const,
+                  color: "var(--deer-gold)",
+                  border: "1px solid rgba(197,151,109,0.45)",
+                  padding: "0.75rem 2rem",
+                  textDecoration: "none",
+                  transition: "all 0.25s ease",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.backgroundColor = "rgba(197,151,109,0.1)";
+                  el.style.borderColor = "rgba(197,151,109,0.8)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.backgroundColor = "transparent";
+                  el.style.borderColor = "rgba(197,151,109,0.45)";
+                }}
+              >
+                <span>前往 CRÈM 預訂蛋糕</span>
+                <span style={{ fontSize: "0.8rem", opacity: 0.7 }}>→</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
