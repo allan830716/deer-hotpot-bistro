@@ -5,7 +5,7 @@
 
 import { useEffect, useRef } from "react";
 
-const HERO_IMG  = "/manus-storage/hero-space_100d3e43.jpg";
+const HERO_IMG  = "/manus-storage/space_J_brand_3b560a56.jpg";
 
 function useFadeIn(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
@@ -99,7 +99,7 @@ export default function Brand() {
 
       {/* ── Hero 全版圖 ── */}
       <section style={{ position: "relative", height: "70vh", minHeight: "480px", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center 40%" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center center" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10,8,7,0.45) 0%, rgba(10,8,7,0.85) 100%)" }} />
         <div className="container" style={{ position: "relative", height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: "5rem" }}>
           <div ref={heroRef} className="fade-up" style={{ maxWidth: "560px" }}>
