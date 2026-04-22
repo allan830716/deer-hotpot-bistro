@@ -331,13 +331,14 @@ export default function Menu() {
 
   const current = filtered[safeIndex];
 
-  // Track 偏移：每張圖片占 track 寬度的 (1/filtered.length)
-  // track 寬度 = filtered.length * 100% （相對於容器）
-  // 所以每張圖片 = 100% 相對於容器 = containerWidth px
-  // 拖動偏移：dragDelta 是 px，需除以 filtered.length 轉換為 track 百分比
-  const trackTranslate = isDragging
-    ? `calc(-${(safeIndex / filtered.length) * 100}% + ${dragDelta / filtered.length}px)`
-    : `calc(-${(safeIndex / filtered.length) * 100}%)`;
+  // Track 偏移：用實際 px 寬度計算
+  // track 寬度 = filtered.length * containerWidth
+  // 每張圖片占 containerWidth px
+  // 所以偏移 = -(safeIndex * containerWidth) + dragDelta
+  const offsetPx = containerWidth > 0
+    ? -(safeIndex * containerWidth) + dragDelta
+    : 0;
+  const trackTranslate = `translateX(${offsetPx}px)`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
@@ -403,19 +404,19 @@ export default function Menu() {
                     zIndex: 20,
                     width: "44px", height: "44px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.4)",
-                    backgroundColor: "#ababab",
+                    border: "1px solid rgba(255,255,255,0.28)",
+                    backgroundColor: "rgba(255,255,255,0.13)",
                     backdropFilter: "blur(6px)",
                     WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.95)",
+                    color: "rgba(255,255,255,0.85)",
                     cursor: filtered.length <= 1 ? "default" : "pointer",
                     fontSize: "1.4rem",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.25 : 1,
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "#c8c8c8"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.7)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#ababab"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.4)"; }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
                 >
                   ‹
                 </button>
@@ -431,19 +432,19 @@ export default function Menu() {
                     zIndex: 20,
                     width: "44px", height: "44px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(255,255,255,0.4)",
-                    backgroundColor: "#ababab",
+                    border: "1px solid rgba(255,255,255,0.28)",
+                    backgroundColor: "rgba(255,255,255,0.13)",
                     backdropFilter: "blur(6px)",
                     WebkitBackdropFilter: "blur(6px)",
-                    color: "rgba(255,255,255,0.95)",
+                    color: "rgba(255,255,255,0.85)",
                     cursor: filtered.length <= 1 ? "default" : "pointer",
                     fontSize: "1.4rem",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.25 : 1,
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "#c8c8c8"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.7)"; } }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#ababab"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.4)"; }}
+                  onMouseEnter={(e) => { if (filtered.length > 1) { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.28)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.55)"; } }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.13)" ; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.28)"; }}
                 >
                   ›
                 </button>
@@ -613,7 +614,17 @@ export default function Menu() {
         </div>
       </section>
 
-
+      {/* ── 備注 ── */}
+      <section style={{ backgroundColor: "rgba(26,18,16,0.6)", borderTop: "1px solid rgba(197,151,109,0.08)", padding: "3rem 0" }}>
+        <div className="container">
+          <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.3)", lineHeight: 2, letterSpacing: "0.04em" }}>
+            本餐廳僅提供 NATURA 微礦水或微礦氣泡水。每份套餐均含一份前菜、綜合菜盤、副餐及甜點。
+            低消一人為 600 元（以單人獨立計算），以上價格均加收一成服務費。
+            部分餐點可能會因供貨短缺及品質等因素而無法正常供應。
+            本餐廳禁止飲用烈酒，自備酒水酌收開瓶費葡萄酒每瓶 500 元。
+          </p>
+        </div>
+      </section>
     </main>
   );
 }
