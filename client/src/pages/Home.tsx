@@ -22,10 +22,10 @@ import { Link } from "wouter";
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
 // 不該被打擾的時刻—全景用餐空間
  const SPACE_IMG = "/manus-storage/59301147_2179218135493270_2323651919307866112_o_06d161dd.jpg";
-// 三核心圖片—均為初衷小鹿真實空間照
- const SOUP_IMG = "/manus-storage/59350634_2179218345493249_3380575317096660992_o_4e94bb86.jpg";
- const MEAT_IMG = "/manus-storage/59409685_2179218615493222_8552773285119524864_o_5bc7d043.jpg";
- const DESSERT_IMG = "/manus-storage/triangler_DeersHotpotBistro19_753d6a7c.jpg";
+// 三核心圖片—專屬生成料理照片
+const SOUP_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-soup-kD9yMfeQhWitk7LSxi895N.webp";
+const MEAT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-meat-HfC4JKdjgVn8nhL3rfu43S.webp";
+const DESSERT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-wine-3MQhsQo8oEws6VuohRtxHt.webp";
 
 // ── Intersection Observer Hook ────────────────────────────────────────────
 function useFadeIn(threshold = 0.15) {
@@ -241,28 +241,28 @@ function BrandPivotSection() {
 // ── Section 3: 三核心 ─────────────────────────────────────────────────────
 const CORES = [
   {
-    img: SOUP_IMG,
-    zh: "湯",
-    en: "The Broth",
-    line1: "湯，不是背景。",
-    line2: "是整場餐桌的開始。",
-    desc: "天然蔬果、乾貨慢熬，清澈不搶味，讓食材說話。",
+    img: MEAT_IMG,
+    zh: "熟成肉品",
+    en: "The Cut",
+    line1: "熟成肉品．肉的嚴選專家",
+    line2: "",
+    desc: "經過濕式熟成處理，保留肉汁、脂肪香氣、提升柔嫩度，適合火鍋這樣的短時間加熱方式，吃得到肉的原味。",
   },
   {
-    img: MEAT_IMG,
-    zh: "肉",
-    en: "The Cut",
-    line1: "不是火鍋肉。",
-    line2: "是經過處理的料理食材。",
-    desc: "熟成、部位、厚切，不需要過度調味。",
+    img: SOUP_IMG,
+    zh: "日本頂級乾貨",
+    en: "The Broth",
+    line1: "『日本頂級乾貨』上湯的層次底蘊",
+    line2: "",
+    desc: "金黃透亮的乾貨上湯，經長時間熬煮而成。鰹魚的煙燻深度、昆布、椎茸的溫潤菌香，在口中層層展開，越喝越有鮮甜厚度。",
   },
   {
     img: DESSERT_IMG,
-    zh: "甜點",
+    zh: "甜點與酒感",
     en: "The Finale",
-    line1: "最後一道，",
-    line2: "才是記住的原因。",
-    desc: "與 CRÈM 合作，把甜點做成餐桌的完整收尾。",
+    line1: "從主鍋延伸到甜點與酒感",
+    line2: "",
+    desc: "真正被記住的體驗，是從入座一路延伸至餐後。甜點、酒櫃與桌邊節奏共同完成這場晚餐。",
   },
 ];
 
