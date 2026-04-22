@@ -588,6 +588,9 @@ export default function Menu() {
                     transition: "background-color 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.3 : 1,
                     boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
+                    paddingBottom: '7px',
+                    marginBottom: '-1px',
+                    marginLeft: '-7px',
                   }}
                   onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
@@ -605,7 +608,7 @@ export default function Menu() {
                     transform: "translateY(-50%)",
                     zIndex: 20,
                     width: "44px", height: "44px",
-                    borderRadius: "50%",
+                    borderRadius: '35px',
                     border: "none",
                     backgroundColor: "rgba(30,20,15,0.72)",
                     color: "#fff",
@@ -616,6 +619,8 @@ export default function Menu() {
                     transition: "background-color 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.3 : 1,
                     boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
+                    paddingBottom: '6px',
+                    marginRight: '-7px',
                   }}
                   onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
