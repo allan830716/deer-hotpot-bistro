@@ -33,6 +33,8 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
+  { href: "/reservation", label: "訂位" },
+  { href: "/experience", label: "品牌體驗" },
 ];
 
 const RESERVATION_URL = "https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw";
@@ -153,6 +155,19 @@ function Navbar() {
         </div>
       </header>
 
+      {/* 手機版頂部黑色半透明橫幅 */}
+      <div
+        className="md:hidden"
+        style={{
+          position: "fixed", top: 0, left: 0, right: 0,
+          height: "64px",
+          zIndex: 205,
+          backgroundColor: "rgba(10,8,7,0.72)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+        }}
+      />
+
       {/* 手機版 Logo — 左上角，固定定位 */}
       <Link href="/">
         <img
@@ -160,7 +175,7 @@ function Navbar() {
           alt="初衷小鹿"
           className="md:hidden"
           style={{
-            position: "fixed", top: "0.5rem", left: "1rem",
+            position: "fixed", top: "6px", left: "1rem",
             zIndex: 210, height: "52px", width: "auto",
             filter: "brightness(1.05)", cursor: "pointer",
           }}

@@ -312,8 +312,15 @@ export default function Menu() {
     return () => ro.disconnect();
   }, []);
 
-  // 所有圖片保留在輪播中，分類選單只做「跳頁」功能
-  const filtered = MENU_PAGES; // 永遠是全部圖片
+  // 分類筛選：先用 activeCategory，再用 activeDrink 子分類
+  const filtered = (() => {
+    let pages = activeCategory === "all" ? MENU_PAGES : MENU_PAGES.filter((p) => p.category === activeCategory);
+    // 如果目前分類包含 drinks，再用酒水子分類筛選
+    if (activeDrink !== "all") {
+      pages = pages.filter((p) => p.category === "drinks" && p.label === activeDrink);
+    }
+    return pages; // 無結果時回傳空陣列，由 UI 顯示空狀態
+  })();
 
   const safeIndex = Math.min(currentIndex, filtered.length - 1);
 
@@ -334,13 +341,7 @@ export default function Menu() {
   const handleCategoryChange = (key: string) => {
     setActiveCategory(key);
     setActiveDrink("all"); // 切換主分類時重置酒水子分類
-    // 跳頁：找到該分類第一張圖片的索引
-    if (key === "all") {
-      goTo(0);
-    } else {
-      const idx = MENU_PAGES.findIndex((p) => p.category === key);
-      if (idx >= 0) goTo(idx);
-    }
+    setCurrentIndex(0);
     setDragDelta(0);
     setIsDragging(false);
     setCategoryKey(k => k + 1);
@@ -348,17 +349,11 @@ export default function Menu() {
 
   const handleDrinkChange = (key: string) => {
     setActiveDrink(key);
-    if (key === "all") {
-      // 選全部酒水：跳到 drinks 分類第一張
+    // 選擇酒水子分類時，自動切換主分類為 drinks（除非選全部）
+    if (key !== "all") {
       setActiveCategory("drinks");
-      const idx = MENU_PAGES.findIndex((p) => p.category === "drinks");
-      if (idx >= 0) goTo(idx);
-    } else {
-      // 選具體子分類：跳到該 label 第一張
-      setActiveCategory("drinks");
-      const idx = MENU_PAGES.findIndex((p) => p.category === "drinks" && p.label === key);
-      if (idx >= 0) goTo(idx);
     }
+    setCurrentIndex(0);
     setDragDelta(0);
     setIsDragging(false);
     setCategoryKey(k => k + 1);
@@ -446,22 +441,21 @@ export default function Menu() {
 
   const current = filtered[safeIndex];
 
-  // Track 偏移：用百分比計算（相對於 track 本身寬度）
-  // track 寬度 = filtered.length * 100%（相對於容器）
-  // 每個 slot 寬度 = 100% / filtered.length（相對於 track）= 1 / filtered.length * track寬度
-  // 所以對应第 i 張的 translateX = -(i / filtered.length) * 100%
-  // 拖動時需要將 dragDelta(px) 轉換為相對於 track 寬度的百分比
-  const trackWidthPx = containerWidth * filtered.length; // track 的實際寬度
-  const dragPercent = trackWidthPx > 0 ? (dragDelta / trackWidthPx) * 100 : 0;
-  const basePercent = filtered.length > 0 ? -(safeIndex / filtered.length) * 100 : 0;
-  const trackTranslate = `translateX(calc(${basePercent}% + ${dragDelta}px))`;
+  // Track 偏移：用實際 px 寬度計算
+  // track 寬度 = filtered.length * containerWidth
+  // 每張圖片占 containerWidth px
+  // 所以偏移 = -(safeIndex * containerWidth) + dragDelta
+  const offsetPx = containerWidth > 0
+    ? -(safeIndex * containerWidth) + dragDelta
+    : 0;
+  const trackTranslate = `translateX(${offsetPx}px)`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
       <style>{`
         @keyframes categoryFadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         .menu-img-wrap {
           touch-action: pan-y;
@@ -594,9 +588,6 @@ export default function Menu() {
                     transition: "background-color 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.3 : 1,
                     boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
-                    paddingBottom: '7px',
-                    marginBottom: '-1px',
-                    marginLeft: '-7px',
                   }}
                   onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
@@ -614,7 +605,7 @@ export default function Menu() {
                     transform: "translateY(-50%)",
                     zIndex: 20,
                     width: "44px", height: "44px",
-                    borderRadius: '35px',
+                    borderRadius: "50%",
                     border: "none",
                     backgroundColor: "rgba(30,20,15,0.72)",
                     color: "#fff",
@@ -625,8 +616,6 @@ export default function Menu() {
                     transition: "background-color 0.2s ease",
                     opacity: filtered.length <= 1 ? 0.3 : 1,
                     boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
-                    paddingBottom: '6px',
-                    marginRight: '-7px',
                   }}
                   onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
