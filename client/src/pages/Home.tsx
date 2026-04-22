@@ -586,7 +586,7 @@ function SpaceSection() {
           </h2>
           <Link href="/space">
             <span className="btn-deer-light" style={{ fontSize: "0.8rem" }}>
-              探索空間
+              空間體驗⇢
             </span>
           </Link>
         </div>
@@ -801,7 +801,7 @@ function CremSection() {
               <br />
               讓每一場慶祝都有專屬蛋糕。
               <br />
-              <span className="crem-collab-sub">這不是兩家店的合作，而是一場慶祝的完整設計。</span>
+              <span className="crem-collab-sub">由兩個品牌共創一場慶祝的完整設計。</span>
             </p>
           </div>
 
@@ -815,7 +815,7 @@ function CremSection() {
           {/* CTA */}
           <div style={{ textAlign: "center" }}>
             <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.06em", marginBottom: "2rem" }}>
-              客人常說，這是一場不需要擔心任何事的慶祝。
+              這是一場不需要擔心任何事的專屬慶祝。
             </p>
             <a
               href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
