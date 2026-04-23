@@ -241,28 +241,28 @@ function BrandPivotSection() {
 // ── Section 3: 三核心 ─────────────────────────────────────────────────────
 const CORES = [
   {
-    img: MEAT_IMG,
-    zh: "熟成肉品",
-    en: "The Cut",
-    line1: "熟成肉品．肉的嚴選專家",
-    line2: "",
-    desc: "經過濕式熟成處理，保留肉汁、脂肪香氣、提升柔嫩度，適合火鍋這樣的短時間加熱方式，吃得到肉的原味。",
-  },
-  {
     img: SOUP_IMG,
     zh: "日本頂級乾貨",
     en: "The Broth",
-    line1: "『日本頂級乾貨』上湯的層次底蘊",
+    line1: "湯底從來不是背景，而是料理的靈魂",
     line2: "",
-    desc: "以日本靜岡百年老舖本枯節、北海道羅臼昆布、宮崎香信椎茸長時熬製。本枯節的煙燻發酵深度、昆布保留的海水鮮味、椎茸低溫慢乾的菌香，在口中層層展開，越喝越有鮮甜厚度。不添加人工甘味，只留食材本身的誠意。",
+    desc: "選用靜岡、熊本、北海道與宮崎百年老舖乾貨，大火煮沸後轉小火慢熬至湯汁濃縮約三分之一。鰹魚歷經煙燻、發酵、乾燥成為香氣奔放的本枯節；昆布以自然風乾保留鮮味；香信椎茸低溫慢乾封存菌香。不添加人工甘味，只留食材本身的誠意。",
+  },
+  {
+    img: MEAT_IMG,
+    zh: "熟成肉品",
+    en: "The Cut",
+    line1: "#誰說火鍋不能吃到西餐才有的等級",
+    line2: "",
+    desc: "選用美國 SRF 極黑和牛、紐西蘭草飼羊、西班牙伊比利豬等西餐等級肉種。每款肉品依部位不同，做出適合它的濕式熟成與厚切處理，保留肉汁與脂肪香氣。沒有太多噱頭，只希望客人可以慢慢涮、安心吃，讓火鍋也能有一點講究。",
   },
   {
     img: DESSERT_IMG,
     zh: "甜點與酒感",
     en: "The Finale",
-    line1: "從主鍋延伸到甜點與酒感",
+    line1: "誰說甜點只能是飯後的配角？",
     line2: "",
-    desc: "真正被記住的體驗，是從入座一路延伸至餐後。甜點、酒櫃與桌邊節奏共同完成這場晚餐。",
+    desc: "由專業甜點師嚴製每一道甜點的風味與外觀設計。侍酒師從百支酒品中嚴選最適合搭配火鍋的紅、白、氣泡酒，一口肉一口美酒，讓美味更上一層樓。這是我們反骨的個性——甜點，也是主角。",
   },
 ];
 
@@ -704,23 +704,38 @@ function TrustSection() {
             </p>
           </div>
 
-          {/* 認證標章 */}
-          <div style={{ marginTop: "3rem" }}>
-            <p className="font-label mb-6" style={{ color: "var(--deer-gold)" }}>
-              Awards & Recognition
+          {/* 獲獎敘述 */}
+          <div style={{ marginTop: "3rem", borderTop: "1px solid rgba(197,151,109,0.12)", paddingTop: "2.5rem" }}>
+            <p className="font-label mb-8" style={{ color: "rgba(197,151,109,0.5)" }}>
+              Recognition
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.875rem", alignItems: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1.75rem", border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(197,151,109,0.06)", width: "fit-content" }}>
-                <span style={{ color: "var(--deer-gold)", fontSize: "0.875rem" }}>✦</span>
-                <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-text)", letterSpacing: "0.08em" }}>台北鍋界十強</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+              <div>
+                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
+                  2023 · Taipei International Hotpot Awards
+                </p>
+                <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
+                  臺北十強鍋物
+                </p>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1.75rem", border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(197,151,109,0.06)", width: "fit-content" }}>
-                <span style={{ color: "var(--deer-gold)", fontSize: "0.875rem" }}>✦</span>
-                <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-text)", letterSpacing: "0.08em" }}>台灣 30 大鍋物</span>
+              <div>
+                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
+                  2024 · Taiwan International Hotpot Awards
+                </p>
+                <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
+                  臺灣 30 大鍋物
+                </p>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1.75rem", border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(197,151,109,0.06)", width: "fit-content" }}>
-                <span style={{ color: "var(--deer-gold)", fontSize: "0.875rem" }}>✦</span>
-                <span style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "var(--deer-text)", letterSpacing: "0.08em" }}>Vogue 推薦餐廳</span>
+              <div>
+                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
+                  2024 · &amp;Premium Japan
+                </p>
+                <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
+                  日本生活品味雜誌《&amp;Premium》年度收錄
+                </p>
+                <p style={{ fontSize: "0.75rem", color: "var(--deer-sub)", marginTop: "0.4rem", lineHeight: 1.7 }}>
+                  以「美好生活指南」為概念，廣受歡迎且充滿質感氛圍的日本生活雜誌
+                </p>
               </div>
             </div>
           </div>

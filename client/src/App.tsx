@@ -23,6 +23,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
 import AdminMembers from "./pages/AdminMembers";
+import Awards from "./pages/Awards";
+import Crem from "./pages/Crem";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./contexts/CartContext";
 import { useCart } from "./contexts/CartContext";
@@ -33,6 +35,8 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
+  { href: "/awards", label: "得獎殊榮" },
+  { href: "/crem", label: "CRÈM 上桌預訂" },
 ];
 
 const RESERVATION_URL = "https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw";
@@ -427,6 +431,8 @@ function Router() {
         <Route path="/space" component={Space} />
         <Route path="/reservation" component={Reservation} />
         <Route path="/experience" component={Experience} />
+        <Route path="/awards" component={Awards} />
+        <Route path="/crem" component={Crem} />
         <Route path="/shop" component={Shop} />
         <Route path="/shop/success" component={ShopSuccess} />
         <Route path="/shop/:id" component={ShopProduct} />

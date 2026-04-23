@@ -1,11 +1,15 @@
-/*
- * 初衷小鹿 — 菜單 Menu.tsx
- * v3：真實跟隨手指滑動、滑動時鎖定頁面滾動、分類切換 fade 動畫
+/**
+ * Menu.tsx v4
+ * ─────────────────────────────────────────────────────────────
+ * 分類選單：點擊後直接跳到該分類的第一張圖（不篩選，全部菜單保持完整）
+ * 酒水子分類：只在主分類為「酒水飲品」時顯示，點擊後跳到對應第一張
+ * 主圖輪播：移除 categoryKey 重新 mount 機制，改為直接更新 currentIndex
  */
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { Search, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
+/* ── 菜單圖片清單（完整，不篩選） ──────────────────────────────────────── */
 const MENU_PAGES = [
   { src: "/manus-storage/menu-01_b93902b3.png", category: "intro",   label: "品牌理念" },
   { src: "/manus-storage/menu-02_14251abf.png", category: "surf",    label: "海陸套餐" },
@@ -42,8 +46,9 @@ const MENU_PAGES = [
   { src: "/manus-storage/menu-33_92682d10.png", category: "drinks",  label: "飲料" },
 ];
 
+/* ── 主分類（用於跳頁） ────────────────────────────────────────────────── */
 const CATEGORIES = [
-  { key: "all",     label: "全部菜單" },
+  { key: "intro",   label: "品牌理念" },
   { key: "surf",    label: "海陸套餐" },
   { key: "beef",    label: "牛肉套餐" },
   { key: "pork",    label: "豬肉套餐" },
@@ -55,15 +60,14 @@ const CATEGORIES = [
   { key: "drinks",  label: "酒水飲品" },
 ];
 
-// 酒水單子分類（對應 MENU_PAGES 中 category=drinks 的 label）
+/* ── 酒水子分類（只在 drinks 時顯示） ─────────────────────────────────── */
 const DRINK_SUBCATEGORIES = [
-  { key: "all",    label: "全部酒水" },
-  { key: "飲品",  label: "飲品" },
-  { key: "紅酒",  label: "紅酒" },
-  { key: "白酒",  label: "白酒" },
+  { key: "飲品",   label: "飲品" },
+  { key: "紅酒",   label: "紅酒" },
+  { key: "白酒",   label: "白酒" },
   { key: "氣泡酒", label: "氣泡酒" },
-  { key: "啤酒",  label: "啤酒" },
-  { key: "飲料",  label: "飲料" },
+  { key: "啤酒",   label: "啤酒" },
+  { key: "飲料",   label: "飲料" },
 ];
 
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
@@ -74,7 +78,6 @@ function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
-
   return createPortal(
     <div
       onClick={onClose}
@@ -120,12 +123,17 @@ function LightboxViewer({ src, onClose }: { src: string; onClose: () => void }) 
   );
 }
 
-/* ── 下拉分類選單 ──────────────────────────────────────────────────────── */
-function CategoryDropdown({ activeCategory, onChange }: { activeCategory: string; onChange: (key: string) => void }) {
+/* ── 主分類下拉選單 ─────────────────────────────────────────────────────── */
+function CategoryDropdown({
+  currentCategory,
+  onJumpTo,
+}: {
+  currentCategory: string;
+  onJumpTo: (key: string) => void;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const activeLabel = CATEGORIES.find(c => c.key === activeCategory)?.label ?? "全部菜單";
-
+  const activeLabel = CATEGORIES.find(c => c.key === currentCategory)?.label ?? "快速跳頁";
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -133,7 +141,6 @@ function CategoryDropdown({ activeCategory, onChange }: { activeCategory: string
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
-
   return (
     <div ref={ref} style={{ position: "relative", display: "inline-block" }}>
       <button
@@ -143,52 +150,51 @@ function CategoryDropdown({ activeCategory, onChange }: { activeCategory: string
           fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
           fontSize: "0.8125rem", letterSpacing: "0.1em",
           padding: "0.55rem 1.25rem",
-          border: "1px solid rgba(197,151,109,0.5)",
-          backgroundColor: "rgba(197,151,109,0.08)",
-          color: "var(--deer-gold)",
+          border: "1px solid rgba(197,151,109,0.35)",
+          backgroundColor: "rgba(197,151,109,0.06)",
+          color: "rgba(197,151,109,0.85)",
           cursor: "pointer",
           transition: "all 0.2s ease",
-          minWidth: "160px", justifyContent: "space-between",
+          minWidth: "140px", justifyContent: "space-between",
         }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.15)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.08)"; }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.12)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.06)"; }}
       >
         <span>{activeLabel}</span>
         <ChevronDown size={14} style={{ transition: "transform 0.25s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }} />
       </button>
-
       <div style={{
         position: "absolute", top: "calc(100% + 4px)", left: 0,
-        minWidth: "160px", zIndex: 100,
+        minWidth: "140px", zIndex: 100,
         backgroundColor: "rgba(18,12,10,0.98)",
         border: "1px solid rgba(197,151,109,0.2)",
         backdropFilter: "blur(12px)",
         boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
         overflow: "hidden",
-        maxHeight: open ? "400px" : "0px",
+        maxHeight: open ? "500px" : "0px",
         opacity: open ? 1 : 0,
-        transition: "max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
+        transition: "max-height 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease",
         pointerEvents: open ? "auto" : "none",
       }}>
         {CATEGORIES.map((cat) => (
           <button
             key={cat.key}
-            onClick={() => { onChange(cat.key); setOpen(false); }}
+            onClick={() => { onJumpTo(cat.key); setOpen(false); }}
             style={{
               display: "block", width: "100%", textAlign: "left",
               padding: "0.65rem 1.25rem",
               fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
               fontSize: "0.8rem", letterSpacing: "0.08em",
-              color: activeCategory === cat.key ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
-              backgroundColor: activeCategory === cat.key ? "rgba(197,151,109,0.1)" : "transparent",
+              color: currentCategory === cat.key ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
+              backgroundColor: currentCategory === cat.key ? "rgba(197,151,109,0.1)" : "transparent",
               border: "none", cursor: "pointer",
               borderBottom: "1px solid rgba(197,151,109,0.06)",
               transition: "all 0.15s ease",
             }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.color = "var(--deer-gold)"; }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = activeCategory === cat.key ? "rgba(197,151,109,0.1)" : "transparent";
-              (e.currentTarget as HTMLElement).style.color = activeCategory === cat.key ? "var(--deer-gold)" : "rgba(240,233,223,0.55)";
+              (e.currentTarget as HTMLElement).style.backgroundColor = currentCategory === cat.key ? "rgba(197,151,109,0.1)" : "transparent";
+              (e.currentTarget as HTMLElement).style.color = currentCategory === cat.key ? "var(--deer-gold)" : "rgba(240,233,223,0.55)";
             }}
           >
             {cat.label}
@@ -199,12 +205,17 @@ function CategoryDropdown({ activeCategory, onChange }: { activeCategory: string
   );
 }
 
-/* ── 酒水单子分類下拉選單 ─────────────────────────────────────────────────────────── */
-function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChange: (key: string) => void }) {
+/* ── 酒水子分類下拉選單（只在 drinks 時顯示） ──────────────────────────── */
+function DrinkDropdown({
+  activeDrink,
+  onJumpToDrink,
+}: {
+  activeDrink: string;
+  onJumpToDrink: (label: string) => void;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const activeLabel = DRINK_SUBCATEGORIES.find(c => c.key === activeDrink)?.label ?? "全部酒水";
-
+  const activeLabel = DRINK_SUBCATEGORIES.find(c => c.key === activeDrink)?.label ?? "酒水分類";
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -212,7 +223,6 @@ function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChang
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
-
   return (
     <div ref={ref} style={{ position: "relative", display: "inline-block" }}>
       <button
@@ -227,7 +237,7 @@ function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChang
           color: "var(--deer-gold)",
           cursor: "pointer",
           transition: "all 0.2s ease",
-          minWidth: "140px", justifyContent: "space-between",
+          minWidth: "120px", justifyContent: "space-between",
         }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.15)"; }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.08)"; }}
@@ -235,10 +245,9 @@ function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChang
         <span>{activeLabel}</span>
         <ChevronDown size={14} style={{ transition: "transform 0.25s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }} />
       </button>
-
       <div style={{
         position: "absolute", top: "calc(100% + 4px)", left: 0,
-        minWidth: "140px", zIndex: 100,
+        minWidth: "120px", zIndex: 100,
         backgroundColor: "rgba(18,12,10,0.98)",
         border: "1px solid rgba(197,151,109,0.2)",
         backdropFilter: "blur(12px)",
@@ -252,7 +261,7 @@ function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChang
         {DRINK_SUBCATEGORIES.map((cat) => (
           <button
             key={cat.key}
-            onClick={() => { onChange(cat.key); setOpen(false); }}
+            onClick={() => { onJumpToDrink(cat.key); setOpen(false); }}
             style={{
               display: "block", width: "100%", textAlign: "left",
               padding: "0.65rem 1.25rem",
@@ -280,16 +289,11 @@ function DrinkDropdown({ activeDrink, onChange }: { activeDrink: string; onChang
 
 /* ── 主元件 ──────────────────────────────────────────────────────────────────── */
 export default function Menu() {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [activeDrink, setActiveDrink] = useState("all"); // 酒水单子分類
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  // 輪播 track 拖動偏移（像素）
   const [dragDelta, setDragDelta] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [categoryKey, setCategoryKey] = useState(0);
 
-  // 觸控/滑鼠狀態
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const isHorizontal = useRef<boolean | null>(null);
@@ -298,7 +302,6 @@ export default function Menu() {
   const isMouseDragging = useRef(false);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  // 監聴容器寬度
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -312,54 +315,40 @@ export default function Menu() {
     return () => ro.disconnect();
   }, []);
 
-  // 分類筛選：先用 activeCategory，再用 activeDrink 子分類
-  const filtered = (() => {
-    let pages = activeCategory === "all" ? MENU_PAGES : MENU_PAGES.filter((p) => p.category === activeCategory);
-    // 如果目前分類包含 drinks，再用酒水子分類筛選
-    if (activeDrink !== "all") {
-      pages = pages.filter((p) => p.category === "drinks" && p.label === activeDrink);
-    }
-    return pages; // 無結果時回傳空陣列，由 UI 顯示空狀態
-  })();
+  const total = MENU_PAGES.length;
+  const safeIndex = Math.max(0, Math.min(currentIndex, total - 1));
+  const current = MENU_PAGES[safeIndex];
 
-  const safeIndex = Math.min(currentIndex, filtered.length - 1);
+  // 目前分類（用於高亮下拉選單）
+  const currentCategory = current?.category ?? "";
+  // 目前酒水子分類
+  const currentDrinkLabel = currentCategory === "drinks" ? (current?.label ?? "") : "";
 
-  // 直接跳到指定索引（無動畫延遲，CSS transition 負責滑動感）
   const goTo = useCallback((newIndex: number) => {
-    setCurrentIndex(Math.max(0, Math.min(newIndex, filtered.length - 1)));
+    setCurrentIndex(Math.max(0, Math.min(newIndex, total - 1)));
     setDragDelta(0);
-  }, [filtered.length]);
+  }, [total]);
 
   const prev = useCallback(() => {
-    goTo((safeIndex - 1 + filtered.length) % filtered.length);
-  }, [safeIndex, filtered.length, goTo]);
+    goTo((safeIndex - 1 + total) % total);
+  }, [safeIndex, total, goTo]);
 
   const next = useCallback(() => {
-    goTo((safeIndex + 1) % filtered.length);
-  }, [safeIndex, filtered.length, goTo]);
+    goTo((safeIndex + 1) % total);
+  }, [safeIndex, total, goTo]);
 
-  const handleCategoryChange = (key: string) => {
-    setActiveCategory(key);
-    setActiveDrink("all"); // 切換主分類時重置酒水子分類
-    setCurrentIndex(0);
-    setDragDelta(0);
-    setIsDragging(false);
-    setCategoryKey(k => k + 1);
+  // 點擊主分類：跳到該分類第一張
+  const handleCategoryJump = (key: string) => {
+    const idx = MENU_PAGES.findIndex(p => p.category === key);
+    if (idx >= 0) goTo(idx);
   };
 
-  const handleDrinkChange = (key: string) => {
-    setActiveDrink(key);
-    // 選擇酒水子分類時，自動切換主分類為 drinks（除非選全部）
-    if (key !== "all") {
-      setActiveCategory("drinks");
-    }
-    setCurrentIndex(0);
-    setDragDelta(0);
-    setIsDragging(false);
-    setCategoryKey(k => k + 1);
+  // 點擊酒水子分類：跳到對應 label 的第一張
+  const handleDrinkJump = (label: string) => {
+    const idx = MENU_PAGES.findIndex(p => p.category === "drinks" && p.label === label);
+    if (idx >= 0) goTo(idx);
   };
 
-  // 鍵盤方向鍵
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (lightboxSrc) { if (e.key === "Escape") setLightboxSrc(null); return; }
@@ -370,7 +359,6 @@ export default function Menu() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [prev, next, lightboxSrc]);
 
-  // ── 觸控手勢 ──
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
@@ -378,28 +366,22 @@ export default function Menu() {
     setDragDelta(0);
     setIsDragging(false);
   };
-
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
     if (isHorizontal.current === null) {
-      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
-        isHorizontal.current = Math.abs(dx) > Math.abs(dy);
-      }
+      isHorizontal.current = Math.abs(dx) > Math.abs(dy);
     }
-    if (isHorizontal.current === true) {
-      e.preventDefault();
-      setIsDragging(true);
-      setDragDelta(dx);
-    }
+    if (!isHorizontal.current) return;
+    e.preventDefault();
+    setDragDelta(dx);
+    setIsDragging(true);
   };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = () => {
     if (touchStartX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (isHorizontal.current === true && Math.abs(dx) > 50) {
-      if (dx < 0) next(); else prev();
+    if (isDragging && Math.abs(dragDelta) > 40) {
+      if (dragDelta < 0) next(); else prev();
     } else {
       setDragDelta(0);
     }
@@ -409,23 +391,20 @@ export default function Menu() {
     isHorizontal.current = null;
   };
 
-  // ── 滑鼠拖動 ──
   const handleMouseDown = (e: React.MouseEvent) => {
     mouseStartX.current = e.clientX;
     isMouseDragging.current = false;
     setDragDelta(0);
   };
-
   const handleMouseMove = (e: React.MouseEvent) => {
     if (mouseStartX.current === null) return;
     const dx = e.clientX - mouseStartX.current;
     if (Math.abs(dx) > 8) {
       isMouseDragging.current = true;
-      setIsDragging(true);
       setDragDelta(dx);
+      setIsDragging(true);
     }
   };
-
   const handleMouseUp = (e: React.MouseEvent) => {
     if (mouseStartX.current === null) return;
     const dx = e.clientX - mouseStartX.current;
@@ -439,29 +418,14 @@ export default function Menu() {
     isMouseDragging.current = false;
   };
 
-  const current = filtered[safeIndex];
-
-  // Track 偏移：用實際 px 寬度計算
-  // track 寬度 = filtered.length * containerWidth
-  // 每張圖片占 containerWidth px
-  // 所以偏移 = -(safeIndex * containerWidth) + dragDelta
-  const offsetPx = containerWidth > 0
-    ? -(safeIndex * containerWidth) + dragDelta
-    : 0;
+  const offsetPx = containerWidth > 0 ? -(safeIndex * containerWidth) + dragDelta : 0;
   const trackTranslate = `translateX(${offsetPx}px)`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
       <style>{`
-        @keyframes categoryFadeIn {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .menu-img-wrap {
-          touch-action: pan-y;
-        }
+        .menu-img-wrap { touch-action: pan-y; }
       `}</style>
-
       {lightboxSrc && (
         <LightboxViewer src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
       )}
@@ -482,12 +446,20 @@ export default function Menu() {
         </div>
       </section>
 
-      {/* ── 下拉分類選單（主分類 + 酒水子分類） ── */}
+      {/* ── 分類選單（快速跳頁） ── */}
       <section style={{ backgroundColor: "var(--deer-dark)", paddingBottom: "2rem" }}>
         <div className="container">
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
-            <CategoryDropdown activeCategory={activeCategory} onChange={handleCategoryChange} />
-            <DrinkDropdown activeDrink={activeDrink} onChange={handleDrinkChange} />
+            <CategoryDropdown
+              currentCategory={currentCategory}
+              onJumpTo={handleCategoryJump}
+            />
+            {currentCategory === "drinks" && (
+              <DrinkDropdown
+                activeDrink={currentDrinkLabel}
+                onJumpToDrink={handleDrinkJump}
+              />
+            )}
           </div>
         </div>
       </section>
@@ -496,82 +468,70 @@ export default function Menu() {
       <section style={{ backgroundColor: "var(--deer-dark)", paddingBottom: "5rem" }}>
         <div className="container">
           <div style={{ display: "flex", justifyContent: "center" }}>
-
-            {/* 圖片主體（包裹左右按鈕） */}
             {current && (
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  maxWidth: "640px",
-                }}
-              >
-                {/* 輪播圖片區域（左右按鈕在此容器內，top:50% 相對於圖片高度） */}
-              <div
-                ref={containerRef}
-                className="menu-img-wrap"
-                style={{
-                  width: "100%",
-                  cursor: isMouseDragging.current ? "grabbing" : "grab",
-                  position: "relative",
-                  userSelect: "none",
-                  overflow: "hidden",
-                }}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={() => {
-                  if (mouseStartX.current !== null) {
-                    setDragDelta(0);
-                    setIsDragging(false);
-                    mouseStartX.current = null;
-                    isMouseDragging.current = false;
-                  }
-                }}
-              >
-                {/* 輪播 track — 所有圖片並排在同一行，用 translateX 滑動 */}
+              <div style={{ position: "relative", width: "100%", maxWidth: "640px" }}>
                 <div
-                  key={categoryKey}
+                  ref={containerRef}
+                  className="menu-img-wrap"
                   style={{
-                    display: "flex",
-                    width: `${filtered.length * 100}%`,
-                    transform: trackTranslate,
-                    transition: isDragging ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-                    // trackTranslate 現在是 translateX(px)，跟圖片寬度正確對應
-                    willChange: "transform",
-                    animation: categoryKey > 0 ? "categoryFadeIn 0.55s ease forwards" : "none",
+                    width: "100%",
+                    cursor: isMouseDragging.current ? "grabbing" : "grab",
+                    position: "relative",
+                    userSelect: "none",
+                    overflow: "hidden",
+                  }}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={() => {
+                    if (mouseStartX.current !== null) {
+                      setDragDelta(0);
+                      setIsDragging(false);
+                      mouseStartX.current = null;
+                      isMouseDragging.current = false;
+                    }
                   }}
                 >
-                  {filtered.map((page, i) => (
-                    <div
-                      key={i}
-                      style={{ width: `${100 / filtered.length}%`, flexShrink: 0 }}
-                    >
-                      <img
-                        src={page.src}
-                        alt={page.label}
-                        style={{
-                          width: "100%", height: "auto", display: "block",
-                          boxShadow: i === safeIndex ? "0 8px 48px rgba(0,0,0,0.5)" : "none",
-                          pointerEvents: "auto",
-                          cursor: "zoom-in",
-                        }}
-                        onClick={() => { if (!isMouseDragging.current) setLightboxSrc(page.src); }}
-                        draggable={false}
-                        loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
-                      />
-                    </div>
-                  ))}
+                  <div
+                    style={{
+                      display: "flex",
+                      width: `${total * 100}%`,
+                      transform: trackTranslate,
+                      transition: isDragging ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                      willChange: "transform",
+                    }}
+                  >
+                    {MENU_PAGES.map((page, i) => (
+                      <div
+                        key={i}
+                        style={{ width: `${100 / total}%`, flexShrink: 0 }}
+                      >
+                        <img
+                          src={page.src}
+                          alt={page.label}
+                          style={{
+                            width: "100%", height: "auto", display: "block",
+                            boxShadow: i === safeIndex ? "0 8px 48px rgba(0,0,0,0.5)" : "none",
+                            pointerEvents: "auto",
+                            cursor: "zoom-in",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isMouseDragging.current) setLightboxSrc(page.src);
+                          }}
+                          draggable={false}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                {/* 上一頁按鈕（圖片左側置中） */}
                 <button
                   onClick={prev}
-                  disabled={filtered.length <= 1}
-                  aria-label="上一頁"
+                  aria-label="上一張"
                   style={{
                     position: "absolute", left: "0.75rem", top: "50%",
                     transform: "translateY(-50%)",
@@ -581,24 +541,21 @@ export default function Menu() {
                     border: "none",
                     backgroundColor: "rgba(30,20,15,0.72)",
                     color: "#fff",
-                    cursor: filtered.length <= 1 ? "default" : "pointer",
+                    cursor: "pointer",
                     fontSize: "1.6rem",
                     lineHeight: 1,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "background-color 0.2s ease",
-                    opacity: filtered.length <= 1 ? 0.3 : 1,
                     boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
                 >
                   ‹
                 </button>
 
-                {/* 下一頁按鈕（圖片右側置中） */}
                 <button
                   onClick={next}
-                  disabled={filtered.length <= 1}
                   aria-label="下一張"
                   style={{
                     position: "absolute", right: "0.75rem", top: "50%",
@@ -609,82 +566,53 @@ export default function Menu() {
                     border: "none",
                     backgroundColor: "rgba(30,20,15,0.72)",
                     color: "#fff",
-                    cursor: filtered.length <= 1 ? "default" : "pointer",
+                    cursor: "pointer",
                     fontSize: "1.6rem",
                     lineHeight: 1,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "background-color 0.2s ease",
-                    opacity: filtered.length <= 1 ? 0.3 : 1,
                     boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
                   }}
-                  onMouseEnter={(e) => { if (filtered.length > 1) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
                 >
                   ›
                 </button>
               </div>
-              </div>
             )}
-
-
           </div>
 
-          {/* 頁碼與白色點點導覽 */}
           {current && (
             <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
               <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", letterSpacing: "0.08em", marginBottom: "1.25rem" }}>
-                {current.label} &nbsp;·&nbsp; {safeIndex + 1} / {filtered.length}
+                {current.label} &nbsp;·&nbsp; {safeIndex + 1} / {total}
               </p>
-
-              {/* 點點導覽 */}
               <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", alignItems: "center", marginBottom: "1.5rem" }}>
-                {filtered.length <= 15 ? (
-                  filtered.map((_, i) => (
+                {[-2, -1, 0, 1, 2].map((offset) => {
+                  const idx = safeIndex + offset;
+                  if (idx < 0 || idx >= total) return <span key={offset} style={{ width: "7px" }} />;
+                  return (
                     <button
-                      key={i}
-                      onClick={() => goTo(i)}
-                      aria-label={`第 ${i + 1} 頁`}
+                      key={idx}
+                      onClick={() => goTo(idx)}
                       style={{
-                        width: i === safeIndex ? "20px" : "7px",
+                        width: offset === 0 ? "20px" : "7px",
                         height: "7px",
                         borderRadius: "4px",
                         border: "none",
                         cursor: "pointer",
                         padding: 0,
-                        backgroundColor: i === safeIndex ? "rgba(197,151,109,0.9)" : "rgba(255,255,255,0.3)",
+                        backgroundColor: offset === 0 ? "rgba(197,151,109,0.9)" : "rgba(255,255,255,0.3)",
                         transition: "all 0.3s ease",
                         flexShrink: 0,
                       }}
                     />
-                  ))
-                ) : (
-                  [-2, -1, 0, 1, 2].map((offset) => {
-                    const idx = safeIndex + offset;
-                    if (idx < 0 || idx >= filtered.length) return <span key={offset} style={{ width: "7px" }} />;
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => goTo(idx)}
-                        style={{
-                          width: offset === 0 ? "20px" : "7px",
-                          height: "7px",
-                          borderRadius: "4px",
-                          border: "none",
-                          cursor: "pointer",
-                          padding: 0,
-                          backgroundColor: offset === 0 ? "rgba(197,151,109,0.9)" : "rgba(255,255,255,0.3)",
-                          transition: "all 0.3s ease",
-                          flexShrink: 0,
-                        }}
-                      />
-                    );
-                  })
-                )}
+                  );
+                })}
               </div>
 
-              {/* 縮圖列 */}
               <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", flexWrap: "wrap" }}>
-                {filtered.map((page, i) => (
+                {MENU_PAGES.map((page, i) => (
                   <button
                     key={i}
                     onClick={() => goTo(i)}
