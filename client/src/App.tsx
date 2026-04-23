@@ -42,11 +42,11 @@ function NavCartBtn() {
   const [, navigate] = useLocation();
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      {/* 商店文字連結 */}
+      {/* 商店文字連結 — 暫時隱藏，待上線時移除 display:none */}
       <button
         onClick={() => navigate("/shop")}
         className="nav-shop-link"
-        style={{ background: "transparent", border: "1px solid rgba(197,151,109,0.35)", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.375rem", padding: "0.375rem 0.875rem", fontSize: "0.75rem", letterSpacing: "0.08em", fontFamily: "'Noto Serif TC', serif" }}
+        style={{ background: "transparent", border: "1px solid rgba(197,151,109,0.35)", color: "var(--deer-gold)", cursor: "pointer", display: "none", alignItems: "center", gap: "0.375rem", padding: "0.375rem 0.875rem", fontSize: "0.75rem", letterSpacing: "0.08em", fontFamily: "'Noto Serif TC', serif" }}
       >
         生鮮商店
       </button>
@@ -269,7 +269,7 @@ function Navbar() {
               </div>
             </Link>
           ))}
-          {/* 商店連結 */}
+          {/* 商店連結 — 暫時隱藏，待上線時移除 display:none */}
           <Link href="/shop">
             <div style={{
               padding: "1rem 0",
@@ -281,7 +281,7 @@ function Navbar() {
               transform: menuOpen ? "translateX(0)" : "translateX(16px)",
               opacity: menuOpen ? 1 : 0,
               transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + NAV_LINKS.length * 45}ms, opacity 0.35s ease ${60 + NAV_LINKS.length * 45}ms`,
-              display: "flex", alignItems: "center", gap: "0.5rem",
+              display: "none", alignItems: "center", gap: "0.5rem",
             }}>
               <ShoppingCart size={14} /> 生鮮商店
             </div>
