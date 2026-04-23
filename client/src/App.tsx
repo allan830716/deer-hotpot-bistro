@@ -50,8 +50,8 @@ function NavCartBtn() {
       >
         生鮮商店
       </button>
-      {/* 購物車圖示：點擊跳到購物車頁面 */}
-      {itemCount > 0 && (
+      {/* 購物車圖示 — 暫時隱藏，待上線時移除 */}
+      {false && itemCount > 0 && (
         <button
           onClick={() => navigate("/cart")}
           style={{ position: "relative", background: "transparent", border: "none", color: "var(--deer-gold)", cursor: "pointer", display: "flex", alignItems: "center", padding: "0.375rem" }}
@@ -352,6 +352,8 @@ function FloatingCartButton() {
   const [location] = useLocation();
   // 在購物車頁面或結帳頁面不顯示
   if (location === "/cart" || location === "/shop/success") return null;
+  // 暫時隱藏購物車浮動按鈕，待生鮮商店上線時移除此行
+  return null;
   if (itemCount === 0) return null;
   return (
     <button
