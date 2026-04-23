@@ -244,25 +244,25 @@ const CORES = [
     img: SOUP_IMG,
     zh: "日本頂級乾貨",
     en: "The Broth",
-    line1: "湯底從來不是背景，而是料理的靈魂",
+    line1: "靜岡本枯節 · 北海道羅臼昆布 · 宮崎香信椎茸",
     line2: "",
-    desc: "選用靜岡、熊本、北海道與宮崎百年老舖乾貨，大火煮沸後轉小火慢熬至湯汁濃縮約三分之一。鰹魚歷經煙燻、發酵、乾燥成為香氣奔放的本枯節；昆布以自然風乾保留鮮味；香信椎茸低溫慢乾封存菌香。不添加人工甘味，只留食材本身的誠意。",
+    desc: "三種頂級日本乾貨，長時慢熬。鮮甜清澈，不添加人工甘味——湯底是料理的靈魂，不是背景。",
   },
   {
     img: MEAT_IMG,
     zh: "熟成肉品",
     en: "The Cut",
-    line1: "#誰說火鍋不能吃到西餐才有的等級",
+    line1: "SRF 極黑和牛 · 伊比利豬 · 草飼羊",
     line2: "",
-    desc: "選用美國 SRF 極黑和牛、紐西蘭草飼羊、西班牙伊比利豬等西餐等級肉種。每款肉品依部位不同，做出適合它的濕式熟成與厚切處理，保留肉汁與脂肪香氣。沒有太多噱頭，只希望客人可以慢慢涮、安心吃，讓火鍋也能有一點講究。",
+    desc: "西餐等級肉種，濕式熟成處理。保留肉汁與脂肪香氣，讓火鍋也能有一點講究。",
   },
   {
     img: DESSERT_IMG,
     zh: "甜點與酒感",
     en: "The Finale",
-    line1: "誰說甜點只能是飯後的配角？",
+    line1: "專業甜點師 · 侍酒師嚴選酒單",
     line2: "",
-    desc: "由專業甜點師嚴製每一道甜點的風味與外觀設計。侍酒師從百支酒品中嚴選最適合搭配火鍋的紅、白、氣泡酒，一口肉一口美酒，讓美味更上一層樓。這是我們反骨的個性——甜點，也是主角。",
+    desc: "甜點不是配角。從紅白氣泡酒搭配到餐後甜點收尾，這是我們反骨的個性——一場餐桌，不該在主食後就散場。",
   },
 ];
 
@@ -287,7 +287,7 @@ function CoreSection() {
               letterSpacing: "0.1em",
             }}
           >
-            三個核心，構成一場完整的餐桌。
+            三核心，構成一場完整的餐桌
           </h2>
         </div>
 
@@ -694,15 +694,7 @@ function TrustSection() {
             每一則評論，都是真實的用餐記憶。
           </p>
 
-          {/* 口碑金句 */}
-          <div style={{ marginTop: "3rem", padding: "1.75rem 2rem", borderTop: "1px solid rgba(197,151,109,0.2)", borderBottom: "1px solid rgba(197,151,109,0.2)" }}>
-            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "var(--deer-text)", lineHeight: 1.8, letterSpacing: "0.06em", marginBottom: "0.75rem" }}>
-              「被甜點耽誤的火鍋店。」
-            </p>
-            <p style={{ fontSize: "0.75rem", color: "var(--deer-sub)", letterSpacing: "0.1em" }}>
-              — 顧客評論
-            </p>
-          </div>
+
 
           {/* 獲獎敘述 */}
           <div style={{ marginTop: "3rem", borderTop: "1px solid rgba(197,151,109,0.12)", paddingTop: "2.5rem" }}>
@@ -712,18 +704,18 @@ function TrustSection() {
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
               <div>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
-                  2023 · Taipei International Hotpot Awards
+                  2023 · 台北市府鍋物大賽
                 </p>
                 <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
-                  臺北十強鍋物
+                  2023 台北十強鍋物
                 </p>
               </div>
               <div>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
-                  2024 · Taiwan International Hotpot Awards
+                  2024 · 台北市府鍋物大賽
                 </p>
                 <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
-                  臺灣 30 大鍋物
+                  2024 台灣 30 大鍋物
                 </p>
               </div>
               <div>

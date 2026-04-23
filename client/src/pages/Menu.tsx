@@ -33,21 +33,22 @@ const MENU_PAGES = [
   { src: "/manus-storage/menu-20_0c245cb0.png", category: "lunch",   label: "午餐羊 / 海鮮" },
   { src: "/manus-storage/menu-21_34e7b7f3.png", category: "lunch",   label: "午餐附餐甜點" },
   { src: "/manus-storage/menu-22_aebcd897.png", category: "quote",   label: "品牌語句" },
-  { src: "/manus-storage/menu-23_55e5158c.png", category: "drinks",  label: "飲品" },
-  { src: "/manus-storage/menu-24_59cd65b6.png", category: "drinks",  label: "飲品" },
-  { src: "/manus-storage/menu-25_573ad6e1.png", category: "drinks",  label: "紅酒" },
-  { src: "/manus-storage/menu-26_15343df0.png", category: "drinks",  label: "紅酒" },
-  { src: "/manus-storage/menu-27_cf8a114d.png", category: "drinks",  label: "白酒" },
-  { src: "/manus-storage/menu-28_b938af18.png", category: "drinks",  label: "白酒" },
-  { src: "/manus-storage/menu-29_28a8f7d3.png", category: "drinks",  label: "氣泡酒" },
+  { src: "/manus-storage/menu-23_55e5158c.png", category: "drinks",  label: "紅｜白｜氣泡/杯" },
+  { src: "/manus-storage/menu-24_59cd65b6.png", category: "drinks",  label: "紅｜白｜氣泡/杯" },
+  { src: "/manus-storage/menu-25_573ad6e1.png", category: "drinks",  label: "紅酒/瓶" },
+  { src: "/manus-storage/menu-26_15343df0.png", category: "drinks",  label: "紅酒/瓶" },
+  { src: "/manus-storage/menu-27_cf8a114d.png", category: "drinks",  label: "白酒/瓶" },
+  { src: "/manus-storage/menu-28_b938af18.png", category: "drinks",  label: "白酒/瓶" },
+  { src: "/manus-storage/menu-29_28a8f7d3.png", category: "drinks",  label: "氣泡酒/瓶" },
   { src: "/manus-storage/menu-30_fcc4dd16.png", category: "drinks",  label: "啤酒" },
   { src: "/manus-storage/menu-31_1aaca962.png", category: "drinks",  label: "啤酒" },
-  { src: "/manus-storage/menu-32_353a9d59.png", category: "drinks",  label: "飲料" },
-  { src: "/manus-storage/menu-33_92682d10.png", category: "drinks",  label: "飲料" },
+  { src: "/manus-storage/menu-32_353a9d59.png", category: "drinks",  label: "果汁/氣泡飲" },
+  { src: "/manus-storage/menu-33_92682d10.png", category: "drinks",  label: "果汁/氣泡飲" },
 ];
 
 /* ── 主分類（用於跳頁） ────────────────────────────────────────────────── */
 const CATEGORIES = [
+  { key: "all",     label: "全部菜單" },
   { key: "intro",   label: "品牌理念" },
   { key: "surf",    label: "海陸套餐" },
   { key: "beef",    label: "牛肉套餐" },
@@ -62,12 +63,12 @@ const CATEGORIES = [
 
 /* ── 酒水子分類（只在 drinks 時顯示） ─────────────────────────────────── */
 const DRINK_SUBCATEGORIES = [
-  { key: "飲品",   label: "飲品" },
-  { key: "紅酒",   label: "紅酒" },
-  { key: "白酒",   label: "白酒" },
-  { key: "氣泡酒", label: "氣泡酒" },
-  { key: "啤酒",   label: "啤酒" },
-  { key: "飲料",   label: "飲料" },
+  { key: "紅｜白｜氣泡/杯", label: "紅｜白｜氣泡/杯" },
+  { key: "紅酒/瓶",         label: "紅酒/瓶" },
+  { key: "白酒/瓶",         label: "白酒/瓶" },
+  { key: "氣泡酒/瓶",       label: "氣泡酒/瓶" },
+  { key: "啤酒",            label: "啤酒" },
+  { key: "果汁/氣泡飲",     label: "果汁/氣泡飲" },
 ];
 
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
@@ -339,12 +340,23 @@ export default function Menu() {
 
   // 點擊主分類：跳到該分類第一張
   const handleCategoryJump = (key: string) => {
+    if (key === "all") { goTo(0); return; }
     const idx = MENU_PAGES.findIndex(p => p.category === key);
     if (idx >= 0) goTo(idx);
   };
 
-  // 點擊酒水子分類：跳到對應 label 的第一張
+  // 點擊酒水子分類：跳到對應 label 的指定張
   const handleDrinkJump = (label: string) => {
+    // 特定分類跳到第二張（依需求）
+    const jumpToSecond = ["白酒/瓶", "啤酒", "果汁/氣泡飲"];
+    if (jumpToSecond.includes(label)) {
+      const allMatches = MENU_PAGES.reduce<number[]>((acc, p, i) => {
+        if (p.category === "drinks" && p.label === label) acc.push(i);
+        return acc;
+      }, []);
+      if (allMatches.length >= 2) { goTo(allMatches[1]); return; }
+      if (allMatches.length === 1) { goTo(allMatches[0]); return; }
+    }
     const idx = MENU_PAGES.findIndex(p => p.category === "drinks" && p.label === label);
     if (idx >= 0) goTo(idx);
   };

@@ -35,7 +35,7 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
-  { href: "/awards", label: "得獎殊榮" },
+  { href: "/awards", label: "獲獎殊榮／雜誌專訪" },
   { href: "/crem", label: "CRÈM 上桌預訂" },
 ];
 
@@ -324,6 +324,10 @@ function Footer() {
         <div>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Location</p>
           <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2 }}>台北市信義區<br />忠孝東路四段 553 巷 6 弄 15 號</p>
+        </div>
+        <div>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Contact</p>
+          <a href="tel:+886227658585" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", display: "block", lineHeight: 2, transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>02-2765-8585</a>
         </div>
         <div>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Hours</p>

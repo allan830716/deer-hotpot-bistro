@@ -1,10 +1,23 @@
-/**
- * Awards.tsx — 得獎殊榮頁面
- * 設計語言：暗底、金色細節、大量留白、敘事感
+/*
+ * 初衷小鹿 — 獲獎殊榮／雜誌專訪 Awards.tsx
+ * ─────────────────────────────────────────────
+ * 設計語言：深色背景 var(--deer-dark) · 金色點綴 · 克制排版
+ * 原則：獲獎是被動的榮耀，不主動推銷，以敘事帶出脈絡
  */
+
 import { useEffect, useRef } from "react";
 
-function useFadeIn(threshold = 0.15) {
+// ── CDN 圖片 ────────────────────────────────────────────────────────────────
+const AWARD_TAIWAN30 = "/manus-storage/award-taiwan30_286d027c.webp";
+const AWARD_TAIPEI10_COLLAGE = "/manus-storage/award-taipei10-collage_8a9d2c22.webp";
+const AWARD_TAIPEI10_TEAM = "/manus-storage/award-taipei10-team_9e26013a.webp";
+const PREMIUM_JUL_COVER = "/manus-storage/premium-jul-cover_db537d5f.webp";
+const PREMIUM_JUL_INSIDE = "/manus-storage/premium-jul-inside_b77d482e.webp";
+const PREMIUM_OCT_COVER = "/manus-storage/premium-oct-cover_485776b5.webp";
+const PREMIUM_OCT_INSIDE = "/manus-storage/premium-oct-inside_1b5f8f99.webp";
+
+// ── Intersection Observer Hook ────────────────────────────────────────────
+function useFadeIn(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -37,12 +50,49 @@ function GoldLine({ width = 32 }: { width?: number }) {
   );
 }
 
+function Divider() {
+  return (
+    <div
+      style={{
+        height: "1px",
+        background: "linear-gradient(to right, transparent, rgba(197,151,109,0.18), transparent)",
+        margin: "0 2rem",
+      }}
+    />
+  );
+}
+
+// ── 媒體連結資料 ─────────────────────────────────────────────────────────
+const MEDIA_LINKS = [
+  {
+    pub: "Vogue",
+    title: "隱身巷弄的質感系鍋物",
+    url: "https://www.vogue.com.tw/article/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-%E9%8D%8B%E7%89%A9",
+  },
+  {
+    pub: "工商時報",
+    title: "台北鍋界大賽十強",
+    url: "https://www.ctee.com.tw/news/20230930700224-431207",
+  },
+  {
+    pub: "ELLE",
+    title: "台北大巨蛋美食攻略",
+    url: "https://www.elle.com.tw/life/foodie/g46059914/taipei-big-dome-foods/",
+  },
+  {
+    pub: "旅讀 Or",
+    title: "一鍋澄清的溫柔",
+    url: "https://today.line.me/tw/v3/article/PG7PxnM",
+  },
+];
+
 export default function Awards() {
   const ref1 = useFadeIn(0.1);
   const ref2 = useFadeIn(0.1);
   const ref3 = useFadeIn(0.1);
   const ref4 = useFadeIn(0.1);
   const ref5 = useFadeIn(0.1);
+  const ref6 = useFadeIn(0.1);
 
   return (
     <main
@@ -66,7 +116,7 @@ export default function Awards() {
               marginBottom: "1.25rem",
             }}
           >
-            Achievements & Recognition
+            Achievements &amp; Press
           </p>
           <h1
             style={{
@@ -79,7 +129,7 @@ export default function Awards() {
               marginBottom: "1.5rem",
             }}
           >
-            得獎殊榮
+            獲獎殊榮／雜誌專訪
           </h1>
           <div
             style={{
@@ -107,89 +157,109 @@ export default function Awards() {
         </div>
       </section>
 
-      {/* ── 分隔線 ── */}
-      <div
-        style={{
-          height: "1px",
-          background:
-            "linear-gradient(to right, transparent, rgba(197,151,109,0.25), transparent)",
-          margin: "0 2rem",
-        }}
-      />
+      <Divider />
 
       {/* ── 2023 台北十強 ── */}
       <section style={{ padding: "6rem 0" }}>
         <div className="container">
-          <div
-            ref={ref1}
-            className="fade-up"
-            style={{ maxWidth: "640px" }}
-          >
-            <p
+          <div ref={ref1} className="fade-up">
+            {/* 文字 */}
+            <div style={{ maxWidth: "560px", marginBottom: "3rem" }}>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 400,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "rgba(197,151,109,0.5)",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                2023 · 台北市府鍋物大賽
+              </p>
+              <h2
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 200,
+                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  color: "var(--deer-dark-text)",
+                  letterSpacing: "0.1em",
+                  lineHeight: 1.5,
+                  marginBottom: "0.5rem",
+                }}
+              >
+                2023 台北十強鍋物
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(197,151,109,0.6)",
+                  letterSpacing: "0.12em",
+                  marginBottom: "2rem",
+                }}
+              >
+                Taipei International Hotpot Awards — Top 10
+              </p>
+              <GoldLine />
+              <p
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(240,233,223,0.5)",
+                  lineHeight: 2,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                在台北數百家鍋物餐廳中，以湯頭工藝、食材選品與整體用餐體驗，
+                獲評審評選為年度十強之列。
+              </p>
+            </div>
+
+            {/* 照片組 */}
+            <div
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 400,
-                fontSize: "0.65rem",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "rgba(197,151,109,0.5)",
-                marginBottom: "1.25rem",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: "1rem",
+                maxWidth: "680px",
               }}
             >
-              2023 · Taipei International Hotpot Awards
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 200,
-                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-                color: "var(--deer-dark-text)",
-                letterSpacing: "0.1em",
-                lineHeight: 1.5,
-                marginBottom: "0.5rem",
-              }}
-            >
-              臺北十強鍋物
-            </h2>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(197,151,109,0.6)",
-                letterSpacing: "0.12em",
-                marginBottom: "2rem",
-              }}
-            >
-              Taipei International Hotpot Awards — Top 10
-            </p>
-            <GoldLine />
-            <p
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(240,233,223,0.5)",
-                lineHeight: 2,
-                letterSpacing: "0.05em",
-              }}
-            >
-              在台北數百家鍋物餐廳中，以湯頭工藝、食材選品與整體用餐體驗，
-              獲評審評選為年度十強之列。
-            </p>
+              <div
+                style={{
+                  aspectRatio: "4/3",
+                  overflow: "hidden",
+                  backgroundColor: "rgba(197,151,109,0.05)",
+                }}
+              >
+                <img
+                  src={AWARD_TAIPEI10_COLLAGE}
+                  alt="2023 台北十強鍋物 — 得獎拼貼"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+              <div
+                style={{
+                  aspectRatio: "4/3",
+                  overflow: "hidden",
+                  backgroundColor: "rgba(197,151,109,0.05)",
+                }}
+              >
+                <img
+                  src={AWARD_TAIPEI10_TEAM}
+                  alt="2023 台北十強鍋物 — 團隊合影"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── 分隔線 ── */}
-      <div
-        style={{
-          height: "1px",
-          background:
-            "linear-gradient(to right, transparent, rgba(197,151,109,0.15), transparent)",
-          margin: "0 2rem",
-        }}
-      />
+      <Divider />
 
       {/* ── 2024 台灣 30 大 ── */}
       <section style={{ padding: "6rem 0" }}>
@@ -197,82 +267,278 @@ export default function Awards() {
           <div
             ref={ref2}
             className="fade-up"
-            style={{ maxWidth: "640px", marginLeft: "auto" }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: "4rem",
+              alignItems: "start",
+              maxWidth: "860px",
+              marginLeft: "auto",
+            }}
           >
-            <p
+            {/* 獎狀圖 */}
+            <div
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 400,
-                fontSize: "0.65rem",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "rgba(197,151,109,0.5)",
-                marginBottom: "1.25rem",
+                width: "clamp(160px, 25vw, 280px)",
+                aspectRatio: "3/4",
+                overflow: "hidden",
+                backgroundColor: "rgba(197,151,109,0.05)",
+                flexShrink: 0,
               }}
             >
-              2024 · Taiwan International Hotpot Awards
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 200,
-                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-                color: "var(--deer-dark-text)",
-                letterSpacing: "0.1em",
-                lineHeight: 1.5,
-                marginBottom: "0.5rem",
-              }}
-            >
-              臺灣 30 大鍋物
-            </h2>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(197,151,109,0.6)",
-                letterSpacing: "0.12em",
-                marginBottom: "2rem",
-              }}
-            >
-              Taiwan International Hotpot Awards — Top 30
-            </p>
-            <GoldLine />
-            <p
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(240,233,223,0.5)",
-                lineHeight: 2,
-                letterSpacing: "0.05em",
-              }}
-            >
-              從台北到全台，在更大的競技場中再次獲得評審認可，
-              入選台灣年度三十大鍋物餐廳。
-            </p>
+              <img
+                src={AWARD_TAIWAN30}
+                alt="2024 台灣 30 大鍋物 獎狀"
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+              />
+            </div>
+
+            {/* 文字 */}
+            <div>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 400,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "rgba(197,151,109,0.5)",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                2024 · 台北市府鍋物大賽
+              </p>
+              <h2
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 200,
+                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  color: "var(--deer-dark-text)",
+                  letterSpacing: "0.1em",
+                  lineHeight: 1.5,
+                  marginBottom: "0.5rem",
+                }}
+              >
+                2024 台灣 30 大鍋物
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(197,151,109,0.6)",
+                  letterSpacing: "0.12em",
+                  marginBottom: "2rem",
+                }}
+              >
+                Taiwan International Hotpot Awards — Top 30
+              </p>
+              <GoldLine />
+              <p
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(240,233,223,0.5)",
+                  lineHeight: 2,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                從台北到全台，在更大的競技場中再次獲得評審認可，
+                入選台灣年度三十大鍋物餐廳。
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── 分隔線 ── */}
-      <div
-        style={{
-          height: "1px",
-          background:
-            "linear-gradient(to right, transparent, rgba(197,151,109,0.15), transparent)",
-          margin: "0 2rem",
-        }}
-      />
+      <Divider />
 
-      {/* ── 日本 &Premium ── */}
+      {/* ── 日本 &Premium 雜誌 ── */}
       <section style={{ padding: "6rem 0" }}>
         <div className="container">
-          <div
-            ref={ref3}
-            className="fade-up"
-            style={{ maxWidth: "640px" }}
-          >
+          <div ref={ref3} className="fade-up">
+            {/* 標題 */}
+            <div style={{ maxWidth: "560px", marginBottom: "3rem" }}>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 400,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "rgba(197,151,109,0.5)",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                2024 · &amp;Premium Japan
+              </p>
+              <h2
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 200,
+                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  color: "var(--deer-dark-text)",
+                  letterSpacing: "0.1em",
+                  lineHeight: 1.5,
+                  marginBottom: "0.5rem",
+                }}
+              >
+                日本生活品味雜誌《&amp;Premium》
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(197,151,109,0.6)",
+                  letterSpacing: "0.12em",
+                  marginBottom: "2rem",
+                }}
+              >
+                The Guide To A Better Life
+              </p>
+              <GoldLine />
+              <p
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(240,233,223,0.5)",
+                  lineHeight: 2,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                以「美好生活指南」為核心概念的日本知名生活雜誌《&amp;Premium》，
+                分別於 2024 年 7 月號及 10 月號兩度收錄初衷小鹿，
+                作為台北值得一訪的品味餐廳代表。
+              </p>
+            </div>
+
+            {/* 兩期雜誌並排 */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "3rem",
+              }}
+            >
+              {/* 7 月號 */}
+              <div>
+                <p
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontWeight: 400,
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "rgba(197,151,109,0.45)",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  July 2024
+                </p>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "0.75rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <div style={{ aspectRatio: "3/4", overflow: "hidden", backgroundColor: "rgba(197,151,109,0.05)" }}>
+                    <img
+                      src={PREMIUM_JUL_COVER}
+                      alt="&Premium 2024年7月號封面"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                  <div style={{ aspectRatio: "3/4", overflow: "hidden", backgroundColor: "rgba(197,151,109,0.05)" }}>
+                    <img
+                      src={PREMIUM_JUL_INSIDE}
+                      alt="&Premium 2024年7月號內頁"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
+                <p
+                  style={{
+                    fontFamily: "'Noto Serif TC', serif",
+                    fontWeight: 300,
+                    fontSize: "0.8125rem",
+                    color: "rgba(240,233,223,0.4)",
+                    lineHeight: 1.8,
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  7 月號以台北美食為主題，
+                  收錄初衷小鹿作為代表性品味餐廳。
+                </p>
+              </div>
+
+              {/* 10 月號 */}
+              <div>
+                <p
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontWeight: 400,
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "rgba(197,151,109,0.45)",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  October 2024
+                </p>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "0.75rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <div style={{ aspectRatio: "3/4", overflow: "hidden", backgroundColor: "rgba(197,151,109,0.05)" }}>
+                    <img
+                      src={PREMIUM_OCT_COVER}
+                      alt="&Premium 2024年10月號封面"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                  <div style={{ aspectRatio: "3/4", overflow: "hidden", backgroundColor: "rgba(197,151,109,0.05)" }}>
+                    <img
+                      src={PREMIUM_OCT_INSIDE}
+                      alt="&Premium 2024年10月號內頁"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
+                <p
+                  style={{
+                    fontFamily: "'Noto Serif TC', serif",
+                    fontWeight: 300,
+                    fontSize: "0.8125rem",
+                    color: "rgba(240,233,223,0.4)",
+                    lineHeight: 1.8,
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  10 月號再度收錄，
+                  持續作為台北品味生活的推薦選擇。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Divider />
+
+      {/* ── 媒體報導 ── */}
+      <section style={{ padding: "6rem 0" }}>
+        <div className="container">
+          <div ref={ref4} className="fade-up">
             <p
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -284,7 +550,7 @@ export default function Awards() {
                 marginBottom: "1.25rem",
               }}
             >
-              July 2024 · &amp;Premium Japan
+              Press Coverage
             </p>
             <h2
               style={{
@@ -294,54 +560,81 @@ export default function Awards() {
                 color: "var(--deer-dark-text)",
                 letterSpacing: "0.1em",
                 lineHeight: 1.5,
-                marginBottom: "0.5rem",
-              }}
-            >
-              日本生活品味雜誌《&amp;Premium》年度收錄
-            </h2>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(197,151,109,0.6)",
-                letterSpacing: "0.12em",
                 marginBottom: "2rem",
               }}
             >
-              The Guide To A Better Life
-            </p>
+              媒體報導
+            </h2>
             <GoldLine />
-            <p
+            <div
               style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(240,233,223,0.5)",
-                lineHeight: 2,
-                letterSpacing: "0.05em",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0",
+                maxWidth: "680px",
               }}
             >
-              以「美好生活指南」為核心概念的日本知名生活雜誌《&amp;Premium》，
-              於 2024 年 7 月號收錄初衷小鹿，作為台北值得一訪的品味餐廳代表。
-              <br />
-              <br />
-              「品味」是個很主觀的定義，但在《&amp;Premium》中，
-              它為好品味設下一個範圍與樣貌。
-            </p>
+              {MEDIA_LINKS.map((item, i) => (
+                <a
+                  key={i}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1.5rem",
+                    padding: "1.5rem 0",
+                    borderBottom: "1px solid rgba(197,151,109,0.1)",
+                    textDecoration: "none",
+                    transition: "opacity 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.65")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontWeight: 400,
+                      fontSize: "0.65rem",
+                      letterSpacing: "0.18em",
+                      color: "rgba(197,151,109,0.55)",
+                      flexShrink: 0,
+                      minWidth: "80px",
+                    }}
+                  >
+                    《{item.pub}》
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "'Noto Serif TC', serif",
+                      fontWeight: 300,
+                      fontSize: "0.9375rem",
+                      color: "rgba(240,233,223,0.65)",
+                      letterSpacing: "0.06em",
+                      lineHeight: 1.6,
+                      flex: 1,
+                    }}
+                  >
+                    {item.title}
+                  </span>
+                  <span
+                    style={{
+                      color: "rgba(197,151,109,0.35)",
+                      fontSize: "0.75rem",
+                      flexShrink: 0,
+                    }}
+                  >
+                    →
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── 分隔線 ── */}
-      <div
-        style={{
-          height: "1px",
-          background:
-            "linear-gradient(to right, transparent, rgba(197,151,109,0.15), transparent)",
-          margin: "0 2rem",
-        }}
-      />
+      <Divider />
 
       {/* ── Google 三不原則 ── */}
       <section
@@ -352,7 +645,7 @@ export default function Awards() {
       >
         <div className="container">
           <div
-            ref={ref4}
+            ref={ref5}
             className="fade-up"
             style={{ maxWidth: "640px", marginLeft: "auto" }}
           >
@@ -459,7 +752,7 @@ export default function Awards() {
           borderTop: "1px solid rgba(197,151,109,0.1)",
         }}
       >
-        <div ref={ref5} className="fade-up container">
+        <div ref={ref6} className="fade-up container">
           <p
             style={{
               fontFamily: "'Noto Serif TC', serif",

@@ -27,6 +27,7 @@ function useFadeIn(threshold = 0.15) {
 const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
 const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
 const CREM_IMG  = "/manus-storage/crem-cake_7f5629d5.jpg";
+const CREM_INTERIOR = "/manus-storage/crem-interior_2c8fe91b.webp";
 
 const STEPS = [
   {
@@ -97,7 +98,7 @@ export default function Crem() {
                 src={DEER_LOGO}
                 alt="初衷小鹿 Logo"
                 style={{
-                  height: "clamp(48px, 8vw, 80px)",
+                  height: "clamp(64px, 10vw, 100px)",
                   width: "auto",
                   objectFit: "contain",
                 }}
@@ -118,7 +119,7 @@ export default function Crem() {
                 src={CREM_LOGO}
                 alt="CRÈM Logo"
                 style={{
-                  height: "clamp(48px, 8vw, 80px)",
+                  height: "clamp(64px, 10vw, 100px)",
                   width: "auto",
                   objectFit: "contain",
                 }}
@@ -181,7 +182,7 @@ export default function Crem() {
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               gap: "clamp(2rem, 6vw, 6rem)",
-              alignItems: "center",
+              alignItems: "start",
             }}
             className="crem-about-grid"
           >
@@ -267,21 +268,21 @@ export default function Crem() {
               ref={ref3}
               className="fade-up"
               style={{
-                aspectRatio: "3/4",
                 overflow: "hidden",
               }}
             >
               <img
-                src={CREM_IMG}
-                alt="CRÈM 蛋糕"
+                src={CREM_INTERIOR}
+                alt="CRÈM 室內空間"
                 style={{
                   width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
+                  height: "auto",
+                  objectFit: "contain",
+                  display: "block",
                   transition: "transform 0.8s ease",
                 }}
                 onMouseEnter={(e) => {
-                  (e.target as HTMLImageElement).style.transform = "scale(1.04)";
+                  (e.target as HTMLImageElement).style.transform = "scale(1.02)";
                 }}
                 onMouseLeave={(e) => {
                   (e.target as HTMLImageElement).style.transform = "scale(1)";
@@ -467,9 +468,14 @@ export default function Crem() {
       </section>
 
       <style>{`
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
           .crem-about-grid {
             grid-template-columns: 1fr !important;
+          }
+          .crem-about-grid img {
+            width: 100% !important;
+            height: auto !important;
+            object-fit: contain !important;
           }
         }
       `}</style>
