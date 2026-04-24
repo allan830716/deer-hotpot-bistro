@@ -8,7 +8,7 @@ import { createPortal } from "react-dom";
 import { MapView } from "@/components/Map";
 
 const PHOTOS = {
-  A: "/manus-storage/space_A_signage_9eef2174.jpg",
+  A: "/manus-storage/59409685_2179218615493222_8552773285119524864_o_8ea95551.jpg",
   B: "/manus-storage/space_B_exterior_a879d9bc.jpg",
   C: "/manus-storage/space_C_exterior2_5d3bb86f.jpg",
   D: "/manus-storage/space_D_dining_main_59a93d64.jpg",
