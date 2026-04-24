@@ -139,6 +139,22 @@ function Navbar() {
               </Link>
             ))}
             <NavCartBtn />
+            <Link href="/crem">
+              <span
+                style={{
+                  fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem",
+                  letterSpacing: "0.1em",
+                  color: location === "/crem" ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
+                  cursor: "pointer", transition: "color 0.2s ease",
+                  borderBottom: location === "/crem" ? "1px solid rgba(197,151,109,0.6)" : "1px solid transparent",
+                  paddingBottom: "2px",
+                }}
+                onMouseEnter={(e) => { if (location !== "/crem") (e.target as HTMLElement).style.color = "rgba(240,233,223,0.85)"; }}
+                onMouseLeave={(e) => { if (location !== "/crem") (e.target as HTMLElement).style.color = "rgba(240,233,223,0.55)"; }}
+              >
+                CRÈM 蛋糕上桌預訂
+              </span>
+            </Link>
             <a
               href={RESERVATION_URL}
               target="_blank" rel="noopener noreferrer"
