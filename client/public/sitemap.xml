@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- 首頁 -->
+  <url>
+    <loc>https://deerhotpot-vgu6vmsi.manus.space/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/" />
+    <image:image>
+      <image:loc>https://deerhotpot-vgu6vmsi.manus.space/manus-storage/hero-space_100d3e43.jpg</image:loc>
+      <image:title>初衷小鹿 Deer's Hotpot Bistro 台北信義區高端鍋物餐廳</image:title>
+      <image:caption>不是一頓火鍋，是一場有節奏的餐桌體驗。台北信義區高端鍋物餐酒館。</image:caption>
+    </image:image>
+  </url>
+
+  <!-- 品牌故事 -->
+  <url>
+    <loc>https://deerhotpot-vgu6vmsi.manus.space/brand</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/brand" />
+  </url>
+
+  <!-- 菜單 -->
+  <url>
+    <loc>https://deerhotpot-vgu6vmsi.manus.space/menu</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/menu" />
+  </url>
+
+  <!-- 空間體驗 -->
+  <url>
+    <loc>https://deerhotpot-vgu6vmsi.manus.space/space</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/space" />
+    <image:image>
+      <image:loc>https://deerhotpot-vgu6vmsi.manus.space/manus-storage/59409685_2179218615493222_8552773285119524864_o_572ede20.jpg</image:loc>
+      <image:title>初衷小鹿餐廳空間 台北信義區高端鍋物餐廳用餐環境</image:title>
+    </image:image>
+  </url>
+
+  <!-- 獲獎殊榮與雜誌專訪 -->
+  <url>
+    <loc>https://deerhotpot-vgu6vmsi.manus.space/awards</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/awards" />
+  </url>
+
+  <!-- 交通與停車 -->
+  <url>
+    <loc>https://deerhotpot-vgu6vmsi.manus.space/transport</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/transport" />
+  </url>
+
+</urlset>

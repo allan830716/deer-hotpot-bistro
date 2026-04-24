@@ -521,11 +521,57 @@ function ScrollToTop() {
   return null;
 }
 
+// ── 動態 SEO 標題與描述管理 ────────────────────────────────────────────────
+const PAGE_META: Record<string, { title: string; description: string }> = {
+  "/": {
+    title: "初衷小鹿 Deer's Hotpot Bistro｜台北信義區高端鍋物餐酒館",
+    description: "初衷小鹿，台北信義區高端鍋物餐酒館。天然日式乾貨上湯、熟成肉品、精選酒單，適合約會、週年紀念、生日慶祝與正式聚餐。立即線上訂位。",
+  },
+  "/brand": {
+    title: "品牌故事｜初衷小鹿 Deer's Hotpot Bistro",
+    description: "了解初衷小鹿的品牌理念：以鍋物為形式，延伸出具有節奏感的完整晚餐體驗。天然上湯、熟成肉品與成熟空間，構成品牌所重視的款待標準。",
+  },
+  "/menu": {
+    title: "菜單與價位｜初衷小鹿 Deer's Hotpot Bistro",
+    description: "初衷小鹿菜單：牛肉套餐 920–1,980 元、海鮮套餐 1,380–3,460 元、豬肉套餐 920–1,380 元。天然日式乾貨上湯、熟成肉品、精選加點。台北信義區。",
+  },
+  "/space": {
+    title: "空間體驗｜初衷小鹿 Deer's Hotpot Bistro",
+    description: "初衷小鹿台北信義區餐廳空間：黑磚、木質、暖銅燈具，成熟內斂的用餐環境，適合約會、紀念日與正式聚會。一窺餐廳空間全貌。",
+  },
+  "/awards": {
+    title: "獲獎殊榮與雜誌專訪｜初衷小鹿 Deer's Hotpot Bistro",
+    description: "初衷小鹿獲獎紀錄與媒體報導。Google 評分 4.6 顆星，獲多家美食雜誌與媒體專訪推薦。台北信義區高端鍋物餐廳。",
+  },
+  "/transport": {
+    title: "交通與停車指南｜初衷小鹿 Deer's Hotpot Bistro",
+    description: "初衷小鹿交通指南：捷運市政府站步行5分鐘，附近三個停車場最近步行2分鐘。台北市信義區忠孝東路四段553巷6弄15號。",
+  },
+};
+
+function DynamicTitle() {
+  const [location] = useLocation();
+  useEffect(() => {
+    const meta = PAGE_META[location] || PAGE_META["/"];
+    document.title = meta.title;
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute("content", meta.description);
+    const ogTitleEl = document.querySelector('meta[property="og:title"]');
+    if (ogTitleEl) ogTitleEl.setAttribute("content", meta.title);
+    const ogDescEl = document.querySelector('meta[property="og:description"]');
+    if (ogDescEl) ogDescEl.setAttribute("content", meta.description);
+    const canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (canonicalEl) canonicalEl.setAttribute("href", `https://deerhotpot-vgu6vmsi.manus.space${location}`);
+  }, [location]);
+  return null;
+}
+
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <>
       <ScrollToTop />
+      <DynamicTitle />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/brand" component={Brand} />

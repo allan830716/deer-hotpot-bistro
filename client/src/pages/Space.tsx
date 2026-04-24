@@ -233,7 +233,7 @@ export default function Space() {
       <section className="sp-hero">
         <img
           src={PHOTOS.A}
-          alt="初衷小鹿品牌招牌"
+          alt="初衷小鹿 Deer's Hotpot Bistro 台北信義區高端鍋物餐廳用餐空間夜景"
           style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.6)" }}
         />
         <div style={{
