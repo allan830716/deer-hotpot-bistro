@@ -326,10 +326,11 @@ export default function Crem() {
         }}
       />
 
-      {/* ── 一條龍服務流程 ── */}
-      <section style={{ padding: "6rem 0" }}>
+      {/* ── 預訂流程圖 ── */}
+      <section style={{ padding: "6rem 0", backgroundColor: "rgba(10,8,7,0.4)" }}>
         <div className="container">
           <div ref={ref4} className="fade-up">
+            {/* 標題 */}
             <div style={{ textAlign: "center", marginBottom: "4rem" }}>
               <p
                 className="font-label mb-4"
@@ -347,73 +348,123 @@ export default function Crem() {
                   lineHeight: 1.7,
                 }}
               >
-                一條龍慶祝服務
+                四個步驟，
                 <br />
-                從餐桌到蛋糕
+                完成一場完整的慶祝。
               </h2>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "2.5rem",
-                maxWidth: "900px",
-                margin: "0 auto",
-              }}
-            >
-              {STEPS.map((step) => (
-                <div key={step.num}>
-                  <p
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontWeight: 300,
-                      fontSize: "2rem",
-                      color: "rgba(197,151,109,0.25)",
-                      lineHeight: 1,
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    {step.num}
-                  </p>
-                  <div
-                    style={{
-                      width: "20px",
-                      height: "1px",
-                      backgroundColor: "rgba(197,151,109,0.4)",
-                      marginBottom: "1rem",
-                    }}
-                  />
-                  <h3
-                    style={{
-                      fontFamily: "'Noto Serif TC', serif",
-                      fontWeight: 300,
-                      fontSize: "1rem",
-                      color: "var(--deer-dark-text)",
-                      letterSpacing: "0.1em",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: "0.8125rem",
-                      color: "rgba(240,233,223,0.4)",
-                      lineHeight: 1.9,
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    {step.desc}
-                  </p>
+            {/* 流程圖：桌機橫向 / 手機縱向 */}
+            <div className="crem-flow-wrapper">
+              {STEPS.map((step, i) => (
+                <div key={step.num} className="crem-flow-item-group">
+                  {/* 步驟卡片 */}
+                  <div className="crem-flow-card">
+                    {/* 圓形編號 */}
+                    <div className="crem-flow-circle">
+                      <span
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          fontWeight: 400,
+                          fontSize: "1rem",
+                          color: "var(--deer-gold)",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {step.num}
+                      </span>
+                    </div>
+                    {/* 圖示 */}
+                    <div className="crem-flow-icon">
+                      {i === 0 && (
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                          <line x1="16" y1="2" x2="16" y2="6"/>
+                          <line x1="8" y1="2" x2="8" y2="6"/>
+                          <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                      )}
+                      {i === 1 && (
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                      )}
+                      {i === 2 && (
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                          <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                      )}
+                      {i === 3 && (
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                          <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                      )}
+                    </div>
+                    {/* 標題 */}
+                    <h3
+                      style={{
+                        fontFamily: "'Noto Serif TC', serif",
+                        fontWeight: 300,
+                        fontSize: "1.0625rem",
+                        color: "var(--deer-dark-text)",
+                        letterSpacing: "0.1em",
+                        marginBottom: "0.75rem",
+                        textAlign: "center",
+                      }}
+                    >
+                      {step.title}
+                    </h3>
+                    {/* 說明 */}
+                    <p
+                      style={{
+                        fontSize: "0.8125rem",
+                        color: "rgba(240,233,223,0.45)",
+                        lineHeight: 1.9,
+                        letterSpacing: "0.04em",
+                        textAlign: "center",
+                      }}
+                    >
+                      {step.desc}
+                    </p>
+                  </div>
+                  {/* 箭頭連線（最後一個不顯示） */}
+                  {i < STEPS.length - 1 && (
+                    <div className="crem-flow-arrow" aria-hidden="true">
+                      <svg className="crem-flow-arrow-h" width="48" height="16" viewBox="0 0 48 16" fill="none">
+                        <line x1="0" y1="8" x2="38" y2="8" stroke="rgba(197,151,109,0.35)" strokeWidth="1"/>
+                        <polyline points="34,4 42,8 34,12" fill="none" stroke="rgba(197,151,109,0.55)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <svg className="crem-flow-arrow-v" width="16" height="48" viewBox="0 0 16 48" fill="none">
+                        <line x1="8" y1="0" x2="8" y2="38" stroke="rgba(197,151,109,0.35)" strokeWidth="1"/>
+                        <polyline points="4,34 8,42 12,34" fill="none" stroke="rgba(197,151,109,0.55)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+
+            {/* 底部提示 */}
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "3rem",
+                fontSize: "0.8rem",
+                color: "rgba(197,151,109,0.4)",
+                letterSpacing: "0.1em",
+                fontFamily: "'Cormorant Garamond', serif",
+              }}
+            >
+              全程由初衷小鹿協助溝通，您只需安心就座。
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
+            {/* ── CTA ── */}
       <section
         style={{
           padding: "6rem 0",
