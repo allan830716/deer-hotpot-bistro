@@ -470,7 +470,7 @@ function Footer() {
       </div>
 
       <div style={{ maxWidth: "1280px", margin: "2rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.5rem", textAlign: "center" }}>
-        <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>© 2024 初衷小鹿 Deer's Hotpot Bistro. All rights reserved.</p>
+        <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>© 2026 初衷小鹿 Deer's Hotpot Bistro. All rights reserved.</p>
       </div>
     </footer>
   );
