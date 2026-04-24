@@ -36,7 +36,7 @@ const NAV_LINKS = [
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
   { href: "/awards", label: "獲獎殊榮／雜誌專訪" },
-  { href: "/crem", label: "CRÈM 上桌預訂" },
+  { href: "/crem", label: "CRÈM蛋糕上桌預訂" },
 ];
 
 const RESERVATION_URL = "https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw";

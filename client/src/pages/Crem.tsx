@@ -1,5 +1,5 @@
 /**
- * Crem.tsx — CRÈM 上桌預訂頁面
+ * Crem.tsx — CRÈM蛋糕上桌預訂頁面
  * 介紹 CRÈM 品牌、聯名服務流程，並提供連結至 crem.tw
  */
 import { useEffect, useRef } from "react";
@@ -151,8 +151,21 @@ export default function Crem() {
                   marginBottom: "1.5rem",
                 }}
               >
-                CRÈM 上桌預訂
+                CRÈM蛋糕上桌預訂
               </h1>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 300,
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "rgba(197,151,109,0.55)",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                × CRÈM 聯名共創
+              </p>
               <p
                 style={{
                   fontFamily: "'Noto Serif TC', serif",

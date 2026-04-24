@@ -2440,3 +2440,25 @@
     margin-top: 0.5rem;
   }
 }
+
+/* ── Awards 獎項排版：手機版上圖下文 ─────────────────────────────── */
+.awards-item-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.awards-item-grid > div:first-child {
+  width: 100% !important;
+  max-width: 280px;
+  margin: 0 auto 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .awards-item-grid {
+    grid-template-columns: auto 1fr !important;
+  }
+
+  .awards-item-grid > div:first-child {
+    width: clamp(160px, 25vw, 280px) !important;
+    margin: 0;
+  }
+}

@@ -285,11 +285,11 @@ export default function Awards() {
         <div className="container">
           <div
             ref={ref2}
-            className="fade-up"
+            className="fade-up awards-item-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "auto 1fr",
-              gap: "4rem",
+              gap: "clamp(2rem, 5vw, 4rem)",
               alignItems: "start",
               maxWidth: "860px",
               marginLeft: "auto",
