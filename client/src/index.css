@@ -2552,3 +2552,101 @@
     display: block;
   }
 }
+
+/* ── 交通與停車頁面 Transport ─────────────────────────────────── */
+
+/* 交通方式總覽卡片按鈕 */
+.transport-card-btn:hover {
+  border-color: rgba(197, 151, 109, 0.35) !important;
+  background: rgba(197, 151, 109, 0.04) !important;
+}
+
+/* 桌機版：4 欄排列 */
+@media (min-width: 768px) {
+  .transport-overview-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* 停車卡片 hover */
+.parking-card:hover {
+  border-color: rgba(197, 151, 109, 0.3) !important;
+}
+
+/* 桌機版停車卡片：3 欄 */
+@media (min-width: 768px) {
+  .parking-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* 決策引導 hover */
+.decision-row:hover {
+  padding-left: 0.5rem !important;
+}
+.decision-row:hover p:last-child {
+  color: var(--deer-accent) !important;
+}
+
+/* 手機底部 Sticky 快速按鈕 */
+.transport-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 0;
+  z-index: 100;
+  background: var(--deer-dark);
+  border-top: 1px solid rgba(197, 151, 109, 0.2);
+  padding: 0.625rem 0.75rem;
+  padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
+}
+
+.transport-sticky-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  font-weight: 300;
+  cursor: pointer;
+  border: none;
+  padding: 0.625rem 0.25rem;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.transport-sticky-primary {
+  background: var(--deer-gold);
+  color: #1A1210;
+  margin-right: 0.5rem;
+}
+
+.transport-sticky-primary:hover {
+  background: #D4A97D;
+  color: #1A1210;
+}
+
+.transport-sticky-secondary {
+  background: transparent;
+  color: rgba(240, 233, 223, 0.7);
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  margin-left: 0.25rem;
+}
+
+.transport-sticky-secondary:hover {
+  background: rgba(197, 151, 109, 0.08);
+  color: var(--deer-dark-text);
+}
+
+/* 桌機版隱藏 Sticky Bar（不需要） */
+@media (min-width: 768px) {
+  .transport-sticky-bar {
+    display: none;
+  }
+}
