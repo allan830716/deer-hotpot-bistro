@@ -435,8 +435,10 @@ export default function Menu() {
 
   // 目前分類（用於高亮下拉選單）
   const currentCategory = current?.category ?? "";
-  // 目前酒水子分類
+  // 目前酒水子分類（從頁面 label 取得，僅用於 DrinkDropdown 的高亮）
   const currentDrinkLabel = currentCategory === "drinks" ? (current?.label ?? "") : "";
+  // 使用者主動選擇的酒水子分類（用於 DrinkParentDropdown 的高亮顯示）
+  const [selectedDrinkLabel, setSelectedDrinkLabel] = useState("");
 
   const goTo = useCallback((newIndex: number) => {
     setCurrentIndex(Math.max(0, Math.min(newIndex, total - 1)));
@@ -459,6 +461,7 @@ export default function Menu() {
   };
   // 點擊「全部酒水」母分類：跳到酒水第一頁
   const handleDrinksJump = () => {
+    setSelectedDrinkLabel("");
     const idx = MENU_PAGES.findIndex(p => p.category === "drinks");
     if (idx >= 0) goTo(idx);
   };
@@ -474,6 +477,7 @@ export default function Menu() {
       "啤酒":            30,  // 第 31 頁
       "果汁/氣泡飲":     32,  // 第 33 頁
     };
+    setSelectedDrinkLabel(label);
     if (label in drinkPageMap) {
       goTo(drinkPageMap[label]);
       return;
@@ -600,7 +604,7 @@ export default function Menu() {
             {/* 母分類二：全部酒水（含酒水子分類） */}
             <DrinkParentDropdown
               currentCategory={currentCategory}
-              currentDrinkLabel={currentDrinkLabel}
+              currentDrinkLabel={selectedDrinkLabel}
               onJumpToDrinks={handleDrinksJump}
               onJumpToDrink={handleDrinkJump}
             />
