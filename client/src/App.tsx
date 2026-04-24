@@ -347,43 +347,52 @@ function Footer() {
           <a href="https://www.facebook.com/deershotpotbistro/?locale=zh_TW" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>Facebook</a>
         </div>
       </div>
-      {/* ── 地圖快速導航區塊 ── */}
+      {/* ── 地圖 + 地址並排區塊 ── */}
       <div style={{ maxWidth: "1280px", margin: "3rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2.5rem" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem" }}>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.7)", marginBottom: "0.5rem" }}>Find Us</p>
-          <div style={{ borderRadius: "2px", overflow: "hidden", border: "1px solid rgba(197,151,109,0.12)", height: "200px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "2.5rem", alignItems: "stretch" }}>
+          {/* 左欄：地址資訊 */}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1.5rem" }}>
+            <div>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.7)", marginBottom: "1rem" }}>Find Us</p>
+              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.75)", lineHeight: 2, letterSpacing: "0.06em", marginBottom: "0.25rem" }}>台北市信義區</p>
+              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.75)", lineHeight: 2, letterSpacing: "0.06em", marginBottom: "1.5rem" }}>忠孝東路四段 553 巷 6 弄 15 號</p>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "0.75rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.08em", lineHeight: 1.8 }}>Zhongxiao E. Rd. Sec. 4, Lane 553<br />Alley 6, No. 15, Xinyi Dist., Taipei</p>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=25.0423803,121.5634603&destination_place_id=ChIJUe3i_A6rQjQRLQzk4lRMncI"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: "0.75rem", color: "rgba(197,151,109,0.85)", textDecoration: "none", letterSpacing: "0.1em", border: "1px solid rgba(197,151,109,0.35)", padding: "0.5rem 1.25rem", transition: "all 0.2s", fontFamily: "'Cormorant Garamond', serif", display: "inline-block", width: "fit-content" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)"; }}
+              >
+                ↗ 立即導航
+              </a>
+              <a
+                href="https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: "0.7rem", color: "rgba(240,233,223,0.3)", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s", fontFamily: "'Cormorant Garamond', serif" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.6)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.3)"; }}
+              >
+                在 Google Maps 查看
+              </a>
+            </div>
+          </div>
+          {/* 右欄：地圖 iframe */}
+          <div style={{ borderRadius: "2px", overflow: "hidden", border: "1px solid rgba(197,151,109,0.12)", minHeight: "240px" }}>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.9!2d121.56346!3d25.04238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab0efce2ed51%3A0xc29d4c54e2e40c2d!2z5Yid6KW15bCP6bm_IERlZXIncyBIb3Rwb3QgQmlzdHJv!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw"
               width="100%"
-              height="200"
-              style={{ border: 0, display: "block", filter: "invert(90%) hue-rotate(180deg) brightness(0.85) saturate(0.7)" }}
+              height="100%"
+              style={{ border: 0, display: "block", minHeight: "240px", filter: "invert(90%) hue-rotate(180deg) brightness(0.85) saturate(0.7)" }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="初衷小鹿位置地圖"
             />
-          </div>
-          <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" as const }}>
-            <a
-              href="https://www.google.com/maps/dir/?api=1&destination=25.0423803,121.5634603&destination_place_id=ChIJUe3i_A6rQjQRLQzk4lRMncI"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: "0.75rem", color: "rgba(197,151,109,0.85)", textDecoration: "none", letterSpacing: "0.1em", border: "1px solid rgba(197,151,109,0.35)", padding: "0.4rem 1rem", transition: "all 0.2s", fontFamily: "'Cormorant Garamond', serif" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,1)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.85)"; }}
-            >
-              ↗ 立即導航
-            </a>
-            <a
-              href="https://maps.app.goo.gl/deershotpot"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.35)", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.7)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.35)"; }}
-            >
-              在 Google Maps 查看
-            </a>
           </div>
         </div>
       </div>
