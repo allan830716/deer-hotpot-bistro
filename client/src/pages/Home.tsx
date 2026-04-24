@@ -25,7 +25,7 @@ const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
 // 三核心圖片—專屬生成料理照片
 const SOUP_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-soup-kD9yMfeQhWitk7LSxi895N.webp";
 const MEAT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-meat-HfC4JKdjgVn8nhL3rfu43S.webp";
-const DESSERT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/core-wine-3MQhsQo8oEws6VuohRtxHt.webp";
+const DESSERT_IMG = "/manus-storage/core-wine-cellar_3dd0f607.webp";
 
 // ── Intersection Observer Hook ────────────────────────────────────────────
 function useFadeIn(threshold = 0.15) {

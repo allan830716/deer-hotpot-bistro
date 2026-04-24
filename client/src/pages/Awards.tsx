@@ -8,6 +8,7 @@
 import { useEffect, useRef } from "react";
 
 // ── CDN 圖片 ────────────────────────────────────────────────────────────────
+const AWARDS_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/awards-hero-7jmxMSptfMLUhEkH6L3KK4.webp";
 const AWARD_TAIWAN30 = "/manus-storage/award-taiwan30_286d027c.webp";
 const AWARD_TAIPEI10_COLLAGE = "/manus-storage/award-taipei10-collage_8a9d2c22.webp";
 const AWARD_TAIPEI10_TEAM = "/manus-storage/award-taipei10-team_9e26013a.webp";
@@ -66,28 +67,32 @@ function Divider() {
 // ── 媒體連結資料 ─────────────────────────────────────────────────────────
 const MEDIA_LINKS = [
   {
-    pub: "Vogue",
+    pub: "Vogue Taiwan",
     title: "隱身巷弄的質感系鍋物",
     desc: "以熟成肉品、乾貨上湯與精緻甜點，打造有節奏感的餐桌體驗。",
     url: "https://www.vogue.com.tw/article/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-%E9%8D%8B%E7%89%A9",
+    img: "/manus-storage/media-vogue_3d3c94b6.webp",
   },
   {
     pub: "工商時報",
     title: "台北鍋界大賽十強高質感鍋物，初衷小鹿如私房招待所",
     desc: "榮獲台北市政府 112 年「美食在台北・鍋際大賞」人氣票選 TOP 10。",
     url: "https://www.ctee.com.tw/news/20230930700224-431207",
+    img: "/manus-storage/media-chinatimes_1b9ec7a4.png",
   },
   {
     pub: "ELLE",
     title: "台北大巨蛋美食攻略",
     desc: "信義區不可錯過的精緻鍋物選擇，適合商務宴客與特殊紀念日。",
     url: "https://www.elle.com.tw/life/foodie/g46059914/taipei-big-dome-foods/",
+    img: "/manus-storage/media-elle_b69c8ed0.webp",
   },
   {
     pub: "旅讀 Or",
     title: "一鍋澄清的溫柔",
     desc: "日本頂級乾貨上湯，讓每一口都有它應有的位置。",
     url: "https://today.line.me/tw/v3/article/PG7PxnM",
+    img: "/manus-storage/media-or_610baf69.webp",
   },
 ];
 
@@ -107,6 +112,35 @@ export default function Awards() {
         minHeight: "100vh",
       }}
     >
+      {/* ── Hero 首圖 ── */}
+      <section
+        style={{
+          position: "relative",
+          height: "45vh",
+          minHeight: "280px",
+          maxHeight: "480px",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={AWARDS_HERO}
+          alt="獲獎殊榮"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center 40%",
+            display: "block",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to bottom, rgba(10,8,7,0.2) 0%, rgba(10,8,7,0.55) 100%)",
+          }}
+        />
+      </section>
       {/* ── Hero ── */}
       <section style={{ padding: "6rem 0 4rem" }}>
         <div className="container">
@@ -566,70 +600,113 @@ export default function Awards() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.75rem",
-                    padding: "1.5rem",
                     border: "1px solid rgba(197,151,109,0.15)",
                     backgroundColor: "rgba(197,151,109,0.04)",
                     textDecoration: "none",
-                    transition: "border-color 0.25s ease, background-color 0.25s ease",
+                    transition: "border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease",
                     cursor: "pointer",
+                    overflow: "hidden",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(197,151,109,0.45)";
-                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(197,151,109,0.09)";
+                    const el = e.currentTarget as HTMLAnchorElement;
+                    el.style.borderColor = "rgba(197,151,109,0.5)";
+                    el.style.backgroundColor = "rgba(197,151,109,0.09)";
+                    el.style.transform = "translateY(-3px)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(197,151,109,0.15)";
-                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(197,151,109,0.04)";
+                    const el = e.currentTarget as HTMLAnchorElement;
+                    el.style.borderColor = "rgba(197,151,109,0.15)";
+                    el.style.backgroundColor = "rgba(197,151,109,0.04)";
+                    el.style.transform = "translateY(0)";
                   }}
                 >
-                  {/* 媒體名稱 badge */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span
+                  {/* 報導截圖預覽 */}
+                  {item.img && (
+                    <div
                       style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontWeight: 500,
-                        fontSize: "0.7rem",
-                        letterSpacing: "0.16em",
-                        textTransform: "uppercase",
-                        color: "var(--deer-gold)",
-                        padding: "0.2rem 0.6rem",
-                        border: "1px solid rgba(197,151,109,0.3)",
-                        display: "inline-block",
+                        width: "100%",
+                        aspectRatio: "16/9",
+                        overflow: "hidden",
+                        position: "relative",
                       }}
                     >
-                      {item.pub}
-                    </span>
-                    <span style={{ color: "rgba(197,151,109,0.5)", fontSize: "0.85rem" }}>↗</span>
-                  </div>
-                  {/* 標題 */}
-                  <p
-                    style={{
-                      fontFamily: "'Noto Serif TC', serif",
-                      fontWeight: 300,
-                      fontSize: "0.9375rem",
-                      color: "rgba(240,233,223,0.8)",
-                      letterSpacing: "0.06em",
-                      lineHeight: 1.7,
-                      margin: 0,
-                    }}
-                  >
-                    {item.title}
-                  </p>
-                  {/* 說明文字（若有） */}
-                  {item.desc && (
+                      <img
+                        src={item.img}
+                        alt={item.pub}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "top center",
+                          display: "block",
+                          transition: "transform 0.5s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.target as HTMLImageElement).style.transform = "scale(1.04)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.target as HTMLImageElement).style.transform = "scale(1)";
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background: "linear-gradient(to bottom, transparent 50%, rgba(10,8,7,0.6) 100%)",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {/* 文字區 */}
+                  <div style={{ padding: "1.25rem 1.5rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.6rem", flex: 1 }}>
+                    {/* 媒體名稱 badge + 箭頭 */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          fontWeight: 500,
+                          fontSize: "0.65rem",
+                          letterSpacing: "0.18em",
+                          textTransform: "uppercase",
+                          color: "var(--deer-gold)",
+                          padding: "0.2rem 0.6rem",
+                          border: "1px solid rgba(197,151,109,0.3)",
+                          display: "inline-block",
+                        }}
+                      >
+                        {item.pub}
+                      </span>
+                      <span style={{ color: "rgba(197,151,109,0.55)", fontSize: "0.85rem" }}>↗</span>
+                    </div>
+                    {/* 標題 */}
                     <p
                       style={{
-                        fontSize: "0.8rem",
-                        color: "rgba(240,233,223,0.4)",
+                        fontFamily: "'Noto Serif TC', serif",
+                        fontWeight: 300,
+                        fontSize: "0.9rem",
+                        color: "rgba(240,233,223,0.85)",
+                        letterSpacing: "0.05em",
                         lineHeight: 1.7,
                         margin: 0,
-                        letterSpacing: "0.04em",
                       }}
                     >
-                      {item.desc}
+                      {item.title}
                     </p>
-                  )}
+                    {/* 說明文字 */}
+                    {item.desc && (
+                      <p
+                        style={{
+                          fontSize: "0.775rem",
+                          color: "rgba(240,233,223,0.4)",
+                          lineHeight: 1.7,
+                          margin: 0,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {item.desc}
+                      </p>
+                    )}
+                  </div>
                 </a>
               ))}
             </div>
