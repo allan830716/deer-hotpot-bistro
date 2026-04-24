@@ -5,7 +5,7 @@
  * 原則：獲獎是被動的榮耀，不主動推銷，以敘事帶出脈絡
  */
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 
 // ── CDN 圖片 ────────────────────────────────────────────────────────────────
@@ -105,18 +105,6 @@ export default function Awards() {
   const ref5 = useFadeIn(0.1);
   const ref6 = useFadeIn(0.1);
   const { data: placeData } = trpc.placeInfo.getReviews.useQuery();
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const GOOGLE_MAPS_REVIEWS_URL = "https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z/data=!4m8!3m7!1s0x3442ab0efce2ed51:0xc29d4c54e2e40c2d!8m2!3d25.0423803!4d121.5634603!9m1!1b1";
-
-  const scrollCarousel = useCallback((dir: number) => {
-    setCarouselIndex(prev => {
-      const next = prev + dir;
-      if (next < 0) return MEDIA_LINKS.length - 1;
-      if (next >= MEDIA_LINKS.length) return 0;
-      return next;
-    });
-  }, []);
 
   return (
     <main
@@ -597,203 +585,132 @@ export default function Awards() {
               媒體報導
             </h2>
             <GoldLine />
-            {/* 輪播容器 */}
-            <div style={{ position: "relative", maxWidth: "860px" }}>
-              {/* 左箭頭 */}
-              <button
-                onClick={() => scrollCarousel(-1)}
-                aria-label="上一則"
-                style={{
-                  position: "absolute",
-                  left: "-2.5rem",
-                  top: "40%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "1px solid rgba(197,151,109,0.3)",
-                  color: "var(--deer-gold)",
-                  width: "2rem",
-                  height: "2rem",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.85rem",
-                  zIndex: 2,
-                  transition: "border-color 0.2s",
-                }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(197,151,109,0.7)")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(197,151,109,0.3)")}
-              >
-                ←
-              </button>
-              {/* 右箭頭 */}
-              <button
-                onClick={() => scrollCarousel(1)}
-                aria-label="下一則"
-                style={{
-                  position: "absolute",
-                  right: "-2.5rem",
-                  top: "40%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "1px solid rgba(197,151,109,0.3)",
-                  color: "var(--deer-gold)",
-                  width: "2rem",
-                  height: "2rem",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.85rem",
-                  zIndex: 2,
-                  transition: "border-color 0.2s",
-                }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(197,151,109,0.7)")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(197,151,109,0.3)")}
-              >
-                →
-              </button>
-
-              {/* 卡片滑動區 */}
-              <div ref={carouselRef} style={{ overflow: "hidden" }}>
-                <div
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                gap: "1.25rem",
+                maxWidth: "860px",
+              }}
+            >
+              {MEDIA_LINKS.map((item, i) => (
+                <a
+                  key={i}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     display: "flex",
-                    transition: "transform 0.45s cubic-bezier(0.4,0,0.2,1)",
-                    transform: `translateX(-${carouselIndex * 100}%)`,
+                    flexDirection: "column",
+                    border: "1px solid rgba(197,151,109,0.15)",
+                    backgroundColor: "rgba(197,151,109,0.04)",
+                    textDecoration: "none",
+                    transition: "border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease",
+                    cursor: "pointer",
+                    overflow: "hidden",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLAnchorElement;
+                    el.style.borderColor = "rgba(197,151,109,0.5)";
+                    el.style.backgroundColor = "rgba(197,151,109,0.09)";
+                    el.style.transform = "translateY(-3px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLAnchorElement;
+                    el.style.borderColor = "rgba(197,151,109,0.15)";
+                    el.style.backgroundColor = "rgba(197,151,109,0.04)";
+                    el.style.transform = "translateY(0)";
                   }}
                 >
-                  {MEDIA_LINKS.map((item, i) => (
-                    <a
-                      key={i}
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {/* 報導截圖預覽 */}
+                  {item.img && (
+                    <div
                       style={{
-                        minWidth: "100%",
-                        flexShrink: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        border: "1px solid rgba(197,151,109,0.15)",
-                        backgroundColor: "rgba(197,151,109,0.04)",
-                        textDecoration: "none",
-                        transition: "border-color 0.25s ease, background-color 0.25s ease",
-                        cursor: "pointer",
+                        width: "100%",
+                        aspectRatio: "16/9",
                         overflow: "hidden",
-                      }}
-                      onMouseEnter={(e) => {
-                        const el = e.currentTarget as HTMLAnchorElement;
-                        el.style.borderColor = "rgba(197,151,109,0.5)";
-                        el.style.backgroundColor = "rgba(197,151,109,0.09)";
-                      }}
-                      onMouseLeave={(e) => {
-                        const el = e.currentTarget as HTMLAnchorElement;
-                        el.style.borderColor = "rgba(197,151,109,0.15)";
-                        el.style.backgroundColor = "rgba(197,151,109,0.04)";
+                        position: "relative",
                       }}
                     >
-                      {/* 報導截圖預覽 */}
-                      {item.img && (
-                        <div
-                          style={{
-                            width: "100%",
-                            aspectRatio: "16/9",
-                            overflow: "hidden",
-                            position: "relative",
-                          }}
-                        >
-                          <img
-                            src={item.img}
-                            alt={item.pub}
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              objectPosition: "top center",
-                              display: "block",
-                            }}
-                          />
-                          <div
-                            style={{
-                              position: "absolute",
-                              inset: 0,
-                              background: "linear-gradient(to bottom, transparent 50%, rgba(10,8,7,0.6) 100%)",
-                            }}
-                          />
-                        </div>
-                      )}
-                      {/* 文字區 */}
-                      <div style={{ padding: "1.25rem 1.5rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.6rem", flex: 1 }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                          <span
-                            style={{
-                              fontFamily: "'Cormorant Garamond', serif",
-                              fontWeight: 500,
-                              fontSize: "0.65rem",
-                              letterSpacing: "0.18em",
-                              textTransform: "uppercase",
-                              color: "var(--deer-gold)",
-                              padding: "0.2rem 0.6rem",
-                              border: "1px solid rgba(197,151,109,0.3)",
-                              display: "inline-block",
-                            }}
-                          >
-                            {item.pub}
-                          </span>
-                          <span style={{ color: "rgba(197,151,109,0.55)", fontSize: "0.85rem" }}>↗</span>
-                        </div>
-                        <p
-                          style={{
-                            fontFamily: "'Noto Serif TC', serif",
-                            fontWeight: 300,
-                            fontSize: "0.9rem",
-                            color: "rgba(240,233,223,0.85)",
-                            letterSpacing: "0.05em",
-                            lineHeight: 1.7,
-                            margin: 0,
-                          }}
-                        >
-                          {item.title}
-                        </p>
-                        {item.desc && (
-                          <p
-                            style={{
-                              fontSize: "0.775rem",
-                              color: "rgba(240,233,223,0.4)",
-                              lineHeight: 1.7,
-                              margin: 0,
-                              letterSpacing: "0.04em",
-                            }}
-                          >
-                            {item.desc}
-                          </p>
-                        )}
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              {/* 指示點 */}
-              <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginTop: "1.5rem" }}>
-                {MEDIA_LINKS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCarouselIndex(i)}
-                    aria-label={`第 ${i + 1} 則`}
-                    style={{
-                      width: i === carouselIndex ? "1.5rem" : "0.4rem",
-                      height: "0.4rem",
-                      borderRadius: "0.2rem",
-                      background: i === carouselIndex ? "var(--deer-gold)" : "rgba(197,151,109,0.25)",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0,
-                      transition: "all 0.3s ease",
-                    }}
-                  />
-                ))}
-              </div>
+                      <img
+                        src={item.img}
+                        alt={item.pub}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "top center",
+                          display: "block",
+                          transition: "transform 0.5s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.target as HTMLImageElement).style.transform = "scale(1.04)";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.target as HTMLImageElement).style.transform = "scale(1)";
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background: "linear-gradient(to bottom, transparent 50%, rgba(10,8,7,0.6) 100%)",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {/* 文字區 */}
+                  <div style={{ padding: "1.25rem 1.5rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.6rem", flex: 1 }}>
+                    {/* 媒體名稱 badge + 箭頭 */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          fontWeight: 500,
+                          fontSize: "0.65rem",
+                          letterSpacing: "0.18em",
+                          textTransform: "uppercase",
+                          color: "var(--deer-gold)",
+                          padding: "0.2rem 0.6rem",
+                          border: "1px solid rgba(197,151,109,0.3)",
+                          display: "inline-block",
+                        }}
+                      >
+                        {item.pub}
+                      </span>
+                      <span style={{ color: "rgba(197,151,109,0.55)", fontSize: "0.85rem" }}>↗</span>
+                    </div>
+                    {/* 標題 */}
+                    <p
+                      style={{
+                        fontFamily: "'Noto Serif TC', serif",
+                        fontWeight: 300,
+                        fontSize: "0.9rem",
+                        color: "rgba(240,233,223,0.85)",
+                        letterSpacing: "0.05em",
+                        lineHeight: 1.7,
+                        margin: 0,
+                      }}
+                    >
+                      {item.title}
+                    </p>
+                    {/* 說明文字 */}
+                    {item.desc && (
+                      <p
+                        style={{
+                          fontSize: "0.775rem",
+                          color: "rgba(240,233,223,0.4)",
+                          lineHeight: 1.7,
+                          margin: 0,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {item.desc}
+                      </p>
+                    )}
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -803,15 +720,10 @@ export default function Awards() {
 
       {/* ── Google 三不原則 ── */}
       <section
-        onClick={() => window.open(GOOGLE_MAPS_REVIEWS_URL, "_blank", "noopener,noreferrer")}
         style={{
           padding: "6rem 0",
           backgroundColor: "rgba(10,8,7,0.4)",
-          cursor: "pointer",
-          transition: "background-color 0.2s ease",
         }}
-        onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(10,8,7,0.55)")}
-        onMouseLeave={e => (e.currentTarget.style.backgroundColor = "rgba(10,8,7,0.4)")}
       >
         <div className="container">
           <div
@@ -847,20 +759,6 @@ export default function Awards() {
               <br />
               {placeData ? `${placeData.totalRatings.toLocaleString()} 則真實評論` : "100% 自主性真實評論"}
             </h2>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "0.7rem",
-                letterSpacing: "0.15em",
-                color: "rgba(197,151,109,0.45)",
-                marginBottom: "1.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.4rem",
-              }}
-            >
-              點擊查看 Google 評論 ↗
-            </p>
             <GoldLine />
             <div
               style={{
