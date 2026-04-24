@@ -1202,23 +1202,23 @@ export default function Transport() {
       {/* Section 1: Hero */}
       <HeroSection />
 
-      {/* Section 2: 交通方式總覽 */}
+      {/* Section 2: 品牌插畫地圖（一進頁面即可看到） */}
+      <IllustrationMapSection />
+
+      {/* Section 3: 交通方式總覽 */}
       <TransportOverviewSection />
 
-      {/* Section 3: 捷運資訊 */}
+      {/* Section 4: 捷運資訊 */}
       <MrtSection />
 
-      {/* Section 4: 公車資訊 */}
+      {/* Section 5: 公車資訊 */}
       <BusSection />
 
-      {/* Section 5: 開車與停車建議 */}
+      {/* Section 6: 開車與停車建議 */}
       <ParkingSection />
 
-      {/* Section 6: 交通決策引導 */}
+      {/* Section 7: 交通決策引導 */}
       <DecisionSection />
-
-      {/* Section 7: 品牌插畫地圖 */}
-      <IllustrationMapSection />
 
       {/* Section 8: 手機底部 Sticky 快速按鈕 */}
       <StickyBottomBar />
