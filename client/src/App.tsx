@@ -294,12 +294,29 @@ function Navbar() {
           </Link>
         </nav>
 
+        {/* 導航按鈕 */}
+        <a
+          href="https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot+Bistro&daddr=台北市信義區忠孝東路四段553巷6弿15號"
+          target="_blank" rel="noopener noreferrer"
+          style={{
+            display: "block", marginTop: "2rem", textAlign: "center" as const,
+            fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
+            letterSpacing: "0.18em", textTransform: "uppercase" as const,
+            color: "rgba(240,233,223,0.6)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            padding: "1rem", textDecoration: "none", whiteSpace: "nowrap" as const,
+            opacity: menuOpen ? 1 : 0,
+            transform: menuOpen ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.35s ease 320ms, transform 0.4s ease 320ms",
+          }}
+        >↗ 導航至餐廳</a>
+
         {/* 訂位按鈕 */}
         <a
           href={RESERVATION_URL}
           target="_blank" rel="noopener noreferrer"
           style={{
-            display: "block", marginTop: "2rem", textAlign: "center" as const,
+            display: "block", marginTop: "0.75rem", textAlign: "center" as const,
             fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
             letterSpacing: "0.18em", textTransform: "uppercase" as const,
             color: "var(--deer-gold)",
@@ -307,7 +324,7 @@ function Navbar() {
             padding: "1rem", textDecoration: "none", whiteSpace: "nowrap" as const,
             opacity: menuOpen ? 1 : 0,
             transform: menuOpen ? "translateY(0)" : "translateY(8px)",
-            transition: "opacity 0.35s ease 360ms, transform 0.4s ease 360ms",
+            transition: "opacity 0.35s ease 380ms, transform 0.4s ease 380ms",
           }}
         >立即訂位</a>
       </div>
