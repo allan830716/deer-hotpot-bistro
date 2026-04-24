@@ -144,13 +144,21 @@ function Navbar() {
                 style={{
                   fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem",
                   letterSpacing: "0.1em",
-                  color: location === "/crem" ? "var(--deer-gold)" : "rgba(240,233,223,0.55)",
-                  cursor: "pointer", transition: "color 0.2s ease",
-                  borderBottom: location === "/crem" ? "1px solid rgba(197,151,109,0.6)" : "1px solid transparent",
-                  paddingBottom: "2px",
+                  color: location === "/crem" ? "var(--deer-gold)" : "rgba(240,233,223,0.75)",
+                  cursor: "pointer", transition: "all 0.2s ease",
+                  border: location === "/crem" ? "1px solid rgba(197,151,109,0.6)" : "1px solid rgba(255,255,255,0.3)",
+                  padding: "0.4rem 0.9rem",
                 }}
-                onMouseEnter={(e) => { if (location !== "/crem") (e.target as HTMLElement).style.color = "rgba(240,233,223,0.85)"; }}
-                onMouseLeave={(e) => { if (location !== "/crem") (e.target as HTMLElement).style.color = "rgba(240,233,223,0.55)"; }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLElement).style.color = "rgba(240,233,223,1)";
+                  (e.target as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)";
+                }}
+                onMouseLeave={(e) => {
+                  if (location !== "/crem") {
+                    (e.target as HTMLElement).style.color = "rgba(240,233,223,0.75)";
+                    (e.target as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)";
+                  }
+                }}
               >
                 CRÈM 蛋糕上桌預訂
               </span>
