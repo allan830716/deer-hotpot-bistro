@@ -36,8 +36,7 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
-  { href: "/awards", label: "獲獎殊榮／雜誌專訪" },
-  { href: "/crem", label: "CRÈM蛋糕上桌預訂" },
+  { href: "/awards", label: "獲獎殖榮／雜誌專訪" },
   { href: "/transport", label: "交通與停車" },
 ];
 
@@ -294,22 +293,23 @@ function Navbar() {
           </Link>
         </nav>
 
-        {/* 導航按鈕 */}
-        <a
-          href="https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot+Bistro&daddr=台北市信義區忠孝東路四段553巷6弿15號"
-          target="_blank" rel="noopener noreferrer"
-          style={{
-            display: "block", marginTop: "2rem", textAlign: "center" as const,
-            fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
-            letterSpacing: "0.18em", textTransform: "uppercase" as const,
-            color: "rgba(240,233,223,0.6)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            padding: "1rem", textDecoration: "none", whiteSpace: "nowrap" as const,
-            opacity: menuOpen ? 1 : 0,
-            transform: menuOpen ? "translateY(0)" : "translateY(8px)",
-            transition: "opacity 0.35s ease 320ms, transform 0.4s ease 320ms",
-          }}
-        >↗ 導航至餐廳</a>
+        {/* CRÈM 蛋糕上桌預訂按鈕 */}
+        <Link href="/crem">
+          <div
+            onClick={() => setMenuOpen(false)}
+            style={{
+              display: "block", marginTop: "2rem", textAlign: "center" as const,
+              fontFamily: "'Cormorant Garamond', serif", fontSize: "0.7rem",
+              letterSpacing: "0.18em", textTransform: "uppercase" as const,
+              color: "rgba(240,233,223,0.6)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              padding: "1rem", cursor: "pointer",
+              opacity: menuOpen ? 1 : 0,
+              transform: menuOpen ? "translateY(0)" : "translateY(8px)",
+              transition: "opacity 0.35s ease 320ms, transform 0.4s ease 320ms",
+            }}
+          >CRÈM 蛋糕上桌預訂</div>
+        </Link>
 
         {/* 訂位按鈕 */}
         <a
