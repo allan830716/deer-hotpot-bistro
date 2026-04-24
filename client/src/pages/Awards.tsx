@@ -8,7 +8,7 @@
 import { useEffect, useRef } from "react";
 
 // ── CDN 圖片 ────────────────────────────────────────────────────────────────
-const AWARDS_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663054902373/Vgu6VMSix7FNFxaq6at7Cj/awards-hero-7jmxMSptfMLUhEkH6L3KK4.webp";
+const AWARDS_HERO = "/manus-storage/awards-hero-real_51a007dd.jpg";
 const AWARD_TAIWAN30 = "/manus-storage/award-taiwan30_286d027c.webp";
 const AWARD_TAIPEI10_COLLAGE = "/manus-storage/award-taipei10-collage_8a9d2c22.webp";
 const AWARD_TAIPEI10_TEAM = "/manus-storage/award-taipei10-team_9e26013a.webp";
