@@ -115,3 +115,11 @@
 - [x] App.tsx Footer：加入 Google Maps iframe 快速導航區塊（暗色 CSS filter + 立即導航連結）
 - [x] 技能儲存（/skill-creator）：完成 SKILL.md 主體內容，涵蓋設計系統、圖片管理、菜單系統、Google Places API、地圖整合等
 - [x] references/google-places.md：更新為已實作狀態（移除「尚未實作」說明）
+
+## 第十批更新（2026-04-24）
+
+- [x] 首頁：Google 評論區塊串接 trpc.placeInfo.getReviews，顯示即時評論數與星級
+- [x] 首頁：Google 評論區塊加入「查看 Google 評論」連結
+- [x] 手機版導航按鈕（立即導航）：文字不換行（white-space: nowrap）
+- [x] Footer：移除上方 Location 欄（地址已在 Find Us 並排區塊顯示，不重複）
+- [x] 首頁空間區：「為了那些不該被打擾的時刻」改為「一場屬於你們的餐桌，不需要理由。」

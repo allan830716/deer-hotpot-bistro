@@ -17,6 +17,7 @@
 
 import { useEffect, useRef } from "react";
 import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
 
 // ── 空間照片（已上傳至 CDN）────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
@@ -596,7 +597,9 @@ function SpaceSection() {
               marginBottom: "1.5rem",
             }}
           >
-            為了那些不該被打擾的時刻。
+            一場屬於你們的餐桌，
+            <br />
+            不需要理由。
           </h2>
           <Link href="/space">
             <span className="btn-deer-light" style={{ fontSize: "0.8rem" }}>
@@ -612,6 +615,10 @@ function SpaceSection() {
 // ── Section 6: 信任 ───────────────────────────────────────────────────────
 function TrustSection() {
   const ref = useFadeIn();
+  const { data: placeData, isLoading: placeLoading } = trpc.placeInfo.getReviews.useQuery();
+  const rating = placeData?.rating ?? 4.6;
+  const totalRatings = placeData?.totalRatings ?? 1593;
+  const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z/data=!4m8!3m7!1s0x3442ab0efce2ed51:0xc29d4c54e2e40c2d!8m2!3d25.0423803!4d121.5634603!9m1!1b1";
   return (
     <section
       className="section-lg"
@@ -623,7 +630,7 @@ function TrustSection() {
             Google Reviews
           </p>
 
-          {/* 星評 */}
+           {/* 星評 */}
           <div
             style={{
               display: "flex",
@@ -632,19 +639,26 @@ function TrustSection() {
               marginBottom: "1.5rem",
             }}
           >
-            {[...Array(5)].map((_, i) => (
-              <span
-                key={i}
-                style={{
-                  color: i < 4 ? "var(--deer-gold)" : "var(--deer-muted)",
-                  fontSize: "1.25rem",
-                }}
-              >
-                ★
-              </span>
-            ))}
+            {[1, 2, 3, 4, 5].map((star) => {
+              const filled = star <= Math.floor(rating);
+              const half = !filled && star === Math.ceil(rating) && rating % 1 >= 0.3;
+              return (
+                <span key={star} style={{ position: "relative", display: "inline-block", fontSize: "1.25rem", color: "var(--deer-muted)" }}>
+                  ★
+                  {(filled || half) && (
+                    <span style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      overflow: "hidden",
+                      width: filled ? "100%" : "55%",
+                      color: "var(--deer-gold)",
+                    }}>★</span>
+                  )}
+                </span>
+              );
+            })}
           </div>
-
           <p
             className="font-display"
             style={{
@@ -654,18 +668,39 @@ function TrustSection() {
               marginBottom: "0.5rem",
             }}
           >
-            4.6
+            {rating.toFixed(1)}
           </p>
           <p
             style={{
               fontSize: "0.8rem",
               color: "var(--deer-sub)",
               letterSpacing: "0.1em",
-              marginBottom: "3rem",
+              marginBottom: "1.5rem",
             }}
           >
-            1,593 則 Google 評論
+            {totalRatings.toLocaleString()} 則 Google 評論
           </p>
+          <a
+            href={GOOGLE_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-block",
+              fontSize: "0.7rem",
+              color: "rgba(197,151,109,0.75)",
+              textDecoration: "none",
+              letterSpacing: "0.12em",
+              border: "1px solid rgba(197,151,109,0.3)",
+              padding: "0.4rem 1.25rem",
+              fontFamily: "'Cormorant Garamond', serif",
+              transition: "all 0.2s",
+              marginBottom: "2.5rem",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.08)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.6)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.3)"; }}
+          >
+            查看 Google 評論 ↗
+          </a>
 
           <GoldLineCentered width={32} />
 

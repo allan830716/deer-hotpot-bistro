@@ -302,7 +302,7 @@ function Navbar() {
             letterSpacing: "0.18em", textTransform: "uppercase" as const,
             color: "var(--deer-gold)",
             border: "1px solid rgba(197,151,109,0.45)",
-            padding: "1rem", textDecoration: "none",
+            padding: "1rem", textDecoration: "none", whiteSpace: "nowrap" as const,
             opacity: menuOpen ? 1 : 0,
             transform: menuOpen ? "translateY(0)" : "translateY(8px)",
             transition: "opacity 0.35s ease 360ms, transform 0.4s ease 360ms",
@@ -321,10 +321,7 @@ function Footer() {
           <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "1.125rem", color: "rgba(240,233,223,0.85)", letterSpacing: "0.12em", marginBottom: "1rem" }}>初衷小鹿</p>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "0.75rem", letterSpacing: "0.12em", color: "rgba(197,151,109,0.7)", textTransform: "uppercase" }}>Deer's Hotpot Bistro</p>
         </div>
-        <div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Location</p>
-          <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2 }}>台北市信義區<br />忠孝東路四段 553 巷 6 弄 15 號</p>
-        </div>
+
         <div>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Contact</p>
           <a href="tel:+886227658585" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", display: "block", lineHeight: 2, transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>02-2765-8585</a>
@@ -363,7 +360,7 @@ function Footer() {
                 href="https://www.google.com/maps/dir/?api=1&destination=25.0423803,121.5634603&destination_place_id=ChIJUe3i_A6rQjQRLQzk4lRMncI"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ fontSize: "0.75rem", color: "rgba(197,151,109,0.85)", textDecoration: "none", letterSpacing: "0.1em", border: "1px solid rgba(197,151,109,0.35)", padding: "0.5rem 1.25rem", transition: "all 0.2s", fontFamily: "'Cormorant Garamond', serif", display: "inline-block", width: "fit-content" }}
+                style={{ fontSize: "0.75rem", color: "rgba(197,151,109,0.85)", textDecoration: "none", letterSpacing: "0.1em", border: "1px solid rgba(197,151,109,0.35)", padding: "0.5rem 1.25rem", transition: "all 0.2s", fontFamily: "'Cormorant Garamond', serif", display: "inline-block", width: "fit-content", whiteSpace: "nowrap" as const }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)"; }}
               >
