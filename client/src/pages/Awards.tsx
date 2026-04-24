@@ -161,7 +161,7 @@ export default function Awards() {
             style={{
               fontFamily: "'Noto Serif TC', serif",
               fontWeight: 200,
-              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
               color: "var(--deer-dark-text)",
               letterSpacing: "0.08em",
               lineHeight: 1.4,
@@ -221,7 +221,7 @@ export default function Awards() {
                 style={{
                   fontFamily: "'Noto Serif TC', serif",
                   fontWeight: 200,
-                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  fontSize: "clamp(1.25rem, 2.5vw, 2rem)",
                   color: "var(--deer-dark-text)",
                   letterSpacing: "0.1em",
                   lineHeight: 1.5,
@@ -329,7 +329,7 @@ export default function Awards() {
                 style={{
                   fontFamily: "'Noto Serif TC', serif",
                   fontWeight: 200,
-                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  fontSize: "clamp(1.25rem, 2.5vw, 2rem)",
                   color: "var(--deer-dark-text)",
                   letterSpacing: "0.1em",
                   lineHeight: 1.5,
@@ -394,7 +394,7 @@ export default function Awards() {
                 style={{
                   fontFamily: "'Noto Serif TC', serif",
                   fontWeight: 200,
-                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  fontSize: "clamp(1.1rem, 2.5vw, 1.75rem)",
                   color: "var(--deer-dark-text)",
                   letterSpacing: "0.1em",
                   lineHeight: 1.5,
