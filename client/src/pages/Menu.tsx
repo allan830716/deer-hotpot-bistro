@@ -465,16 +465,20 @@ export default function Menu() {
 
   // 點擊酒水子分類：跳到對應 label 的指定張
   const handleDrinkJump = (label: string) => {
-    // 特定分類跳到第二張（依需求）
-    const jumpToSecond = ["白酒/瓶", "啤酒", "果汁/氣泡飲"];
-    if (jumpToSecond.includes(label)) {
-      const allMatches = MENU_PAGES.reduce<number[]>((acc, p, i) => {
-        if (p.category === "drinks" && p.label === label) acc.push(i);
-        return acc;
-      }, []);
-      if (allMatches.length >= 2) { goTo(allMatches[1]); return; }
-      if (allMatches.length === 1) { goTo(allMatches[0]); return; }
+    // 直接指定各子分類對應的目標頁碼（0-based index）
+    const drinkPageMap: Record<string, number> = {
+      "紅｜白｜氣泡/杯": 24,  // 第 25 頁
+      "紅酒/瓶":         25,  // 第 26 頁
+      "白酒/瓶":         27,  // 第 28 頁
+      "氣泡酒/瓶":       29,  // 第 30 頁
+      "啤酒":            30,  // 第 31 頁
+      "果汁/氣泡飲":     32,  // 第 33 頁
+    };
+    if (label in drinkPageMap) {
+      goTo(drinkPageMap[label]);
+      return;
     }
+    // fallback：找第一張
     const idx = MENU_PAGES.findIndex(p => p.category === "drinks" && p.label === label);
     if (idx >= 0) goTo(idx);
   };
