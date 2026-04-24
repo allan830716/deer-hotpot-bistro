@@ -24,8 +24,8 @@ const GOOGLE_MAPS_NAV = "https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot
 const MRT_NAV = "https://maps.google.com/?q=台北捷運市政府站1號出口&daddr=台北市信義區忠孝東路四段553巷6弄15號";
 const BUS_QUERY = "https://maps.google.com/?q=市府轉運站&daddr=台北市信義區忠孝東路四段553巷6弄15號";
 const PARKING_1_NAV = "https://maps.google.com/?q=松山高中地下停車場+台北市基隆路一段156號";
-const PARKING_2_NAV = "https://maps.google.com/?q=台北文創停車場+松菸";
-const PARKING_3_NAV = "https://maps.google.com/?q=市府廣場地下停車場+台北市信義區";
+const PARKING_2_NAV = "https://maps.google.com/?q=俥亭停車基隆路二場+台北市信義區基隆路一段176巷1號";
+const PARKING_3_NAV = "https://maps.google.com/?q=臺北文創大樓收費停車場+台北市信義區菸廠路88號";
 
 // ── Intersection Observer Hook ────────────────────────────────────────────
 function useFadeIn(threshold = 0.12) {
@@ -223,7 +223,7 @@ const TRANSPORT_CARDS = [
     ),
     en: "MRT",
     zh: "捷運",
-    desc: "板南線至「市政府站」\n步行約 6–8 分鐘可抵達",
+    desc: "板南線至「市政府站」\n步行約 5 分鐘",
     anchor: "section-mrt",
   },
   {
@@ -237,7 +237,7 @@ const TRANSPORT_CARDS = [
     ),
     en: "Bus",
     zh: "公車",
-    desc: "「市府轉運站」或「聯合報」站點下車\n步行約 2–5 分鐘",
+    desc: "「市府轉運站」或「聯合報」站點下車\n步行約 2 分鐘",
     anchor: "section-bus",
   },
   {
@@ -265,7 +265,7 @@ const TRANSPORT_CARDS = [
     ),
     en: "Walk",
     zh: "步行",
-    desc: "鄰近松菸、信義商圈\n可由市政府站、松菸方向步行前往",
+    desc: "鄰近松菸、信義商圈，可由市政府站、松菸方向步行前往",
     anchor: "section-mrt",
   },
 ];
@@ -466,7 +466,7 @@ function MrtSection() {
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
                 <span style={{ color: "var(--deer-gold)", fontSize: "0.75rem", marginTop: "0.2rem", flexShrink: 0 }}>03</span>
                 <p style={{ fontSize: "0.875rem", color: "rgba(240,233,223,0.7)", lineHeight: 1.8 }}>
-                  步行約 <strong style={{ color: "var(--deer-dark-text)" }}>400 公尺，6–8 分鐘</strong>可抵達
+                  步行約 <strong style={{ color: "var(--deer-dark-text)" }}>400 公尺，5 分鐘</strong>可抵達
                 </p>
               </div>
             </div>
@@ -504,12 +504,12 @@ function MrtSection() {
 const BUS_STOPS = [
   {
     name: "市府轉運站",
-    walk: "步行約 2 分鐘",
+    walk: "步行約 5 分鐘",
     routes: "202、212、612、647、忠孝幹線、棕 7 等",
   },
   {
     name: "聯合報",
-    walk: "步行約 3 分鐘",
+    walk: "步行約 2 分鐘",
     routes: "多路公車停靠，可依 Google Maps 即時查詢",
   },
 ];
@@ -641,26 +641,26 @@ const PARKING_LOTS = [
     navLabel: "導航至松山高中停車場",
   },
   {
-    badge: "假日備案",
+    badge: "備選",
     badgeColor: "#6B8B5E",
-    name: "台北文創停車場（松菸）",
-    address: "光復南路 133 號",
-    walk: "步行約 5–7 分鐘",
-    feature: "車位較多，適合假日或尖峰時段",
-    spaces: "汽車約 500 格，機車約 1000 格",
+    name: "俥亭停車基隆路二場",
+    address: "基隆路一段 176 巷 1 號",
+    walk: "步行約 3 分鐘",
+    feature: "鄰近餐廳，適合快速停車",
+    spaces: "24 小時營業，車位數量請当場確認",
     nav: PARKING_2_NAV,
-    navLabel: "導航至台北文創停車場",
+    navLabel: "導航至俥亭停車基隆路二場",
   },
   {
-    badge: "穩定選擇",
+    badge: "假日備案",
     badgeColor: "#5E7A8B",
-    name: "市府廣場地下停車場",
-    address: "信義區市府路 1 號",
-    walk: "步行約 8–10 分鐘",
-    feature: "大型停車場，適合不想繞路找車位",
-    spaces: "大型停車場，車位充足",
+    name: "臺北文創大樓收費停車場",
+    address: "信義區菸廠路 88 號",
+    walk: "步行約 7 分鐘",
+    feature: "松菸園區內，車位充足，適合假日尖峰時段",
+    spaces: "24 小時營業，建議提前查詢即時車位",
     nav: PARKING_3_NAV,
-    navLabel: "導航至市府廣場停車場",
+    navLabel: "導航至臺北文創大樓停車場",
   },
 ];
 
@@ -813,12 +813,12 @@ const DECISIONS = [
   },
   {
     situation: "假日或晚餐尖峰",
-    suggestion: "建議直接停台北文創停車場，減少繞路時間",
+    suggestion: "假日建議停臺北文創大樓停車場，車位充足",
     anchor: "section-parking",
   },
   {
     situation: "不想找車位",
-    suggestion: "可選市府廣場地下停車場",
+    suggestion: "可選俥亭停車基隆路二場，鄰近餐廳且車位穩定",
     anchor: "section-parking",
   },
   {
