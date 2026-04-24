@@ -13,7 +13,9 @@
  * Section 9: 手機底部 Sticky 快速按鈕
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const DEER_LOGO = "/manus-storage/deer-logo-white_5580d538.webp";
 
 // ── 常數 ──────────────────────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
@@ -925,18 +927,115 @@ function DecisionSection() {
 }
 
 // ── Section 7: 品牌插畫地圖 ───────────────────────────────────────────────
+// ── 地圖地標資料 ──────────────────────────────────────────────────────────
+const MAP_MARKERS = [
+  {
+    id: "deer",
+    type: "restaurant" as const,
+    label: "初衷小鹿",
+    sublabel: "",
+    walk: "",
+    x: 310, y: 310,
+    mapsUrl: GOOGLE_MAPS_NAV,
+    color: "#C5976D",
+  },
+  {
+    id: "parking1",
+    type: "parking" as const,
+    label: "松山高中地下停車場",
+    sublabel: "基隆路一段156號",
+    walk: "步行 3 分鐘",
+    x: 390, y: 205,
+    mapsUrl: PARKING_1_NAV,
+    color: "#6BAA8E",
+  },
+  {
+    id: "parking2",
+    type: "parking" as const,
+    label: "俥亭停車基隆路二場",
+    sublabel: "基隆路一段176巷1號",
+    walk: "步行 2 分鐘",
+    x: 420, y: 285,
+    mapsUrl: PARKING_2_NAV,
+    color: "#6BAA8E",
+  },
+  {
+    id: "parking3",
+    type: "parking" as const,
+    label: "臺北文創大樓停車場",
+    sublabel: "菸廠路88號",
+    walk: "步行 8 分鐘",
+    x: 130, y: 115,
+    mapsUrl: PARKING_3_NAV,
+    color: "#6BAA8E",
+  },
+  {
+    id: "bus1",
+    type: "bus" as const,
+    label: "聯合報站",
+    sublabel: "忠孝東路四段555號",
+    walk: "步行 2 分鐘",
+    x: 280, y: 415,
+    mapsUrl: "https://maps.google.com/?q=聯合報站+台北市信義區忠孝東路四段555號",
+    color: "#C5976D",
+  },
+  {
+    id: "bus2",
+    type: "bus" as const,
+    label: "市府轉運站",
+    sublabel: "忠孝東路五段6號",
+    walk: "步行 5 分鐘",
+    x: 490, y: 430,
+    mapsUrl: BUS_QUERY,
+    color: "#C5976D",
+  },
+  {
+    id: "mrt",
+    type: "mrt" as const,
+    label: "市政府捷運站",
+    sublabel: "板南線 1號出口",
+    walk: "步行 5 分鐘",
+    x: 530, y: 395,
+    mapsUrl: MRT_NAV,
+    color: "#7EB8D4",
+  },
+];
+
+type FilterType = "parking" | "mrt" | "bus";
+
 function IllustrationMapSection() {
   const ref = useFadeIn();
+  const [activeFilters, setActiveFilters] = useState<Set<FilterType>>(
+    () => new Set<FilterType>(["parking", "mrt", "bus"])
+  );
+
+  const toggleFilter = (f: FilterType) => {
+    setActiveFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(f)) next.delete(f);
+      else next.add(f);
+      return next;
+    });
+  };
+
+  const FILTERS: { key: FilterType; label: string; color: string }[] = [
+    { key: "parking", label: "🅿 停車", color: "#6BAA8E" },
+    { key: "mrt",     label: "🚇 捷運", color: "#7EB8D4" },
+    { key: "bus",     label: "🚌 公車", color: "#C5976D" },
+  ];
+
+  // 虛線路徑（從初衷小鹿到各地標）
+  const deer = MAP_MARKERS.find((m) => m.id === "deer")!;
+  const pathMarkers = MAP_MARKERS.filter((m) => m.type !== "restaurant");
+
   return (
     <section
-      style={{
-        padding: "5rem 0",
-        backgroundColor: "var(--deer-dark)",
-      }}
+      style={{ padding: "5rem 0", backgroundColor: "var(--deer-dark)" }}
     >
       <div className="container">
         <div ref={ref} className="fade-up">
-          <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          {/* 標題 */}
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
             <p className="font-label mb-4" style={{ color: "rgba(197,151,109,0.6)" }}>
               Illustrated Map
             </p>
@@ -953,35 +1052,222 @@ function IllustrationMapSection() {
             </h2>
           </div>
 
+          {/* 篩選器 */}
           <div
             style={{
-              maxWidth: "520px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "0.75rem",
+              marginBottom: "1.75rem",
+              flexWrap: "wrap",
+            }}
+          >
+            {FILTERS.map(({ key, label, color }) => (
+              <button
+                key={key}
+                onClick={() => toggleFilter(key)}
+                style={{
+                  padding: "0.4rem 1rem",
+                  fontSize: "0.8rem",
+                  letterSpacing: "0.05em",
+                  border: `1px solid ${activeFilters.has(key) ? color : "rgba(255,255,255,0.15)"}`,
+                  borderRadius: "2px",
+                  backgroundColor: activeFilters.has(key) ? `${color}22` : "transparent",
+                  color: activeFilters.has(key) ? color : "rgba(255,255,255,0.35)",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  fontFamily: "'Noto Serif TC', serif",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* SVG 地圖 */}
+          <div
+            style={{
+              maxWidth: "560px",
               margin: "0 auto",
               border: "1px solid rgba(197,151,109,0.15)",
               overflow: "hidden",
+              position: "relative",
             }}
           >
-            <img
-              src={MAP_IMG}
-              alt="初衷小鹿周邊交通示意圖"
-              style={{
-                width: "100%",
-                height: "auto",
-                display: "block",
-              }}
-            />
+            <svg
+              viewBox="0 0 640 520"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ width: "100%", height: "auto", display: "block", backgroundColor: "#1A1210" }}
+            >
+              {/* 背景地塊 */}
+              {/* 松山文創園區 */}
+              <rect x="30" y="80" width="200" height="200" rx="4" fill="#2A2018" stroke="rgba(197,151,109,0.2)" strokeWidth="1"/>
+              <text x="130" y="175" textAnchor="middle" fill="rgba(197,151,109,0.45)" fontSize="11" fontFamily="Noto Serif TC, serif">松山文創園區</text>
+              <text x="130" y="192" textAnchor="middle" fill="rgba(197,151,109,0.3)" fontSize="9" fontFamily="Noto Serif TC, serif">Songshan Cultural Park</text>
+
+              {/* 臺北大巨蛋 */}
+              <ellipse cx="100" cy="340" rx="65" ry="50" fill="#221A14" stroke="rgba(197,151,109,0.2)" strokeWidth="1"/>
+              <text x="100" y="337" textAnchor="middle" fill="rgba(197,151,109,0.45)" fontSize="10" fontFamily="Noto Serif TC, serif">臺北大巨蛋</text>
+              <text x="100" y="352" textAnchor="middle" fill="rgba(197,151,109,0.3)" fontSize="8" fontFamily="Noto Serif TC, serif">Taipei Dome</text>
+
+              {/* 主要道路 */}
+              {/* 忠孝東路四段（橫向，偏下） */}
+              <line x1="0" y1="400" x2="640" y2="400" stroke="#3A2E24" strokeWidth="12"/>
+              <text x="320" y="397" textAnchor="middle" fill="rgba(197,151,109,0.5)" fontSize="9" fontFamily="Noto Serif TC, serif">忠孝東路四段</text>
+
+              {/* 基隆路（縱向，偏右） */}
+              <line x1="440" y1="0" x2="440" y2="520" stroke="#3A2E24" strokeWidth="10"/>
+              <text x="448" y="50" fill="rgba(197,151,109,0.4)" fontSize="8" fontFamily="Noto Serif TC, serif" transform="rotate(90, 448, 50)">基隆路</text>
+
+              {/* 菸廠路（橫向，偏上） */}
+              <line x1="0" y1="130" x2="260" y2="130" stroke="#3A2E24" strokeWidth="6"/>
+              <text x="50" y="126" fill="rgba(197,151,109,0.35)" fontSize="8" fontFamily="Noto Serif TC, serif">菸廠路</text>
+
+              {/* 市民大道（橫向，最上） */}
+              <line x1="0" y1="55" x2="640" y2="55" stroke="#3A2E24" strokeWidth="8"/>
+              <text x="320" y="51" textAnchor="middle" fill="rgba(197,151,109,0.35)" fontSize="8" fontFamily="Noto Serif TC, serif">市民大道</text>
+
+              {/* 忠孝東路五段（橫向，最下） */}
+              <line x1="440" y1="420" x2="640" y2="420" stroke="#3A2E24" strokeWidth="8"/>
+              <text x="540" y="416" textAnchor="middle" fill="rgba(197,151,109,0.35)" fontSize="8" fontFamily="Noto Serif TC, serif">忠孝東路五段</text>
+
+              {/* 步行虛線路徑 */}
+              {pathMarkers.map((m) => {
+                const visible = activeFilters.has(m.type as FilterType);
+                if (!visible) return null;
+                return (
+                  <line
+                    key={`path-${m.id}`}
+                    x1={deer.x} y1={deer.y}
+                    x2={m.x} y2={m.y}
+                    stroke={m.color}
+                    strokeWidth="1.5"
+                    strokeDasharray="5,4"
+                    opacity="0.5"
+                  />
+                );
+              })}
+
+              {/* 地標標記 */}
+              {MAP_MARKERS.map((m) => {
+                if (m.id === "deer") {
+                  // 初衷小鹿：Logo + 金色圓圈
+                  return (
+                    <g
+                      key={m.id}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => window.open(m.mapsUrl, "_blank")}
+                    >
+                      <circle cx={m.x} cy={m.y} r="22" fill="#C5976D" opacity="0.15"/>
+                      <circle cx={m.x} cy={m.y} r="16" fill="#1A1210" stroke="#C5976D" strokeWidth="1.5"/>
+                      <image
+                        href={DEER_LOGO}
+                        x={m.x - 11} y={m.y - 11}
+                        width="22" height="22"
+                        style={{ filter: "brightness(0.9)" }}
+                      />
+                      {/* 標籤 */}
+                      <rect x={m.x - 40} y={m.y + 20} width="80" height="18" rx="2" fill="#1A1210" stroke="#C5976D" strokeWidth="0.8" opacity="0.95"/>
+                      <text x={m.x} y={m.y + 32} textAnchor="middle" fill="#C5976D" fontSize="9" fontFamily="Noto Serif TC, serif" fontWeight="500">
+                        初衷小鹿
+                      </text>
+                    </g>
+                  );
+                }
+
+                const visible = activeFilters.has(m.type as FilterType);
+                if (!visible) return null;
+
+                // 判斷標籤方向（避免超出畫布）
+                const labelRight = m.x < 360;
+                const labelLx = labelRight ? m.x + 14 : m.x - 14;
+                const labelAnchor = labelRight ? "start" : "end";
+                const boxW = 120;
+                const boxH = m.walk ? 34 : 22;
+                const boxX = labelRight ? m.x + 12 : m.x - 12 - boxW;
+                const boxY = m.y - 11;
+
+                return (
+                  <g
+                    key={m.id}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => window.open(m.mapsUrl, "_blank")}
+                  >
+                    {/* 圓形標記 */}
+                    <circle cx={m.x} cy={m.y} r="7" fill={m.color} opacity="0.9"/>
+                    <circle cx={m.x} cy={m.y} r="7" fill="none" stroke={m.color} strokeWidth="2" opacity="0.4"/>
+
+                    {/* 文字背景框 */}
+                    <rect
+                      x={boxX} y={boxY}
+                      width={boxW} height={boxH}
+                      rx="2"
+                      fill="rgba(26,18,16,0.92)"
+                      stroke={`${m.color}55`}
+                      strokeWidth="0.8"
+                    />
+
+                    {/* 地標名稱 */}
+                    <text
+                      x={labelLx} y={m.y + 2}
+                      textAnchor={labelAnchor}
+                      fill="#EDE3D8"
+                      fontSize="9"
+                      fontFamily="Noto Serif TC, serif"
+                    >
+                      {m.label.length > 10 ? m.label.slice(0, 10) : m.label}
+                    </text>
+
+                    {/* 步行時間 */}
+                    {m.walk && (
+                      <text
+                        x={labelLx} y={m.y + 14}
+                        textAnchor={labelAnchor}
+                        fill={m.color}
+                        fontSize="8"
+                        fontFamily="Noto Serif TC, serif"
+                      >
+                        {m.walk}
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
+
+              {/* 北方指示 */}
+              <g transform="translate(600, 30)">
+                <circle cx="0" cy="0" r="14" fill="rgba(26,18,16,0.8)" stroke="rgba(197,151,109,0.4)" strokeWidth="1"/>
+                <text x="0" y="-4" textAnchor="middle" fill="#C5976D" fontSize="10" fontFamily="serif" fontWeight="bold">N</text>
+                <line x1="0" y1="2" x2="0" y2="10" stroke="#C5976D" strokeWidth="1.5"/>
+                <polygon points="0,-12 -3,-4 3,-4" fill="#C5976D"/>
+              </g>
+
+              {/* 圖例 */}
+              <g transform="translate(16, 430)">
+                <rect x="0" y="0" width="130" height="72" rx="3" fill="rgba(26,18,16,0.85)" stroke="rgba(197,151,109,0.2)" strokeWidth="0.8"/>
+                <text x="8" y="14" fill="rgba(197,151,109,0.7)" fontSize="8" fontFamily="Noto Serif TC, serif">圖例</text>
+                <circle cx="16" cy="27" r="5" fill="#C5976D"/>
+                <text x="26" y="31" fill="#EDE3D8" fontSize="8" fontFamily="Noto Serif TC, serif">初衷小鹿</text>
+                <circle cx="16" cy="43" r="5" fill="#6BAA8E"/>
+                <text x="26" y="47" fill="#EDE3D8" fontSize="8" fontFamily="Noto Serif TC, serif">停車場</text>
+                <circle cx="16" cy="59" r="5" fill="#7EB8D4"/>
+                <text x="26" y="63" fill="#EDE3D8" fontSize="8" fontFamily="Noto Serif TC, serif">捷運</text>
+                <circle cx="80" cy="43" r="5" fill="#C5976D"/>
+                <text x="90" y="47" fill="#EDE3D8" fontSize="8" fontFamily="Noto Serif TC, serif">公車</text>
+              </g>
+            </svg>
           </div>
 
           <p
             style={{
               textAlign: "center",
-              marginTop: "1.25rem",
-              fontSize: "0.75rem",
-              color: "rgba(197,151,109,0.35)",
+              marginTop: "1rem",
+              fontSize: "0.7rem",
+              color: "rgba(197,151,109,0.3)",
               letterSpacing: "0.08em",
             }}
           >
-            示意圖非精確比例，僅供方向參考
+            點擊地標可開啟 Google Maps 導航 · 示意圖非精確比例，僅供方向參考
           </p>
         </div>
       </div>
