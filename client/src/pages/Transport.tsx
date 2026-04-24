@@ -19,7 +19,7 @@ import { createPortal } from "react-dom";
 const DEER_LOGO = "/manus-storage/deer-logo-white_5580d538.webp";
 
 // ── 常數 ──────────────────────────────────────────────────────────────────
-const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
+const HERO_IMG = "/manus-storage/59350634_2179218345493249_3380575317096660992_o_ba54d29f.jpg";
 const MAP_IMG = "/manus-storage/transport-map-v5_a1bd3d13.svg";
 
 const RESTAURANT_ADDRESS = "台北市信義區忠孝東路四段553巷6弄15號";
