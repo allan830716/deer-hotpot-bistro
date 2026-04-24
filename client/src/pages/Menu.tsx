@@ -48,17 +48,8 @@ const MENU_PAGES = [
 
 /* ── 主分類（用於跳頁） ────────────────────────────────────────────────── */
 const CATEGORIES = [
-  { key: "all",     label: "全部菜單" },
-  { key: "intro",   label: "品牌理念" },
-  { key: "surf",    label: "海陸套餐" },
-  { key: "beef",    label: "牛肉套餐" },
-  { key: "pork",    label: "豬肉套餐" },
-  { key: "lamb",    label: "羊肉套餐" },
-  { key: "seafood", label: "海鮮套餐" },
-  { key: "chicken", label: "雞肉 / 蔬食" },
-  { key: "sides",   label: "單點配料" },
-  { key: "lunch",   label: "商業午餐" },
-  { key: "drinks",  label: "酒水飲品" },
+  { key: "all",    label: "全部菜單" },
+  { key: "drinks", label: "全部酒水" },
 ];
 
 /* ── 酒水子分類（只在 drinks 時顯示） ─────────────────────────────────── */
@@ -134,7 +125,7 @@ function CategoryDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const activeLabel = CATEGORIES.find(c => c.key === currentCategory)?.label ?? "快速跳頁";
+  const activeLabel = currentCategory === "drinks" ? "全部酒水" : "全部菜單";
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -341,6 +332,11 @@ export default function Menu() {
   // 點擊主分類：跳到該分類第一張
   const handleCategoryJump = (key: string) => {
     if (key === "all") { goTo(0); return; }
+    if (key === "drinks") {
+      const idx = MENU_PAGES.findIndex(p => p.category === "drinks");
+      if (idx >= 0) goTo(idx);
+      return;
+    }
     const idx = MENU_PAGES.findIndex(p => p.category === key);
     if (idx >= 0) goTo(idx);
   };
