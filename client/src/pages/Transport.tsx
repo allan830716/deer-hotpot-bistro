@@ -640,7 +640,7 @@ const PARKING_LOTS = [
     feature: "距離最近，適合快速抵達",
     spaces: "約 226 格，24 小時營業",
     nav: PARKING_1_NAV,
-    navLabel: "導航至松山高中停車場",
+    navLabel: "導航",
   },
   {
     badge: "備選",
@@ -651,7 +651,7 @@ const PARKING_LOTS = [
     feature: "鄰近餐廳，適合快速停車",
     spaces: "24 小時營業，車位數量請当場確認",
     nav: PARKING_2_NAV,
-    navLabel: "導航至俥亭停車基隆路二場",
+    navLabel: "導航",
   },
   {
     badge: "假日備案",
@@ -662,7 +662,7 @@ const PARKING_LOTS = [
     feature: "松菸園區內，車位充足，適合假日尖峰時段",
     spaces: "24 小時營業，建議提前查詢即時車位",
     nav: PARKING_3_NAV,
-    navLabel: "導航至臺北文創大樓停車場",
+    navLabel: "導航",
   },
 ];
 

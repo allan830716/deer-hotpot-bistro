@@ -383,7 +383,7 @@ function Footer() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)"; }}
               >
-                ↗ 立即導航
+                立即導航
               </a>
               <a
                 href="https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z"
