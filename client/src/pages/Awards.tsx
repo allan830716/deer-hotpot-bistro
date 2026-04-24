@@ -720,9 +720,11 @@ export default function Awards() {
 
       {/* ── Google 三不原則 ── */}
       <section
+        onClick={() => window.open("https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z/data=!4m8!3m7!1s0x3442ab0efce2ed51:0xc29d4c54e2e40c2d!8m2!3d25.0423803!4d121.5634603!9m1!1b1", "_blank", "noopener,noreferrer")}
         style={{
           padding: "6rem 0",
           backgroundColor: "rgba(10,8,7,0.4)",
+          cursor: "pointer",
         }}
       >
         <div className="container">
@@ -742,23 +744,87 @@ export default function Awards() {
                 marginBottom: "1.25rem",
               }}
             >
-              Google Reviews · {placeData ? `${placeData.rating} Stars` : "4.6 Stars"}
+              Google Reviews
             </p>
-            <h2
+
+            {/* 星級評分視覺化區塊 */}
+            <div
               style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 200,
-                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-                color: "var(--deer-dark-text)",
-                letterSpacing: "0.1em",
-                lineHeight: 1.5,
+                display: "flex",
+                alignItems: "center",
+                gap: "1.5rem",
                 marginBottom: "2rem",
+                flexWrap: "wrap",
               }}
             >
-              {placeData ? placeData.rating.toFixed(1) : "4.6"} 顆星
-              <br />
-              {placeData ? `${placeData.totalRatings.toLocaleString()} 則真實評論` : "100% 自主性真實評論"}
-            </h2>
+              {/* 大數字評分 */}
+              <span
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 300,
+                  fontSize: "clamp(3rem, 6vw, 4.5rem)",
+                  color: "var(--deer-gold)",
+                  lineHeight: 1,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {placeData ? placeData.rating.toFixed(1) : "4.6"}
+              </span>
+
+              {/* 星星 + 評論數 */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {/* 星星列 */}
+                <div style={{ display: "flex", gap: "0.2rem" }}>
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const rating = placeData ? placeData.rating : 4.6;
+                    const isFilled = star <= Math.round(rating);
+                    return (
+                      <svg
+                        key={star}
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        style={{ flexShrink: 0 }}
+                      >
+                        <polygon
+                          points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                          fill={isFilled ? "#C5976D" : "rgba(197,151,109,0.2)"}
+                          stroke="none"
+                        />
+                      </svg>
+                    );
+                  })}
+                </div>
+                {/* 評論數量 */}
+                <p
+                  style={{
+                    fontFamily: "'Noto Serif TC', serif",
+                    fontWeight: 300,
+                    fontSize: "0.875rem",
+                    color: "rgba(240,233,223,0.55)",
+                    letterSpacing: "0.06em",
+                    margin: 0,
+                  }}
+                >
+                  {placeData
+                    ? `${placeData.totalRatings.toLocaleString()} 則真實評論`
+                    : "1,600+ 則真實評論"}
+                </p>
+                {/* 點擊提示 */}
+                <p
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: "0.7rem",
+                    letterSpacing: "0.12em",
+                    color: "rgba(197,151,109,0.4)",
+                    margin: 0,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  在 Google Maps 查看全部評論 ↗
+                </p>
+              </div>
+            </div>
             <GoldLine />
             <div
               style={{
