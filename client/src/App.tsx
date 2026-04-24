@@ -347,7 +347,47 @@ function Footer() {
           <a href="https://www.facebook.com/deershotpotbistro/?locale=zh_TW" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>Facebook</a>
         </div>
       </div>
-      <div style={{ maxWidth: "1280px", margin: "3rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2rem", textAlign: "center" }}>
+      {/* ── 地圖快速導航區塊 ── */}
+      <div style={{ maxWidth: "1280px", margin: "3rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2.5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.7)", marginBottom: "0.5rem" }}>Find Us</p>
+          <div style={{ borderRadius: "2px", overflow: "hidden", border: "1px solid rgba(197,151,109,0.12)", height: "200px" }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.9!2d121.56346!3d25.04238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab0efce2ed51%3A0xc29d4c54e2e40c2d!2z5Yid6KW15bCP6bm_IERlZXIncyBIb3Rwb3QgQmlzdHJv!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw"
+              width="100%"
+              height="200"
+              style={{ border: 0, display: "block", filter: "invert(90%) hue-rotate(180deg) brightness(0.85) saturate(0.7)" }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="初衷小鹿位置地圖"
+            />
+          </div>
+          <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" as const }}>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=25.0423803,121.5634603&destination_place_id=ChIJUe3i_A6rQjQRLQzk4lRMncI"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: "0.75rem", color: "rgba(197,151,109,0.85)", textDecoration: "none", letterSpacing: "0.1em", border: "1px solid rgba(197,151,109,0.35)", padding: "0.4rem 1rem", transition: "all 0.2s", fontFamily: "'Cormorant Garamond', serif" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,1)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.85)"; }}
+            >
+              ↗ 立即導航
+            </a>
+            <a
+              href="https://maps.app.goo.gl/deershotpot"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.35)", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.7)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.35)"; }}
+            >
+              在 Google Maps 查看
+            </a>
+          </div>
+        </div>
+      </div>
+      <div style={{ maxWidth: "1280px", margin: "2rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.5rem", textAlign: "center" }}>
         <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>© 2024 初衷小鹿 Deer's Hotpot Bistro. All rights reserved.</p>
       </div>
     </footer>

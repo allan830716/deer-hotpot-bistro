@@ -5,6 +5,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { MapView } from "@/components/Map";
 
 const PHOTOS = {
   A: "/manus-storage/space_A_signage_9eef2174.jpg",
@@ -335,6 +336,100 @@ export default function Space() {
         <div className="sp-grid-detail-b">
           <Photo src={PHOTOS.I} delay={80} onClick={() => open(PHOTOS.I)} />
           <Photo src={PHOTOS.J} delay={180} onClick={() => open(PHOTOS.J)} />
+        </div>
+      </section>
+
+      {/* 04 位置與導航 */}
+      <section style={{ padding: "5rem 6vw 0", backgroundColor: "var(--deer-dark)" }}>
+        <div style={{ marginBottom: "2rem" }}>
+          <p style={{ ...T.label, marginBottom: "0.75rem" }}>04 — Location</p>
+          <h2 style={{ ...T.secTitle, marginBottom: "0.5rem" }}>位置與導航</h2>
+          <p style={{ fontSize: "0.8rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.06em", lineHeight: 1.8 }}>
+            台北市信義區忠孝東路四段 553 巷 6 弄 15 號
+          </p>
+        </div>
+        <div style={{ height: "420px", borderRadius: "2px", overflow: "hidden", border: "1px solid rgba(197,151,109,0.12)" }}>
+          <MapView
+            initialCenter={{ lat: 25.0423803, lng: 121.5634603 }}
+            initialZoom={17}
+            onMapReady={(map) => {
+              // 套用暗色主題
+              map.setOptions({
+                styles: [
+                  { elementType: "geometry", stylers: [{ color: "#1a1210" }] },
+                  { elementType: "labels.text.stroke", stylers: [{ color: "#1a1210" }] },
+                  { elementType: "labels.text.fill", stylers: [{ color: "#c5976d" }] },
+                  { featureType: "road", elementType: "geometry", stylers: [{ color: "#2d2420" }] },
+                  { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#1a1210" }] },
+                  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
+                  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#3c2e28" }] },
+                  { featureType: "water", elementType: "geometry", stylers: [{ color: "#0f1a2a" }] },
+                  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
+                  { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                  { featureType: "transit", elementType: "labels", stylers: [{ visibility: "off" }] },
+                ],
+              });
+              // 加入金色標記
+              const markerEl = document.createElement("div");
+              markerEl.style.cssText = `
+                width: 36px; height: 36px;
+                background: rgba(197,151,109,0.9);
+                border: 2px solid rgba(240,233,223,0.8);
+                border-radius: 50% 50% 50% 0;
+                transform: rotate(-45deg);
+                box-shadow: 0 2px 12px rgba(197,151,109,0.4);
+              `;
+              new google.maps.marker.AdvancedMarkerElement({
+                map,
+                position: { lat: 25.0423803, lng: 121.5634603 },
+                content: markerEl,
+                title: "初衷小鹿 Deer's Hotpot Bistro",
+              });
+            }}
+          />
+        </div>
+        <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=25.0423803,121.5634603&destination_place_id=ChIJUe3i_A6rQjQRLQzk4lRMncI"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              padding: "0.75rem 1.75rem",
+              backgroundColor: "rgba(197,151,109,0.15)",
+              border: "1px solid rgba(197,151,109,0.45)",
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "0.7rem", letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "rgba(197,151,109,0.9)",
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.25)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.15)"; }}
+          >
+            ↗ 立即導航
+          </a>
+          <a
+            href="https://www.google.com/maps/place/初衷小鹿+Deer's+Hotpot+Bistro/@25.0423803,121.5634603,17z"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              padding: "0.75rem 1.75rem",
+              border: "1px solid rgba(197,151,109,0.2)",
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "0.7rem", letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "rgba(197,151,109,0.55)",
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.45)"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.85)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.2)"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.55)"; }}
+          >
+            在 Google Maps 查看
+          </a>
         </div>
       </section>
 

@@ -109,3 +109,9 @@
 - [x] CRÈM 步驟說明：手機版改為 2×2 格排列，文字不再被擠成窄欄
 - [x] CRÈM 蛋糕圖片：手機版隱藏圖片疊加文字，改在圖片下方獨立顯示標題
 - [x] CRÈM 步驟文字：手機版字體加大、padding 增加，提升可讀性
+
+## 第九批更新（2026-04-24）
+
+- [x] App.tsx Footer：加入 Google Maps iframe 快速導航區塊（暗色 CSS filter + 立即導航連結）
+- [x] 技能儲存（/skill-creator）：完成 SKILL.md 主體內容，涵蓋設計系統、圖片管理、菜單系統、Google Places API、地圖整合等
+- [x] references/google-places.md：更新為已實作狀態（移除「尚未實作」說明）
