@@ -6,9 +6,10 @@
  */
 
 import { useEffect, useRef } from "react";
+import { trpc } from "@/lib/trpc";
 
 // ── CDN 圖片 ────────────────────────────────────────────────────────────────
-const AWARDS_HERO = "/manus-storage/awards-hero-real_51a007dd.jpg";
+const AWARDS_HERO = "/manus-storage/triangler_DeersHotpotBistro19_a3f32aa8.jpg";
 const AWARD_TAIWAN30 = "/manus-storage/award-taiwan30_286d027c.webp";
 const AWARD_TAIPEI10_COLLAGE = "/manus-storage/award-taipei10-collage_8a9d2c22.webp";
 const AWARD_TAIPEI10_TEAM = "/manus-storage/award-taipei10-team_9e26013a.webp";
@@ -103,6 +104,7 @@ export default function Awards() {
   const ref4 = useFadeIn(0.1);
   const ref5 = useFadeIn(0.1);
   const ref6 = useFadeIn(0.1);
+  const { data: placeData } = trpc.placeInfo.getReviews.useQuery();
 
   return (
     <main
@@ -740,7 +742,7 @@ export default function Awards() {
                 marginBottom: "1.25rem",
               }}
             >
-              Google Reviews · 4.6 Stars
+              Google Reviews · {placeData ? `${placeData.rating} Stars` : "4.6 Stars"}
             </p>
             <h2
               style={{
@@ -753,9 +755,9 @@ export default function Awards() {
                 marginBottom: "2rem",
               }}
             >
-              4.6 顆星
+              {placeData ? placeData.rating.toFixed(1) : "4.6"} 顆星
               <br />
-              100% 自主性真實評論
+              {placeData ? `${placeData.totalRatings.toLocaleString()} 則真實評論` : "100% 自主性真實評論"}
             </h2>
             <GoldLine />
             <div

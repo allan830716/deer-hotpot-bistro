@@ -309,6 +309,36 @@ const checkoutRouter = router({
     }),
 });
 
+// ── Place Info Router (Google Places API) ────────────────────────────────────
+let placeInfoCache: { rating: number; totalRatings: number; fetchedAt: number } | null = null;
+const PLACE_CACHE_TTL = 60 * 60 * 1000; // 1 hour in ms
+
+const placeInfoRouter = router({
+  getReviews: publicProcedure.query(async () => {
+    const now = Date.now();
+    if (placeInfoCache && now - placeInfoCache.fetchedAt < PLACE_CACHE_TTL) {
+      return placeInfoCache;
+    }
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+    if (!apiKey) return { rating: 4.6, totalRatings: 1600, fetchedAt: now };
+    try {
+      const placeId = "ChIJUe3i_A6rQjQRLQzk4lRMncI";
+      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=rating,user_ratings_total&key=${apiKey}`;
+      const res = await fetch(url);
+      const data = await res.json() as { result?: { rating?: number; user_ratings_total?: number } };
+      const result = {
+        rating: data.result?.rating ?? 4.6,
+        totalRatings: data.result?.user_ratings_total ?? 1600,
+        fetchedAt: now,
+      };
+      placeInfoCache = result;
+      return result;
+    } catch {
+      return { rating: 4.6, totalRatings: 1600, fetchedAt: now };
+    }
+  }),
+});
+
 // ── App Router ─────────────────────────────────────────────────────────────────
 export const appRouter = router({
   system: systemRouter,
@@ -326,6 +356,7 @@ export const appRouter = router({
   orders: ordersRouter,
   admin: adminRouter,
   checkout: checkoutRouter,
+  placeInfo: placeInfoRouter,
 });
 
 export type AppRouter = typeof appRouter;
