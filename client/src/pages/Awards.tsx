@@ -11,6 +11,7 @@ import { useEffect, useRef } from "react";
 const AWARD_TAIWAN30 = "/manus-storage/award-taiwan30_286d027c.webp";
 const AWARD_TAIPEI10_COLLAGE = "/manus-storage/award-taipei10-collage_8a9d2c22.webp";
 const AWARD_TAIPEI10_TEAM = "/manus-storage/award-taipei10-team_9e26013a.webp";
+const AWARD_TAIPEI10_SINGLE = "/manus-storage/award-taipei-top10_bcd1a47c.webp";
 const PREMIUM_JUL_COVER = "/manus-storage/premium-jul-cover_db537d5f.webp";
 const PREMIUM_JUL_INSIDE = "/manus-storage/premium-jul-inside_b77d482e.webp";
 const PREMIUM_OCT_COVER = "/manus-storage/premium-oct-cover_485776b5.webp";
@@ -67,21 +68,25 @@ const MEDIA_LINKS = [
   {
     pub: "Vogue",
     title: "隱身巷弄的質感系鍋物",
+    desc: "以熟成肉品、乾貨上湯與精緻甜點，打造有節奏感的餐桌體驗。",
     url: "https://www.vogue.com.tw/article/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-%E9%8D%8B%E7%89%A9",
   },
   {
     pub: "工商時報",
-    title: "台北鍋界大賽十強",
+    title: "台北鍋界大賽十強高質感鍋物，初衷小鹿如私房招待所",
+    desc: "榮獲台北市政府 112 年「美食在台北・鍋際大賞」人氣票選 TOP 10。",
     url: "https://www.ctee.com.tw/news/20230930700224-431207",
   },
   {
     pub: "ELLE",
     title: "台北大巨蛋美食攻略",
+    desc: "信義區不可錯過的精緻鍋物選擇，適合商務宴客與特殊紀念日。",
     url: "https://www.elle.com.tw/life/foodie/g46059914/taipei-big-dome-foods/",
   },
   {
     pub: "旅讀 Or",
     title: "一鍋澄清的溫柔",
+    desc: "日本頂級乾貨上湯，讓每一口都有它應有的位置。",
     url: "https://today.line.me/tw/v3/article/PG7PxnM",
   },
 ];
@@ -219,41 +224,19 @@ export default function Awards() {
               </p>
             </div>
 
-            {/* 照片組 */}
+            {/* 照片 — 單張 */}
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: "1rem",
-                maxWidth: "680px",
+                maxWidth: "560px",
+                overflow: "hidden",
+                backgroundColor: "rgba(197,151,109,0.05)",
               }}
             >
-              <div
-                style={{
-                  aspectRatio: "4/3",
-                  overflow: "hidden",
-                  backgroundColor: "rgba(197,151,109,0.05)",
-                }}
-              >
-                <img
-                  src={AWARD_TAIPEI10_COLLAGE}
-                  alt="2023 台北十強鍋物 — 得獎拼貼"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-              <div
-                style={{
-                  aspectRatio: "4/3",
-                  overflow: "hidden",
-                  backgroundColor: "rgba(197,151,109,0.05)",
-                }}
-              >
-                <img
-                  src={AWARD_TAIPEI10_TEAM}
-                  alt="2023 台北十強鍋物 — 團隊合影"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
+              <img
+                src={AWARD_TAIPEI10_SINGLE}
+                alt="2023 台北十強鍋物 — 工商時報報導與台北市政府獎狀"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
             </div>
           </div>
         </div>
@@ -568,10 +551,10 @@ export default function Awards() {
             <GoldLine />
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0",
-                maxWidth: "680px",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                gap: "1.25rem",
+                maxWidth: "860px",
               }}
             >
               {MEDIA_LINKS.map((item, i) => (
@@ -582,51 +565,71 @@ export default function Awards() {
                   rel="noopener noreferrer"
                   style={{
                     display: "flex",
-                    alignItems: "center",
-                    gap: "1.5rem",
-                    padding: "1.5rem 0",
-                    borderBottom: "1px solid rgba(197,151,109,0.1)",
+                    flexDirection: "column",
+                    gap: "0.75rem",
+                    padding: "1.5rem",
+                    border: "1px solid rgba(197,151,109,0.15)",
+                    backgroundColor: "rgba(197,151,109,0.04)",
                     textDecoration: "none",
-                    transition: "opacity 0.2s ease",
+                    transition: "border-color 0.25s ease, background-color 0.25s ease",
+                    cursor: "pointer",
                   }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.65")}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(197,151,109,0.45)";
+                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(197,151,109,0.09)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(197,151,109,0.15)";
+                    (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(197,151,109,0.04)";
+                  }}
                 >
-                  <span
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontWeight: 400,
-                      fontSize: "0.65rem",
-                      letterSpacing: "0.18em",
-                      color: "rgba(197,151,109,0.55)",
-                      flexShrink: 0,
-                      minWidth: "80px",
-                    }}
-                  >
-                    《{item.pub}》
-                  </span>
-                  <span
+                  {/* 媒體名稱 badge */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <span
+                      style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontWeight: 500,
+                        fontSize: "0.7rem",
+                        letterSpacing: "0.16em",
+                        textTransform: "uppercase",
+                        color: "var(--deer-gold)",
+                        padding: "0.2rem 0.6rem",
+                        border: "1px solid rgba(197,151,109,0.3)",
+                        display: "inline-block",
+                      }}
+                    >
+                      {item.pub}
+                    </span>
+                    <span style={{ color: "rgba(197,151,109,0.5)", fontSize: "0.85rem" }}>↗</span>
+                  </div>
+                  {/* 標題 */}
+                  <p
                     style={{
                       fontFamily: "'Noto Serif TC', serif",
                       fontWeight: 300,
                       fontSize: "0.9375rem",
-                      color: "rgba(240,233,223,0.65)",
+                      color: "rgba(240,233,223,0.8)",
                       letterSpacing: "0.06em",
-                      lineHeight: 1.6,
-                      flex: 1,
+                      lineHeight: 1.7,
+                      margin: 0,
                     }}
                   >
                     {item.title}
-                  </span>
-                  <span
-                    style={{
-                      color: "rgba(197,151,109,0.35)",
-                      fontSize: "0.75rem",
-                      flexShrink: 0,
-                    }}
-                  >
-                    →
-                  </span>
+                  </p>
+                  {/* 說明文字（若有） */}
+                  {item.desc && (
+                    <p
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "rgba(240,233,223,0.4)",
+                        lineHeight: 1.7,
+                        margin: 0,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      {item.desc}
+                    </p>
+                  )}
                 </a>
               ))}
             </div>
