@@ -17,12 +17,10 @@ import { useEffect, useRef } from "react";
 
 // ── 常數 ──────────────────────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
-const MAP_IMG = "/manus-storage/transport-map_5a8064d0.svg";
+const MAP_IMG = "/manus-storage/transport-map-v2_6ee97ebb.svg";
 
 const RESTAURANT_ADDRESS = "台北市信義區忠孝東路四段553巷6弄15號";
 const GOOGLE_MAPS_NAV = "https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot+Bistro&daddr=台北市信義區忠孝東路四段553巷6弄15號";
-const GOOGLE_MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.9!2d121.5644!3d25.0408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abe3fc8e2d51%3A0xc29d4c54e4e40c2d!2z5Yid5Zyw5bCP6bq76Lev5YaF5YmN6YKu6aqo5bqX!5e0!3m2!1szh-TW!2stw!4v1714000000000!5m2!1szh-TW!2stw";
-
 const MRT_NAV = "https://maps.google.com/?q=台北捷運市政府站1號出口&daddr=台北市信義區忠孝東路四段553巷6弄15號";
 const BUS_QUERY = "https://maps.google.com/?q=市府轉運站&daddr=台北市信義區忠孝東路四段553巷6弄15號";
 const PARKING_1_NAV = "https://maps.google.com/?q=松山高中地下停車場+台北市基隆路一段156號";
@@ -991,89 +989,7 @@ function IllustrationMapSection() {
   );
 }
 
-// ── Section 8: Google Map 嵌入 ────────────────────────────────────────────
-function GoogleMapSection() {
-  const ref = useFadeIn();
-  return (
-    <section
-      id="section-map"
-      style={{
-        padding: "5rem 0",
-        backgroundColor: "var(--deer-bg)",
-      }}
-    >
-      <div className="container">
-        <div ref={ref} className="fade-up">
-          <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-            <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
-              Google Maps
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 200,
-                fontSize: "clamp(1.25rem, 3vw, 1.75rem)",
-                color: "var(--deer-text)",
-                letterSpacing: "0.1em",
-                marginBottom: "0.5rem",
-              }}
-            >
-              地圖導航
-            </h2>
-            <p
-              style={{
-                fontSize: "0.8125rem",
-                color: "var(--deer-sub)",
-                letterSpacing: "0.06em",
-              }}
-            >
-              {RESTAURANT_ADDRESS}
-            </p>
-          </div>
-
-          {/* Google Maps iframe */}
-          <div
-            style={{
-              width: "100%",
-              height: "400px",
-              border: "1px solid rgba(107,74,50,0.15)",
-              overflow: "hidden",
-              marginBottom: "2rem",
-            }}
-          >
-            <iframe
-              src={GOOGLE_MAPS_EMBED}
-              width="100%"
-              height="100%"
-              style={{
-                border: 0,
-                filter: "grayscale(20%) contrast(1.05)",
-              }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="初衷小鹿地圖"
-            />
-          </div>
-
-          <div style={{ textAlign: "center" }}>
-            <a
-              href={GOOGLE_MAPS_NAV}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-deer"
-              style={{ fontSize: "0.8rem", display: "inline-block" }}
-            >
-              開啟 Google Maps 導航
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ── Section 9: 手機底部 Sticky 快速按鈕 ──────────────────────────────────
+// ── Section 8: 手機底部 Sticky 快速按鈕 ──────────────────────────────────
 function StickyBottomBar() {
   return (
     <div className="transport-sticky-bar">
@@ -1143,10 +1059,7 @@ export default function Transport() {
       {/* Section 7: 品牌插畫地圖 */}
       <IllustrationMapSection />
 
-      {/* Section 8: Google Map 嵌入 */}
-      <GoogleMapSection />
-
-      {/* Section 9: 手機底部 Sticky 快速按鈕 */}
+      {/* Section 8: 手機底部 Sticky 快速按鈕 */}
       <StickyBottomBar />
     </div>
   );

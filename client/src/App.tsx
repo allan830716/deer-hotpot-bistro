@@ -395,6 +395,39 @@ function Footer() {
           </div>
         </div>
       </div>
+      {/* 交通引導區塊 */}
+      <div style={{ maxWidth: "1280px", margin: "2.5rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2rem" }}>
+        <div style={{ display: "flex", flexWrap: "wrap" as const, alignItems: "center", justifyContent: "space-between", gap: "1.25rem" }}>
+          <div>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>Getting Here</p>
+            <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.5)", letterSpacing: "0.06em" }}>
+              捷運、開車、停車建議——詳見交通與停車頁面
+            </p>
+          </div>
+          <Link
+            href="/transport"
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 300,
+              fontSize: "0.75rem",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase" as const,
+              color: "rgba(197,151,109,0.85)",
+              textDecoration: "none",
+              border: "1px solid rgba(197,151,109,0.35)",
+              padding: "0.625rem 1.5rem",
+              whiteSpace: "nowrap" as const,
+              transition: "all 0.2s",
+              display: "inline-block",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)"; }}
+          >
+            交通與停車 →
+          </Link>
+        </div>
+      </div>
+
       <div style={{ maxWidth: "1280px", margin: "2rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.5rem", textAlign: "center" }}>
         <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>© 2024 初衷小鹿 Deer's Hotpot Bistro. All rights reserved.</p>
       </div>
