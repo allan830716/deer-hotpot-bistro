@@ -36,7 +36,7 @@ const NAV_LINKS = [
   { href: "/brand", label: "品牌故事" },
   { href: "/menu", label: "菜單" },
   { href: "/space", label: "空間體驗" },
-  { href: "/awards", label: "獲獎殖榮／雜誌專訪" },
+  { href: "/awards", label: "獲獎殊榮/雜誌專訪" },
   { href: "/transport", label: "交通與停車" },
 ];
 
