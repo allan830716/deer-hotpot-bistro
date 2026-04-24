@@ -17,7 +17,7 @@ import { useEffect, useRef } from "react";
 
 // ── 常數 ──────────────────────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
-const MAP_IMG = "/manus-storage/transport-map-v3_7af7c78f.svg";
+const MAP_IMG = "/manus-storage/transport-map-v4_083dedf1.svg";
 
 const RESTAURANT_ADDRESS = "台北市信義區忠孝東路四段553巷6弄15號";
 const GOOGLE_MAPS_NAV = "https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot+Bistro&daddr=台北市信義區忠孝東路四段553巷6弄15號";
@@ -634,7 +634,7 @@ const PARKING_LOTS = [
     badgeColor: "#C5976D",
     name: "松山高中地下停車場",
     address: "基隆路一段 156 號地下",
-    walk: "步行約 1 分鐘",
+    walk: "步行約 3 分鐘",
     feature: "距離最近，適合快速抵達",
     spaces: "約 226 格，24 小時營業",
     nav: PARKING_1_NAV,
@@ -645,7 +645,7 @@ const PARKING_LOTS = [
     badgeColor: "#6B8B5E",
     name: "俥亭停車基隆路二場",
     address: "基隆路一段 176 巷 1 號",
-    walk: "步行約 3 分鐘",
+    walk: "步行約 2 分鐘",
     feature: "鄰近餐廳，適合快速停車",
     spaces: "24 小時營業，車位數量請当場確認",
     nav: PARKING_2_NAV,
@@ -656,7 +656,7 @@ const PARKING_LOTS = [
     badgeColor: "#5E7A8B",
     name: "臺北文創大樓收費停車場",
     address: "信義區菸廠路 88 號",
-    walk: "步行約 7 分鐘",
+    walk: "步行約 8 分鐘",
     feature: "松菸園區內，車位充足，適合假日尖峰時段",
     spaces: "24 小時營業，建議提前查詢即時車位",
     nav: PARKING_3_NAV,
