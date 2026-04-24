@@ -17,7 +17,7 @@ import { useEffect, useRef } from "react";
 
 // ── 常數 ──────────────────────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
-const MAP_IMG = "/manus-storage/transport-map-v2_6ee97ebb.svg";
+const MAP_IMG = "/manus-storage/transport-map-v3_7af7c78f.svg";
 
 const RESTAURANT_ADDRESS = "台北市信義區忠孝東路四段553巷6弄15號";
 const GOOGLE_MAPS_NAV = "https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot+Bistro&daddr=台北市信義區忠孝東路四段553巷6弄15號";
