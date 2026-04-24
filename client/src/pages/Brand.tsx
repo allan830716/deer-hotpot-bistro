@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef } from "react";
+import { trpc } from "@/lib/trpc";
 
 const HERO_IMG  = "/manus-storage/space_J_brand_3b560a56.jpg";
 
@@ -93,6 +94,10 @@ export default function Brand() {
   const storyRef      = useFadeIn(100);
   const commitmentsRef = useFadeIn(0);
   const quoteRef      = useFadeIn(0);
+  const { data: placeData } = trpc.placeInfo.getReviews.useQuery();
+  const liveRating = placeData?.rating ?? 4.6;
+  const liveTotal  = placeData?.totalRatings ?? 1593;
+  const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z/data=!4m8!3m7!1s0x3442ab0efce2ed51:0xc29d4c54e2e40c2d!8m2!3d25.0423803!4d121.5634603!9m1!1b1";
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)" }}>
@@ -153,7 +158,7 @@ export default function Brand() {
             <div className="flex flex-col gap-12">
               {[
                 { num: "2019",   label: "創立於台北信義區" },
-                { num: "4.6",    label: "Google 評分（1,593 則評論）" },
+                { num: liveRating.toFixed(1), label: `Google 評分（${liveTotal.toLocaleString()} 則評論）`, href: GOOGLE_REVIEWS_URL },
                 { num: "Top 10", label: "2023 台北鍋物大賽十強" },
                 { num: "Top 30", label: "2024 全台灣 30 大鍋物" },
               ].map((item, i) => (

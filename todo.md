@@ -123,3 +123,11 @@
 - [x] 手機版導航按鈕（立即導航）：文字不換行（white-space: nowrap）
 - [x] Footer：移除上方 Location 欄（地址已在 Find Us 並排區塊顯示，不重複）
 - [x] 首頁空間區：「為了那些不該被打擾的時刻」改為「一場屬於你們的餐桌，不需要理由。」
+
+## 第十一批更新（2026-04-24）
+
+- [x] 品牌故事頁：評論數串接 trpc.placeInfo.getReviews + 加入查看 Google 評論連結
+- [x] Footer Google Maps iframe：修正為正確的 embed URL（目前顯示 invalid coord）
+- [x] Footer 營業時間：星期日移到星期六下面（一→六→日的順序）
+- [x] 菜單頁：分類下拉移除「品牌理念」選項
+- [x] Footer 電話：改為 tel: 可撥打連結（點擊直接通話）- [x] CRÈM 頁：聯名圖複製到「CRÈM 上桌服務」分頁首圖（初衷小鹿 xd7 CRÈM 標題下方）- [x] CRÈM 頁：室內裝潢圖移到主標「座落台北信義區的奶油甜點專賣店」下方、敍述上方

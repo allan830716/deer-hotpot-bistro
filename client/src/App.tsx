@@ -329,13 +329,13 @@ function Footer() {
         <div>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Hours</p>
           <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2 }}>
-            星期日　11:30–15:00　17:30–22:30<br />
             星期一　12:00–15:00　18:00–22:00<br />
             星期二　12:00–15:00　18:00–22:00<br />
             星期三　12:00–15:00　18:00–22:00<br />
             星期四　12:00–15:00　18:00–22:00<br />
             星期五　12:00–15:00　17:30–22:30<br />
-            星期六　11:30–15:00　17:30–22:30
+            星期六　11:30–15:00　17:30–22:30<br />
+            星期日　11:30–15:00　17:30–22:30
           </p>
         </div>
         <div>
@@ -381,7 +381,7 @@ function Footer() {
           {/* 右欄：地圖 iframe */}
           <div style={{ borderRadius: "2px", overflow: "hidden", border: "1px solid rgba(197,151,109,0.12)", minHeight: "240px" }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.9!2d121.56346!3d25.04238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab0efce2ed51%3A0xc29d4c54e2e40c2d!2z5Yid6KW15bCP6bm_IERlZXIncyBIb3Rwb3QgQmlzdHJv!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.9!2d121.5634603!3d25.0423803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab0efce2ed51%3A0xc29d4c54e2e40c2d!2z5Yid6KW15bCP6bm_IERlZXIncyBIb3Rwb3QgQmlzdHJv!5e0!3m2!1szh-TW!2stw!4v1745462400000!5m2!1szh-TW!2stw"
               width="100%"
               height="100%"
               style={{ border: 0, display: "block", minHeight: "240px", filter: "invert(90%) hue-rotate(180deg) brightness(0.85) saturate(0.7)" }}

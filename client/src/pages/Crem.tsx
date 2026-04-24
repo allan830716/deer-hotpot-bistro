@@ -172,6 +172,20 @@ export default function Crem() {
             </div>
           </div>
         </div>
+        {/* 聯名圖 — 初衷小鹿 × CRÈM */}
+        <div style={{ overflow: "hidden" }}>
+          <img
+            src={CREM_IMG}
+            alt="初衷小鹿 × CRÈM 聯名"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              objectFit: "contain",
+              backgroundColor: "var(--deer-dark)",
+            }}
+          />
+        </div>
       </section>
 
       {/* ── 關於 CRÈM ── */}
@@ -223,6 +237,26 @@ export default function Crem() {
                   marginBottom: "1.75rem",
                 }}
               />
+              {/* 室內裝潢圖 — 移到主標下方、敘述上方 */}
+              <div ref={ref3} className="fade-up" style={{ overflow: "hidden", marginBottom: "1.75rem" }}>
+                <img
+                  src={CREM_INTERIOR}
+                  alt="CRÈM 室內空間"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                    transition: "transform 0.8s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLImageElement).style.transform = "scale(1.02)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLImageElement).style.transform = "scale(1)";
+                  }}
+                />
+              </div>
               <p
                 style={{
                   fontFamily: "'Noto Serif TC', serif",
@@ -264,31 +298,7 @@ export default function Crem() {
                 前往 CRÈM 官網
               </a>
             </div>
-            <div
-              ref={ref3}
-              className="fade-up"
-              style={{
-                overflow: "hidden",
-              }}
-            >
-              <img
-                src={CREM_INTERIOR}
-                alt="CRÈM 室內空間"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  display: "block",
-                  transition: "transform 0.8s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLImageElement).style.transform = "scale(1.02)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLImageElement).style.transform = "scale(1)";
-                }}
-              />
-            </div>
+
           </div>
         </div>
       </section>

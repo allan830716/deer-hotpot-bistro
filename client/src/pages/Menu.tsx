@@ -49,7 +49,6 @@ const MENU_PAGES = [
 /* ── 主分類（用於跳頁） ────────────────────────────────────────────────── */
 const CATEGORIES = [
   { key: "all",     label: "全部菜單" },
-  { key: "intro",   label: "品牌理念" },
   { key: "surf",    label: "海陸套餐" },
   { key: "beef",    label: "牛肉套餐" },
   { key: "pork",    label: "豬肉套餐" },
