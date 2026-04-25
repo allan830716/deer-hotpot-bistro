@@ -411,7 +411,7 @@ export default function Space() {
             ↗ 立即導航
           </a>
           <a
-            href="https://www.google.com/maps/place/初衷小鹿+Deer's+Hotpot+Bistro/@25.0423803,121.5634603,17z"
+            href="https://maps.app.goo.gl/aWRwfie8rDpdxK277"
             target="_blank"
             rel="noopener noreferrer"
             style={{
