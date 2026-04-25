@@ -283,9 +283,16 @@ export default function Awards() {
       {/* ── 2024 台灣 30 大 ── */}
       <section style={{ padding: "6rem 0" }}>
         <div className="container">
+          <style>{`
+            @media (max-width: 640px) {
+              .awards-taiwan30-img { order: 2; width: 100% !important; max-width: 320px; margin: 0 auto; }
+              .awards-taiwan30-text { order: 1; }
+              .awards-taiwan30-grid { grid-template-columns: 1fr !important; }
+            }
+          `}</style>
           <div
             ref={ref2}
-            className="fade-up awards-item-grid"
+            className="fade-up awards-item-grid awards-taiwan30-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "auto 1fr",
@@ -297,6 +304,7 @@ export default function Awards() {
           >
             {/* 獎狀圖 */}
             <div
+              className="awards-taiwan30-img"
               style={{
                 width: "clamp(160px, 25vw, 280px)",
                 aspectRatio: "3/4",
@@ -313,7 +321,7 @@ export default function Awards() {
             </div>
 
             {/* 文字 */}
-            <div>
+            <div className="awards-taiwan30-text">
               <p
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
