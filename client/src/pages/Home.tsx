@@ -618,7 +618,7 @@ function TrustSection() {
   const { data: placeData, isLoading: placeLoading } = trpc.placeInfo.getReviews.useQuery();
   const rating = placeData?.rating ?? 4.6;
   const totalRatings = placeData?.totalRatings ?? 1593;
-  const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z/data=!4m8!3m7!1s0x3442ab0efce2ed51:0xc29d4c54e2e40c2d!8m2!3d25.0423803!4d121.5634603!9m1!1b1";
+  const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
   return (
     <section
       className="section-lg"
