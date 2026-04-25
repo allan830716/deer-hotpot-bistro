@@ -204,75 +204,86 @@ export default function Awards() {
       <section style={{ padding: "6rem 0" }}>
         <div className="container">
           <div ref={ref1} className="fade-up">
-            {/* 文字 */}
-            <div style={{ maxWidth: "560px", marginBottom: "3rem" }}>
-              <p
+            {/* 照片 — 電腦版左文右圖並排，手機版文字在上圖片在下 */}
+            <style>{`
+              @media (min-width: 768px) {
+                .awards-top10-layout {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: clamp(2rem, 4vw, 4rem);
+                  align-items: start;
+                  max-width: 860px;
+                }
+                .awards-top10-text { margin-bottom: 0 !important; }
+              }
+            `}</style>
+            <div className="awards-top10-layout">
+              <div className="awards-top10-text" style={{ maxWidth: "560px", marginBottom: "3rem" }}>
+                <p
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontWeight: 400,
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.22em",
+                    textTransform: "uppercase",
+                    color: "rgba(197,151,109,0.5)",
+                    marginBottom: "1.25rem",
+                  }}
+                >
+                  2023 · 台北市府鍋物大賽
+                </p>
+                <h2
+                  style={{
+                    fontFamily: "'Noto Serif TC', serif",
+                    fontWeight: 200,
+                    fontSize: "clamp(1.25rem, 2.5vw, 2rem)",
+                    color: "var(--deer-dark-text)",
+                    letterSpacing: "0.1em",
+                    lineHeight: 1.5,
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  2023 台北十強鍋物
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontWeight: 300,
+                    fontSize: "0.875rem",
+                    color: "rgba(197,151,109,0.6)",
+                    letterSpacing: "0.12em",
+                    marginBottom: "2rem",
+                  }}
+                >
+                  Taipei International Hotpot Awards — Top 10
+                </p>
+                <GoldLine />
+                <p
+                  style={{
+                    fontFamily: "'Noto Serif TC', serif",
+                    fontWeight: 300,
+                    fontSize: "0.875rem",
+                    color: "rgba(240,233,223,0.5)",
+                    lineHeight: 2,
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  在台北數百家鍋物餐廳中，以湯頭工藝、食材選品與整體用餐體驗，
+                  獲評審評選為年度十強之列。
+                </p>
+              </div>
+              <div
                 style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 400,
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: "rgba(197,151,109,0.5)",
-                  marginBottom: "1.25rem",
+                  overflow: "hidden",
+                  backgroundColor: "rgba(197,151,109,0.05)",
                 }}
               >
-                2023 · 台北市府鍋物大賽
-              </p>
-              <h2
-                style={{
-                  fontFamily: "'Noto Serif TC', serif",
-                  fontWeight: 200,
-                  fontSize: "clamp(1.25rem, 2.5vw, 2rem)",
-                  color: "var(--deer-dark-text)",
-                  letterSpacing: "0.1em",
-                  lineHeight: 1.5,
-                  marginBottom: "0.5rem",
-                }}
-              >
-                2023 台北十強鍋物
-              </h2>
-              <p
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 300,
-                  fontSize: "0.875rem",
-                  color: "rgba(197,151,109,0.6)",
-                  letterSpacing: "0.12em",
-                  marginBottom: "2rem",
-                }}
-              >
-                Taipei International Hotpot Awards — Top 10
-              </p>
-              <GoldLine />
-              <p
-                style={{
-                  fontFamily: "'Noto Serif TC', serif",
-                  fontWeight: 300,
-                  fontSize: "0.875rem",
-                  color: "rgba(240,233,223,0.5)",
-                  lineHeight: 2,
-                  letterSpacing: "0.05em",
-                }}
-              >
-                在台北數百家鍋物餐廳中，以湯頭工藝、食材選品與整體用餐體驗，
-                獲評審評選為年度十強之列。
-              </p>
-            </div>
-
-            {/* 照片 — 單張 */}
-            <div
-              style={{
-                maxWidth: "560px",
-                overflow: "hidden",
-                backgroundColor: "rgba(197,151,109,0.05)",
-              }}
-            >
-              <img
-                src={AWARD_TAIPEI10_SINGLE}
-                alt="2023 台北十強鍋物 — 工商時報報導與台北市政府獎狀"
-                style={{ width: "100%", height: "auto", display: "block" }}
-              />
+                <img
+                  src={AWARD_TAIPEI10_SINGLE}
+                  alt="2023 台北十強鍋物 — 工商時報報導與台北市政府獎狀"
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -593,10 +604,19 @@ export default function Awards() {
               媒體報導
             </h2>
             <GoldLine />
+            <style>{`
+              @media (min-width: 1024px) {
+                .media-cards-grid {
+                  grid-template-columns: repeat(4, 1fr) !important;
+                  max-width: 100% !important;
+                }
+              }
+            `}</style>
             <div
+              className="media-cards-grid"
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
                 gap: "1.25rem",
                 maxWidth: "860px",
               }}
