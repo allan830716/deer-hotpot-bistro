@@ -410,7 +410,7 @@ function Footer() {
                 立即導航
               </a>
               <a
-                href="https://www.google.com/maps/place/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF+Deer%27s+Hotpot+Bistro/@25.0423803,121.5634603,17z"
+                href="https://maps.app.goo.gl/aWRwfie8rDpdxK277"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ fontSize: "0.7rem", color: "rgba(240,233,223,0.3)", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s", fontFamily: "'Cormorant Garamond', serif" }}
