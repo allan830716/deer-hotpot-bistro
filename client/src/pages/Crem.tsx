@@ -26,7 +26,7 @@ function useFadeIn(threshold = 0.15) {
 
 const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
 const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
-const CREM_IMG  = "/manus-storage/crem-cake_7f5629d5.jpg";
+const CREM_IMG  = "/manus-storage/crem-cake-carnation_bf93218f.jpg";
 const CREM_INTERIOR = "/manus-storage/crem-interior_2c8fe91b.webp";
 
 const STEPS = [
