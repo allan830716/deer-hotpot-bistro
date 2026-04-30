@@ -585,7 +585,7 @@ function DynamicTitle() {
     const ogDescEl = document.querySelector('meta[property="og:description"]');
     if (ogDescEl) ogDescEl.setAttribute("content", meta.description);
     const canonicalEl = document.querySelector('link[rel="canonical"]');
-    if (canonicalEl) canonicalEl.setAttribute("href", `https://deerhotpot-vgu6vmsi.manus.space${location}`);
+    if (canonicalEl) canonicalEl.setAttribute("href", `https://deersbistro.tw${location}`);
   }, [location]);
   return null;
 }

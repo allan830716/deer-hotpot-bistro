@@ -1,5 +1,5 @@
 # robots.txt — 初衷小鹿 Deer's Hotpot Bistro
-# https://deerhotpot-vgu6vmsi.manus.space/
+# https://deersbistro.tw/
 
 User-agent: *
 Allow: /
@@ -56,4 +56,4 @@ User-agent: Omgilibot
 Allow: /
 
 # Sitemap location
-Sitemap: https://deerhotpot-vgu6vmsi.manus.space/sitemap.xml
+Sitemap: https://deersbistro.tw/sitemap.xml

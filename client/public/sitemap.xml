@@ -5,13 +5,13 @@
 
   <!-- 首頁 -->
   <url>
-    <loc>https://deerhotpot-vgu6vmsi.manus.space/</loc>
+    <loc>https://deersbistro.tw/</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/" />
     <image:image>
-      <image:loc>https://deerhotpot-vgu6vmsi.manus.space/manus-storage/hero-space_100d3e43.jpg</image:loc>
+      <image:loc>https://deersbistro.tw/manus-storage/hero-space_100d3e43.jpg</image:loc>
       <image:title>初衷小鹿 Deer's Hotpot Bistro 台北信義區高端鍋物餐廳</image:title>
       <image:caption>不是一頓火鍋，是一場有節奏的餐桌體驗。台北信義區高端鍋物餐酒館。</image:caption>
     </image:image>
@@ -19,51 +19,51 @@
 
   <!-- 品牌故事 -->
   <url>
-    <loc>https://deerhotpot-vgu6vmsi.manus.space/brand</loc>
+    <loc>https://deersbistro.tw/brand</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/brand" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/brand" />
   </url>
 
   <!-- 菜單 -->
   <url>
-    <loc>https://deerhotpot-vgu6vmsi.manus.space/menu</loc>
+    <loc>https://deersbistro.tw/menu</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/menu" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/menu" />
   </url>
 
   <!-- 空間體驗 -->
   <url>
-    <loc>https://deerhotpot-vgu6vmsi.manus.space/space</loc>
+    <loc>https://deersbistro.tw/space</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/space" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/space" />
     <image:image>
-      <image:loc>https://deerhotpot-vgu6vmsi.manus.space/manus-storage/59409685_2179218615493222_8552773285119524864_o_572ede20.jpg</image:loc>
+      <image:loc>https://deersbistro.tw/manus-storage/59409685_2179218615493222_8552773285119524864_o_572ede20.jpg</image:loc>
       <image:title>初衷小鹿餐廳空間 台北信義區高端鍋物餐廳用餐環境</image:title>
     </image:image>
   </url>
 
   <!-- 獲獎殊榮與雜誌專訪 -->
   <url>
-    <loc>https://deerhotpot-vgu6vmsi.manus.space/awards</loc>
+    <loc>https://deersbistro.tw/awards</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/awards" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/awards" />
   </url>
 
   <!-- 交通與停車 -->
   <url>
-    <loc>https://deerhotpot-vgu6vmsi.manus.space/transport</loc>
+    <loc>https://deersbistro.tw/transport</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deerhotpot-vgu6vmsi.manus.space/transport" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/transport" />
   </url>
 
 </urlset>

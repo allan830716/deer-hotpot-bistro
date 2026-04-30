@@ -194,3 +194,11 @@
 - [x] 初衷小鹿標記改用品牌 Logo 圖示
 - [x] 地標點擊互動：點擊開啟對應 Google Maps 導航
 - [x] 加入停車／捷運／公車篩選器（可顯示或隱藏對應地標）
+
+## 第二十三批更新（2026-04-30）
+
+- [x] 修復電腦版從外部連結開啟時一片空白的問題（main.tsx 全域 UNAUTHORIZED 重導向改為只在 /admin 路徑生效）
+- [x] 更新 OG image / twitter:image 縮圖為鹿 LOGO 圖片（deer-logo-og_1edf6d51.jpg）
+- [x] 更新 index.html 中所有舊的 deerhotpot-vgu6vmsi.manus.space 網址為 deersbistro.tw
+- [x] 更新 App.tsx DynamicTitle 中的 canonical URL 為 deersbistro.tw
+- [x] 更新 sitemap.xml、robots.txt、llms.txt 中的舊網址為 deersbistro.tw

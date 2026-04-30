@@ -10,13 +10,20 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 
+// Only redirect to login for admin pages — this is a public website
+// and most pages do not require authentication.
+// Redirecting on all UNAUTHORIZED errors would cause blank pages when
+// users open the site from external links (Instagram, LINE, etc.) on desktop.
 const redirectToLoginIfUnauthorized = (error: unknown) => {
   if (!(error instanceof TRPCClientError)) return;
   if (typeof window === "undefined") return;
 
   const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
-
   if (!isUnauthorized) return;
+
+  // Only redirect on admin paths — public pages should never force login
+  const isAdminPath = window.location.pathname.startsWith("/admin");
+  if (!isAdminPath) return;
 
   window.location.href = getLoginUrl();
 };
