@@ -573,6 +573,25 @@ const PAGE_META: Record<string, { title: string; description: string }> = {
   },
 };
 
+// 菜單頁專用 Menu Schema JSON-LD
+const MENU_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "@id": "https://deersbistro.tw/menu#menu",
+  "name": "初衷小鹿菜單",
+  "url": "https://deersbistro.tw/menu",
+  "inLanguage": "zh-TW",
+  "hasMenuSection": [
+    { "@type": "MenuSection", "name": "牛肉套餐", "description": "西餐等級熟成牛肉套餐，含前菜、湯底、副餐與甜點", "offers": { "@type": "Offer", "priceCurrency": "TWD", "lowPrice": "920", "highPrice": "1980" } },
+    { "@type": "MenuSection", "name": "豚肉套餐", "offers": { "@type": "Offer", "priceCurrency": "TWD", "lowPrice": "920", "highPrice": "1380" } },
+    { "@type": "MenuSection", "name": "海鮮套餐", "offers": { "@type": "Offer", "priceCurrency": "TWD", "lowPrice": "1380", "highPrice": "3460" } },
+    { "@type": "MenuSection", "name": "羊肉套餐" },
+    { "@type": "MenuSection", "name": "雞肉 / 蔬食套餐" },
+    { "@type": "MenuSection", "name": "商業午餐", "description": "平日中午限定優惠套餐" },
+    { "@type": "MenuSection", "name": "酒水單", "description": "侍酒師嚴選紅白氣泡酒、啊酒、無酒精飲品" }
+  ]
+};
+
 function DynamicTitle() {
   const [location] = useLocation();
   useEffect(() => {
@@ -586,6 +605,22 @@ function DynamicTitle() {
     if (ogDescEl) ogDescEl.setAttribute("content", meta.description);
     const canonicalEl = document.querySelector('link[rel="canonical"]');
     if (canonicalEl) canonicalEl.setAttribute("href", `https://deersbistro.tw${location}`);
+    // 修正 og:url 動態跟著當前路由
+    const ogUrlEl = document.querySelector('meta[property="og:url"]');
+    if (ogUrlEl) ogUrlEl.setAttribute("content", `https://deersbistro.tw${location}`);
+    // 菜單頁動態注入 Menu Schema
+    const existingMenuSchema = document.getElementById('schema-menu');
+    if (location === '/menu') {
+      if (!existingMenuSchema) {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = 'schema-menu';
+        script.textContent = JSON.stringify(MENU_SCHEMA);
+        document.head.appendChild(script);
+      }
+    } else {
+      if (existingMenuSchema) existingMenuSchema.remove();
+    }
   }, [location]);
   return null;
 }

@@ -3,67 +3,64 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <!-- 首頁 -->
   <url>
     <loc>https://deersbistro.tw/</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/" />
     <image:image>
-      <image:loc>https://deersbistro.tw/manus-storage/hero-space_100d3e43.jpg</image:loc>
-      <image:title>初衷小鹿 Deer's Hotpot Bistro 台北信義區高端鍋物餐廳</image:title>
-      <image:caption>不是一頓火鍋，是一場有節奏的餐桌體驗。台北信義區高端鍋物餐酒館。</image:caption>
+      <image:loc>https://deersbistro.tw/manus-storage/deer-logo-og_1edf6d51.jpg</image:loc>
+      <image:title>初衷小鹿 Deer's Hotpot Bistro 品牌 LOGO</image:title>
     </image:image>
   </url>
 
-  <!-- 品牌故事 -->
   <url>
     <loc>https://deersbistro.tw/brand</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/brand" />
   </url>
 
-  <!-- 菜單 -->
   <url>
     <loc>https://deersbistro.tw/menu</loc>
-    <lastmod>2026-04-24</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/menu" />
   </url>
 
-  <!-- 空間體驗 -->
   <url>
     <loc>https://deersbistro.tw/space</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/space" />
-    <image:image>
-      <image:loc>https://deersbistro.tw/manus-storage/59409685_2179218615493222_8552773285119524864_o_572ede20.jpg</image:loc>
-      <image:title>初衷小鹿餐廳空間 台北信義區高端鍋物餐廳用餐環境</image:title>
-    </image:image>
+    <priority>0.7</priority>
   </url>
 
-  <!-- 獲獎殊榮與雜誌專訪 -->
   <url>
     <loc>https://deersbistro.tw/awards</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/awards" />
+    <priority>0.6</priority>
   </url>
 
-  <!-- 交通與停車 -->
   <url>
     <loc>https://deersbistro.tw/transport</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://deersbistro.tw/transport" />
+  </url>
+
+  <url>
+    <loc>https://deersbistro.tw/shop</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://deersbistro.tw/crem</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
 </urlset>
