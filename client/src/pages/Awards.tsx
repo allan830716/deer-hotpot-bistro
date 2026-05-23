@@ -343,7 +343,6 @@ export default function Awards() {
               gap: "clamp(2rem, 5vw, 4rem)",
               alignItems: "start",
               maxWidth: "860px",
-              marginLeft: "auto",
             }}
           >
             {/* 獎狀圖 */}
@@ -791,7 +790,7 @@ export default function Awards() {
           <div
             ref={ref5}
             className="fade-up"
-            style={{ maxWidth: "640px", marginLeft: "auto" }}
+            style={{ maxWidth: "640px" }}
           >
             <p
               style={{

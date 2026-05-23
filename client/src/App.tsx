@@ -100,28 +100,38 @@ function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const currentLabel = LANG_OPTIONS.find((o) => o.code === lang)?.label ?? "繁中";
 
   if (compact) {
-    // 手機版：4 個按鈕橫排
+    // 手機版：下拉式 select
     return (
-      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" as const }}>
-        {LANG_OPTIONS.map((opt) => (
-          <button
-            key={opt.code}
-            onClick={() => setLang(opt.code)}
-            style={{
-              background: lang === opt.code ? "rgba(197,151,109,0.18)" : "transparent",
-              border: lang === opt.code ? "1px solid rgba(197,151,109,0.7)" : "1px solid rgba(255,255,255,0.15)",
-              color: lang === opt.code ? "var(--deer-gold)" : "rgba(240,233,223,0.5)",
-              fontSize: "0.75rem",
-              letterSpacing: "0.06em",
-              padding: "0.35rem 0.75rem",
-              cursor: "pointer",
-              fontFamily: "'Noto Serif TC', serif",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {opt.label}
-          </button>
-        ))}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <Globe size={13} strokeWidth={1.5} style={{ color: "rgba(197,151,109,0.7)" }} />
+        <select
+          value={lang}
+          onChange={(e) => setLang(e.target.value as "zh-TW" | "en" | "ja" | "ko")}
+          style={{
+            background: "rgba(18,12,10,0.9)",
+            border: "1px solid rgba(197,151,109,0.35)",
+            color: "rgba(197,151,109,0.9)",
+            fontSize: "0.8rem",
+            letterSpacing: "0.06em",
+            padding: "0.4rem 0.6rem",
+            cursor: "pointer",
+            fontFamily: "'Noto Serif TC', serif",
+            outline: "none",
+            borderRadius: "0",
+            appearance: "none" as const,
+            WebkitAppearance: "none" as const,
+            paddingRight: "1.5rem",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C5976D' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right 0.4rem center",
+          }}
+        >
+          {LANG_OPTIONS.map((opt) => (
+            <option key={opt.code} value={opt.code} style={{ background: "#1a1210", color: "#F0E9DF" }}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
     );
   }
@@ -228,7 +238,7 @@ function Navbar() {
           padding: "0 1.25rem",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "1280px", margin: "0 auto" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", paddingLeft: "0" }}>
           {/* Logo */}
           <Link href="/">
             <img

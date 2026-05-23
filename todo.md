@@ -202,3 +202,16 @@
 - [x] 更新 index.html 中所有舊的 deerhotpot-vgu6vmsi.manus.space 網址為 deersbistro.tw
 - [x] 更新 App.tsx DynamicTitle 中的 canonical URL 為 deersbistro.tw
 - [x] 更新 sitemap.xml、robots.txt、llms.txt 中的舊網址為 deersbistro.tw
+
+## 四語言切換功能（2026-05-23）
+
+- [x] App.tsx Navbar 加入 LanguageSwitcher 元件（地球圖示 + 語言選單）
+- [x] App.tsx Footer 翻譯所有文字
+- [x] LanguageContext.tsx 補充所有頁面的完整翻譯 key（home、brand、reservation、transport、space、awards、crem）
+- [x] Home.tsx 替換所有硬編碼文字為 t() 動態翻譯
+- [x] Brand.tsx 替換所有硬編碼文字為 t() 動態翻譯
+- [x] Reservation.tsx 替換所有硬編碼文字為 t() 動態翻譯
+- [x] Transport.tsx 替換所有硬編碼文字為 t() 動態翻譯
+- [x] Space.tsx 替換所有硬編碼文字為 t() 動態翻譯
+- [x] Awards.tsx 替換所有硬編碼文字為 t() 動態翻譯
+- [x] Crem.tsx 替換所有硬編碼文字為 t() 動態翻譯

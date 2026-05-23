@@ -860,7 +860,7 @@ function CremSection() {
           padding: "0 2rem",
         }}>
           <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
-            {t("home.crem.title")}
+            {t("home.crem.imgTitle")}
           </h2>
         </div>
       </div>
@@ -872,9 +872,9 @@ function CremSection() {
         backgroundColor: "var(--deer-dark)",
       }}>
         <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
-          {t("home.crem.titleMobile1")}
+          {t("home.crem.imgTitleMobile1")}
           <br />
-          {t("home.crem.titleMobile2")}
+          {t("home.crem.imgTitleMobile2")}
         </h2>
       </div>
       {/* 文字說明 + 步驟 + CTA */}
@@ -887,7 +887,7 @@ function CremSection() {
               <br />
               {t("home.crem.desc2")}
               <br />
-              <span className="crem-collab-sub">{t("home.crem.desc3")}</span>
+              <span className="crem-collab-sub">{t("home.crem.descSub")}</span>
             </p>
           </div>
 
