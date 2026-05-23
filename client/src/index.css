@@ -2652,17 +2652,14 @@
 }
 
 /* ── LINE 客服懸浮按鈕脈衝動畫 ─────────────────────────────────────────── */
-@keyframes line-pulse {
+/* 雷達波：從按鈕本體大小向外擴散到 2 倍，同時透明度從 1 降到 0 */
+@keyframes line-radar {
   0% {
     transform: scale(1);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(1.5);
-    opacity: 0;
+    opacity: 1;
   }
   100% {
-    transform: scale(1.5);
+    transform: scale(2);
     opacity: 0;
   }
 }

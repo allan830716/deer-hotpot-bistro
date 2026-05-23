@@ -544,7 +544,6 @@ function LineFloatButton() {
   const [hovered, setHovered] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
 
-  // 頁面載入後 1.5 秒才出現，避免干擾首屏
   React.useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 1500);
     return () => clearTimeout(timer);
@@ -563,90 +562,96 @@ function LineFloatButton() {
         bottom: "2rem",
         right: "2rem",
         zIndex: 290,
-        display: "flex",
-        alignItems: "center",
-        gap: "0",
         textDecoration: "none",
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transform: visible ? "translateY(0) scale(1)" : "translateY(24px) scale(0.85)",
         transition: "opacity 0.6s cubic-bezier(0.34,1.56,0.64,1), transform 0.6s cubic-bezier(0.34,1.56,0.64,1)",
+        display: "block",
       }}
     >
-      {/* 展開文字標籤 */}
-      <div
-        style={{
-          overflow: "hidden",
-          maxWidth: hovered ? "120px" : "0px",
-          opacity: hovered ? 1 : 0,
-          transition: "max-width 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
-          backgroundColor: "#06C755",
-          color: "#fff",
-          fontSize: "0.75rem",
-          fontFamily: "'Noto Serif TC', serif",
-          fontWeight: 400,
-          letterSpacing: "0.08em",
-          whiteSpace: "nowrap",
-          padding: hovered ? "0 1rem 0 1.25rem" : "0",
-          height: "52px",
-          display: "flex",
-          alignItems: "center",
-          borderRadius: "26px 0 0 26px",
-        }}
-      >
-        LINE 客服
-      </div>
+      {/* 外層容器：相對定位，用於放置紅點 */}
+      <div style={{ position: "relative", width: "56px", height: "56px" }}>
 
-      {/* 圓形主按鈕 */}
-      <div
-        style={{
-          position: "relative",
-          width: "52px",
-          height: "52px",
+        {/* 脈衝光環 — 3 層，從按鈕邊緣向外擴散 */}
+        <div style={{
+          position: "absolute",
+          inset: "0",
           borderRadius: "50%",
-          backgroundColor: "#06C755",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: hovered
-            ? "0 8px 32px rgba(6,199,85,0.55), 0 4px 12px rgba(0,0,0,0.35)"
-            : "0 4px 20px rgba(6,199,85,0.4), 0 2px 8px rgba(0,0,0,0.3)",
-          transform: hovered ? "scale(1.1)" : "scale(1)",
-          transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease",
-          flexShrink: 0,
-        }}
-      >
-        {/* 脈衝光環 */}
+          backgroundColor: "rgba(6,199,85,0.35)",
+          animation: "line-radar 2.4s ease-out infinite",
+          pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute",
+          inset: "0",
+          borderRadius: "50%",
+          backgroundColor: "rgba(6,199,85,0.25)",
+          animation: "line-radar 2.4s ease-out 0.8s infinite",
+          pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute",
+          inset: "0",
+          borderRadius: "50%",
+          backgroundColor: "rgba(6,199,85,0.15)",
+          animation: "line-radar 2.4s ease-out 1.6s infinite",
+          pointerEvents: "none",
+        }} />
+
+        {/* 主圓形按鈕 */}
         <div
           style={{
             position: "absolute",
-            inset: "-6px",
+            inset: "0",
             borderRadius: "50%",
-            border: "2px solid rgba(6,199,85,0.5)",
-            animation: "line-pulse 2s ease-out infinite",
-            pointerEvents: "none",
+            backgroundColor: "#06C755",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: hovered
+              ? "0 8px 28px rgba(6,199,85,0.6), 0 4px 12px rgba(0,0,0,0.4)"
+              : "0 4px 16px rgba(6,199,85,0.45), 0 2px 8px rgba(0,0,0,0.3)",
+            transform: hovered ? "scale(1.1)" : "scale(1)",
+            transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease",
           }}
-        />
+        >
+          {/* 官方 LINE 圖示：白色對話氣泡 + LINE 文字 */}
+          <svg width="34" height="34" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* 對話氣泡主體 */}
+            <path
+              d="M32 8C18.745 8 8 17.373 8 29c0 6.627 3.552 12.546 9.136 16.556-.402 1.503-2.595 9.69-2.595 9.69s-.105.844.45 1.164c.555.32 1.17.06 1.575-.18 0 0 10.8-7.14 12.435-8.22.975.135 1.98.21 3 .21 13.255 0 24-9.373 24-21S45.255 8 32 8z"
+              fill="white"
+            />
+            {/* LINE 文字 */}
+            <text
+              x="32"
+              y="33"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#06C755"
+              fontSize="13"
+              fontFamily="Arial, sans-serif"
+              fontWeight="800"
+              letterSpacing="0.5"
+            >LINE</text>
+          </svg>
+        </div>
+
+        {/* 右上角紅點通知 */}
         <div
           style={{
             position: "absolute",
-            inset: "-12px",
+            top: "2px",
+            right: "2px",
+            width: "12px",
+            height: "12px",
             borderRadius: "50%",
-            border: "1.5px solid rgba(6,199,85,0.25)",
-            animation: "line-pulse 2s ease-out 0.5s infinite",
-            pointerEvents: "none",
+            backgroundColor: "#FF3B30",
+            border: "2px solid #fff",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
+            zIndex: 1,
           }}
         />
-        {/* LINE 圖示 SVG */}
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M20 4C11.163 4 4 10.268 4 18c0 4.418 2.37 8.364 6.09 11.04-.268 1.002-1.73 6.46-1.73 6.46s-.07.563.3.776c.37.213.78.04 1.05-.12 0 0 7.2-4.76 8.29-5.48.65.09 1.32.14 2 .14 8.837 0 16-6.268 16-14S28.837 4 20 4z"
-            fill="white"
-          />
-          <path
-            d="M32.5 18.5c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zM22 18.5c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zM11.5 18.5c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"
-            fill="#06C755"
-          />
-        </svg>
       </div>
     </a>
   );
