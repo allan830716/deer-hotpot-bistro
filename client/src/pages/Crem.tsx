@@ -1,6 +1,6 @@
 /**
- * Crem.tsx — CRÈM蛋糕上桌預訂頁面（全面重製版）
- * 設計：暗色系 · 痛點區塊 · 流程設計 · 蛋糕商品展示
+ * Crem.tsx — CRÈM蛋糕上桌預訂頁面（重整版）
+ * 結構：Hero → 痛點 → 流程（橫向一目瞭然）→ 關於 CRÈM → CTA
  */
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -26,158 +26,80 @@ function useFadeIn(threshold = 0.15) {
 }
 
 const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
-const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
-const CREM_HERO = "/manus-storage/crem-hero-new_b33a4ac5.jpg";
-const CREM_INTERIOR = "/manus-storage/crem-interior_2c8fe91b.webp";
-
-// 目前供應的 CRÈM 蛋糕商品（2026年5-6月）
-const CREM_CAKES = [
-  {
-    name: "Éternel 精品收藏級花禮",
-    badge: "浪漫限定",
-    price: "NT$ 3,380",
-    period: "",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#C5976D",
-  },
-  {
-    name: "茉莉烏龍・紅心芭樂",
-    badge: "5/16–5/31",
-    price: "NT$ 1,380–3,580",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#8BAF7A",
-  },
-  {
-    name: "伯爵・秋翠",
-    badge: "5/16–5/31",
-    price: "NT$ 880–2,580",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#7A9E8B",
-  },
-  {
-    name: "純粹・白",
-    badge: "5/16–6/15",
-    price: "NT$ 960–1,680",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#D4C5B0",
-  },
-  {
-    name: "純粹・香密",
-    badge: "5/16–5/31",
-    price: "NT$ 1,280–3,380",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#C9A96E",
-  },
-  {
-    name: "紅烏龍無花果",
-    badge: "5/16–6/15",
-    price: "NT$ 1,180–2,880",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#A0785A",
-  },
-  {
-    name: "藍莓・薰衣草",
-    badge: "6/1–6/15",
-    price: "NT$ 1,280–3,280",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#8B7FA8",
-  },
-  {
-    name: "純粹・芒果",
-    badge: "6/1–6/15",
-    price: "NT$ 1,380–3,480",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#D4A04A",
-  },
-  {
-    name: "伯爵・愛文",
-    badge: "6/1–6/15",
-    price: "NT$ 960–2,780",
-    period: "限量供應",
-    url: "https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97",
-    color: "#B8956A",
-  },
-];
+const CREM_LOGO_WHITE = "/manus-storage/crem-hero-user_bced4f58.webp";
+const CREM_HERO_BG = "/manus-storage/crem-hero-new_b33a4ac5.jpg";
 
 // 痛點清單
 const PAIN_POINTS = [
-  "壽星在旁，還要偷偷準備",
-  "花費交通、時間取蛋糕",
-  "怕蛋糕撞壞或融化變形",
-  "取貨時間對不上，行程亂掉",
-  "一邊吃飯還要偷偷協調",
-  "製造驚喜卻變成最忙的人",
+  { icon: "×", text: "壽星在旁，還要偷偷準備" },
+  { icon: "×", text: "花費交通、時間取蛋糕" },
+  { icon: "×", text: "怕蛋糕撞壞或融化變形" },
+  { icon: "×", text: "取貨時間對不上，行程亂掉" },
+  { icon: "×", text: "一邊吃飯還要偷偷協調" },
+  { icon: "×", text: "製造驚喜卻變成最忙的人" },
+];
+
+const STEPS_DATA = [
+  {
+    num: "01",
+    title: "線上預訂座位",
+    sub: "透過 Inline 線上預訂",
+    desc: "訂位時備註需要蛋糕服務，我們會與您確認細節。",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.85)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+    ),
+  },
+  {
+    num: "02",
+    title: "選擇蛋糕口味",
+    sub: "4 / 6 / 8 吋任選",
+    desc: "從 CRÈM 當季鮮奶油蛋糕系列中，挑選您心儀的口味與尺寸。",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.85)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+    ),
+  },
+  {
+    num: "03",
+    title: "專車冷藏配送",
+    sub: "準時送達餐廳",
+    desc: "CRÈM 以專車冷藏配送，確保蛋糕完美抵達，無需您親自取件。",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.85)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="1" y="3" width="15" height="13" rx="1"/>
+        <path d="M16 8h4l3 3v5h-7V8z"/>
+        <circle cx="5.5" cy="18.5" r="2.5"/>
+        <circle cx="18.5" cy="18.5" r="2.5"/>
+      </svg>
+    ),
+  },
+  {
+    num: "04",
+    title: "專人安排上桌",
+    sub: "驚喜完美呈現",
+    desc: "由初衷小鹿服務人員在適當時機，為您安排蛋糕上桌儀式。",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.85)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    ),
+  },
 ];
 
 export default function Crem() {
   const { t } = useLanguage();
   const refHero = useFadeIn(0.05);
   const refPain = useFadeIn(0.1);
-  const refSteps = useFadeIn(0.1);
-  const refCakes = useFadeIn(0.1);
+  const refSteps = useFadeIn(0.08);
   const refAbout = useFadeIn(0.1);
   const refCTA = useFadeIn(0.1);
-
-  const STEPS = [
-    {
-      num: "01",
-      icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.8)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-        </svg>
-      ),
-      title: t("crem.step1.title"),
-      desc: t("crem.step1.desc"),
-      sub: "透過 Inline 線上預訂",
-    },
-    {
-      num: "02",
-      icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.8)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 8v4l3 3"/>
-        </svg>
-      ),
-      title: t("crem.step2.title"),
-      desc: t("crem.step2.desc"),
-      sub: "線上選口味 4/6/8 吋",
-    },
-    {
-      num: "03",
-      icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.8)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="1" y="3" width="15" height="13" rx="1"/>
-          <path d="M16 8h4l3 3v5h-7V8z"/>
-          <circle cx="5.5" cy="18.5" r="2.5"/>
-          <circle cx="18.5" cy="18.5" r="2.5"/>
-        </svg>
-      ),
-      title: t("crem.step3.title"),
-      desc: t("crem.step3.desc"),
-      sub: "專車冷藏配送",
-    },
-    {
-      num: "04",
-      icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(197,151,109,0.8)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-      ),
-      title: t("crem.step4.title"),
-      desc: t("crem.step4.desc"),
-      sub: "專人安排上桌",
-    },
-  ];
 
   return (
     <main
@@ -187,80 +109,73 @@ export default function Crem() {
         minHeight: "100vh",
       }}
     >
-      {/* ── 頂部橫幅：雙圖並排 + 標題 ── */}
+      {/* ── Section 1: Hero 橫幅（單張圖 + 品牌 Logo + 主標題）── */}
       <section style={{ position: "relative", overflow: "hidden" }}>
-        {/* 雙圖並排橫幅 */}
+        {/* 背景圖 */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            height: "clamp(300px, 50vw, 560px)",
+            position: "relative",
+            height: "clamp(320px, 55vw, 600px)",
             overflow: "hidden",
           }}
         >
-          <div style={{ overflow: "hidden" }}>
-            <img
-              src={CREM_HERO}
-              alt="CRÈM 蛋糕"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
-                display: "block",
-              }}
-            />
-          </div>
-          <div style={{ overflow: "hidden" }}>
-            <img
-              src={CREM_INTERIOR}
-              alt="CRÈM 包裝開箱"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
-                display: "block",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* 品牌 Logo 列 */}
-        <div
-          style={{
-            padding: "2rem 0 1.5rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "clamp(1rem, 4vw, 3rem)",
-          }}
-        >
           <img
-            src={DEER_LOGO}
-            alt="初衷小鹿"
-            style={{ height: "clamp(40px, 7vw, 64px)", width: "auto", objectFit: "contain" }}
-          />
-          <span
+            src={CREM_HERO_BG}
+            alt="CRÈM 蛋糕"
             style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontSize: "clamp(1.5rem, 4vw, 3rem)",
-              color: "rgba(197,151,109,0.7)",
-              lineHeight: 1,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center 30%",
+              display: "block",
+            }}
+          />
+          {/* 漸層遮罩 */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(to bottom, rgba(10,8,7,0.2) 0%, rgba(10,8,7,0.5) 60%, rgba(10,8,7,0.85) 100%)",
+            }}
+          />
+          {/* 疊加在圖片上的 CRÈM Logo */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "2.5rem",
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              alignItems: "center",
+              gap: "clamp(0.75rem, 3vw, 2rem)",
             }}
           >
-            ×
-          </span>
-          <img
-            src={CREM_LOGO}
-            alt="CRÈM"
-            style={{ height: "clamp(40px, 7vw, 64px)", width: "auto", objectFit: "contain" }}
-          />
+            <img
+              src={DEER_LOGO}
+              alt="初衷小鹿"
+              style={{ height: "clamp(36px, 6vw, 52px)", width: "auto", objectFit: "contain", opacity: 0.9 }}
+            />
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 300,
+                fontSize: "clamp(1.25rem, 3.5vw, 2.5rem)",
+                color: "rgba(197,151,109,0.6)",
+                lineHeight: 1,
+              }}
+            >
+              ×
+            </span>
+            <img
+              src={CREM_LOGO_WHITE}
+              alt="CRÈM"
+              style={{ height: "clamp(36px, 6vw, 52px)", width: "auto", objectFit: "contain", opacity: 0.9 }}
+            />
+          </div>
         </div>
 
-        {/* 主標題 */}
-        <div ref={refHero} className="fade-up" style={{ textAlign: "center", padding: "0 1.5rem 4rem" }}>
+        {/* 主標題文字區 */}
+        <div ref={refHero} className="fade-up" style={{ textAlign: "center", padding: "3rem 1.5rem 4rem" }}>
           <p
             style={{
               fontFamily: "'Cormorant Garamond', serif",
@@ -281,7 +196,7 @@ export default function Crem() {
               color: "var(--deer-dark-text)",
               letterSpacing: "0.08em",
               lineHeight: 1.6,
-              marginBottom: "1rem",
+              marginBottom: "1.25rem",
             }}
           >
             {t("crem.banner.title")}
@@ -303,7 +218,7 @@ export default function Crem() {
         </div>
       </section>
 
-      {/* ── 痛點區塊 ── */}
+      {/* ── Section 2: 痛點區塊 ── */}
       <section
         style={{
           padding: "5rem 0",
@@ -314,7 +229,7 @@ export default function Crem() {
         <div className="container">
           <div ref={refPain} className="fade-up">
             {/* 標題 */}
-            <div style={{ marginBottom: "3rem" }}>
+            <div style={{ marginBottom: "2.5rem" }}>
               <p
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
@@ -331,11 +246,11 @@ export default function Crem() {
                 style={{
                   fontFamily: "'Noto Serif TC', serif",
                   fontWeight: 200,
-                  fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
                   color: "var(--deer-dark-text)",
                   letterSpacing: "0.08em",
                   lineHeight: 1.5,
-                  marginBottom: "1rem",
+                  marginBottom: "0.75rem",
                 }}
               >
                 一條龍預定服務
@@ -355,51 +270,12 @@ export default function Crem() {
               </p>
             </div>
 
-            {/* 痛點格子 */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "0.75rem",
-                marginBottom: "0",
-              }}
-            >
+            {/* 痛點格子 2 欄 */}
+            <div className="crem-pain-grid">
               {PAIN_POINTS.map((point, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: "1rem 1.25rem",
-                    border: "1px solid rgba(197,151,109,0.15)",
-                    borderRadius: "4px",
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.625rem",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "rgba(197,151,109,0.5)",
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "1rem",
-                      flexShrink: 0,
-                      lineHeight: 1,
-                    }}
-                  >
-                    ×
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "'Noto Serif TC', serif",
-                      fontWeight: 300,
-                      fontSize: "clamp(0.75rem, 2.2vw, 0.875rem)",
-                      color: "rgba(240,233,223,0.55)",
-                      letterSpacing: "0.03em",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {point}
-                  </span>
+                <div key={i} className="crem-pain-item">
+                  <span className="crem-pain-x">×</span>
+                  <span className="crem-pain-text">{point.text}</span>
                 </div>
               ))}
             </div>
@@ -407,7 +283,7 @@ export default function Crem() {
         </div>
       </section>
 
-      {/* ── 預訂流程 ── */}
+      {/* ── Section 3: 預訂流程（橫向一目瞭然）── */}
       <section
         style={{
           padding: "5rem 0",
@@ -417,7 +293,7 @@ export default function Crem() {
         <div className="container">
           <div ref={refSteps} className="fade-up">
             {/* 標題 */}
-            <div style={{ marginBottom: "3rem" }}>
+            <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
               <p
                 className="font-label mb-4"
                 style={{ color: "rgba(197,151,109,0.6)" }}
@@ -440,81 +316,69 @@ export default function Crem() {
               </h2>
             </div>
 
-            {/* 流程卡片：桌機橫向 / 手機縱向 */}
-            <div className="crem-flow-wrapper">
-              {STEPS.map((step, i) => (
-                <div key={step.num} className="crem-flow-item-group">
-                  {/* 步驟卡片 */}
-                  <div className="crem-flow-card">
-                    {/* 圓形編號 */}
-                    <div className="crem-flow-circle">
-                      <span
-                        style={{
-                          fontFamily: "'Cormorant Garamond', serif",
-                          fontWeight: 400,
-                          fontSize: "1rem",
-                          color: "var(--deer-gold)",
-                          letterSpacing: "0.05em",
-                        }}
-                      >
-                        {step.num}
-                      </span>
-                    </div>
-                    {/* 圖示 */}
-                    <div className="crem-flow-icon">{step.icon}</div>
-                    {/* 標題 */}
-                    <h3
-                      style={{
-                        fontFamily: "'Noto Serif TC', serif",
-                        fontWeight: 300,
-                        fontSize: "1.0625rem",
-                        color: "var(--deer-dark-text)",
-                        letterSpacing: "0.1em",
-                        marginBottom: "0.5rem",
-                        textAlign: "center",
-                      }}
-                    >
-                      {step.title}
-                    </h3>
-                    {/* 副標 */}
-                    <p
+            {/* 流程橫向排列（桌機 4 欄 / 手機 2 欄）*/}
+            <div className="crem-steps-grid">
+              {STEPS_DATA.map((step, i) => (
+                <div key={step.num} className="crem-step-card">
+                  {/* 圓形編號 */}
+                  <div className="crem-step-circle">
+                    <span
                       style={{
                         fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: "0.75rem",
-                        color: "rgba(197,151,109,0.6)",
-                        letterSpacing: "0.08em",
-                        textAlign: "center",
-                        marginBottom: "0.75rem",
+                        fontWeight: 400,
+                        fontSize: "1rem",
+                        color: "var(--deer-gold)",
+                        letterSpacing: "0.05em",
                       }}
                     >
-                      {step.sub}
-                    </p>
-                    {/* 說明 */}
-                    <p
-                      style={{
-                        fontSize: "0.8125rem",
-                        color: "rgba(240,233,223,0.45)",
-                        lineHeight: 1.9,
-                        letterSpacing: "0.04em",
-                        textAlign: "center",
-                      }}
-                    >
-                      {step.desc}
-                    </p>
+                      {step.num}
+                    </span>
                   </div>
-                  {/* 箭頭連線 */}
-                  {i < STEPS.length - 1 && (
-                    <div className="crem-flow-arrow" aria-hidden="true">
-                      <svg className="crem-flow-arrow-h" width="48" height="16" viewBox="0 0 48 16" fill="none">
-                        <line x1="0" y1="8" x2="38" y2="8" stroke="rgba(197,151,109,0.35)" strokeWidth="1"/>
-                        <polyline points="34,4 42,8 34,12" fill="none" stroke="rgba(197,151,109,0.55)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      <svg className="crem-flow-arrow-v" width="16" height="48" viewBox="0 0 16 48" fill="none">
-                        <line x1="8" y1="0" x2="8" y2="38" stroke="rgba(197,151,109,0.35)" strokeWidth="1"/>
-                        <polyline points="4,34 8,42 12,34" fill="none" stroke="rgba(197,151,109,0.55)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
+                  {/* 連接線（桌機版，最後一個不顯示）*/}
+                  {i < STEPS_DATA.length - 1 && (
+                    <div className="crem-step-connector" aria-hidden="true" />
                   )}
+                  {/* 圖示 */}
+                  <div style={{ marginBottom: "1rem", opacity: 0.9 }}>{step.icon}</div>
+                  {/* 標題 */}
+                  <h3
+                    style={{
+                      fontFamily: "'Noto Serif TC', serif",
+                      fontWeight: 300,
+                      fontSize: "1rem",
+                      color: "var(--deer-dark-text)",
+                      letterSpacing: "0.08em",
+                      marginBottom: "0.4rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    {step.title}
+                  </h3>
+                  {/* 副標 */}
+                  <p
+                    style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontSize: "0.72rem",
+                      color: "rgba(197,151,109,0.65)",
+                      letterSpacing: "0.08em",
+                      textAlign: "center",
+                      marginBottom: "0.75rem",
+                    }}
+                  >
+                    {step.sub}
+                  </p>
+                  {/* 說明 */}
+                  <p
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "rgba(240,233,223,0.4)",
+                      lineHeight: 1.9,
+                      letterSpacing: "0.04em",
+                      textAlign: "center",
+                    }}
+                  >
+                    {step.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -523,8 +387,8 @@ export default function Crem() {
             <p
               style={{
                 textAlign: "center",
-                marginTop: "3rem",
-                fontSize: "0.8rem",
+                marginTop: "2.5rem",
+                fontSize: "0.78rem",
                 color: "rgba(197,151,109,0.4)",
                 letterSpacing: "0.1em",
                 fontFamily: "'Cormorant Garamond', serif",
@@ -536,7 +400,7 @@ export default function Crem() {
         </div>
       </section>
 
-      {/* ── 蛋糕商品展示 ── */}
+      {/* ── Section 4: 關於 CRÈM ── */}
       <section
         style={{
           padding: "5rem 0",
@@ -545,298 +409,105 @@ export default function Crem() {
         }}
       >
         <div className="container">
-          <div ref={refCakes} className="fade-up">
-            {/* 標題 */}
-            <div style={{ marginBottom: "2.5rem" }}>
+          <div
+            ref={refAbout}
+            className="fade-up crem-about-layout"
+          >
+            {/* 左側文字 */}
+            <div className="crem-about-text">
               <p
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 400,
                   fontSize: "0.65rem",
-                  letterSpacing: "0.22em",
+                  letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  color: "rgba(197,151,109,0.5)",
-                  marginBottom: "0.75rem",
+                  color: "rgba(197,151,109,0.55)",
+                  marginBottom: "1.25rem",
                 }}
               >
-                Current Menu
+                {t("crem.about.label")}
               </p>
               <h2
                 style={{
                   fontFamily: "'Noto Serif TC', serif",
                   fontWeight: 200,
-                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
                   color: "var(--deer-dark-text)",
                   letterSpacing: "0.1em",
-                  lineHeight: 1.6,
-                  marginBottom: "0.75rem",
+                  lineHeight: 1.5,
+                  marginBottom: "1.5rem",
                 }}
               >
-                本季供應蛋糕
+                {t("crem.about.title")}
               </h2>
+              <div
+                style={{
+                  width: "32px",
+                  height: "1px",
+                  backgroundColor: "rgba(197,151,109,0.5)",
+                  marginBottom: "1.75rem",
+                }}
+              />
               <p
                 style={{
-                  fontSize: "0.8125rem",
-                  color: "rgba(240,233,223,0.35)",
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.8,
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(240,233,223,0.5)",
+                  lineHeight: 2.1,
+                  letterSpacing: "0.05em",
+                  marginBottom: "1.5rem",
                 }}
               >
-                以下為 CRÈM 目前開放預訂的鮮奶油蛋糕系列，點擊可前往 CRÈM 官網選購。
+                {t("crem.about.desc1").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
-            </div>
-
-            {/* 商品格子 */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "1px",
-                backgroundColor: "rgba(197,151,109,0.1)",
-                border: "1px solid rgba(197,151,109,0.1)",
-              }}
-              className="crem-cakes-grid"
-            >
-              {CREM_CAKES.map((cake, i) => (
-                <a
-                  key={i}
-                  href={cake.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    padding: "1.5rem 1.25rem",
-                    backgroundColor: "rgba(10,8,7,0.8)",
-                    textDecoration: "none",
-                    transition: "background-color 0.3s ease",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.06)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(10,8,7,0.8)";
-                  }}
-                >
-                  {/* 色彩指示條 */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "3px",
-                      height: "100%",
-                      backgroundColor: cake.color,
-                      opacity: 0.6,
-                    }}
-                  />
-                  {/* 供應期徽章 */}
-                  <div style={{ marginBottom: "0.75rem" }}>
-                    <span
-                      style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: "0.65rem",
-                        letterSpacing: "0.12em",
-                        color: "rgba(197,151,109,0.65)",
-                        backgroundColor: "rgba(197,151,109,0.08)",
-                        padding: "0.2rem 0.5rem",
-                        border: "1px solid rgba(197,151,109,0.2)",
-                        display: "inline-block",
-                      }}
-                    >
-                      {cake.badge}
-                    </span>
-                  </div>
-                  {/* 蛋糕名稱 */}
-                  <h3
-                    style={{
-                      fontFamily: "'Noto Serif TC', serif",
-                      fontWeight: 300,
-                      fontSize: "clamp(0.875rem, 2vw, 1rem)",
-                      color: "var(--deer-dark-text)",
-                      letterSpacing: "0.06em",
-                      lineHeight: 1.5,
-                      marginBottom: "0.5rem",
-                      flex: 1,
-                    }}
-                  >
-                    {cake.name}
-                  </h3>
-                  {/* 價格 */}
-                  <div style={{ marginTop: "auto" }}>
-                    <p
-                      style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontWeight: 400,
-                        fontSize: "0.875rem",
-                        color: "rgba(197,151,109,0.8)",
-                        letterSpacing: "0.05em",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      {cake.price}
-                    </p>
-                    {cake.period && (
-                      <p
-                        style={{
-                          fontFamily: "'Noto Serif TC', serif",
-                          fontSize: "0.7rem",
-                          color: "rgba(240,233,223,0.3)",
-                          letterSpacing: "0.04em",
-                        }}
-                      >
-                        {cake.period}
-                      </p>
-                    )}
-                    {/* 箭頭 */}
-                    <p
-                      style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: "0.7rem",
-                        color: "rgba(197,151,109,0.4)",
-                        letterSpacing: "0.1em",
-                        marginTop: "0.5rem",
-                      }}
-                    >
-                      前往選購 →
-                    </p>
-                  </div>
-                </a>
-              ))}
-            </div>
-
-            {/* 查看全部按鈕 */}
-            <div style={{ textAlign: "center", marginTop: "2rem" }}>
+              <p
+                style={{
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  fontSize: "0.875rem",
+                  color: "rgba(240,233,223,0.35)",
+                  lineHeight: 2.1,
+                  letterSpacing: "0.05em",
+                  marginBottom: "2rem",
+                }}
+              >
+                {t("crem.about.desc2").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
+              </p>
               <a
-                href="https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97"
+                href="https://crem.tw"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: "inline-block",
-                  padding: "0.85rem 2.5rem",
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 400,
-                  fontSize: "0.8rem",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "rgba(197,151,109,0.7)",
-                  border: "1px solid rgba(197,151,109,0.3)",
-                  textDecoration: "none",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,1)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)";
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.06)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.7)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.3)";
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-                }}
+                className="btn-deer-light"
+                style={{ display: "inline-block", fontSize: "0.8rem" }}
               >
-                View All Cakes at CRÈM →
+                {t("crem.about.btn")}
               </a>
+            </div>
+
+            {/* 右側 Logo 裝飾 */}
+            <div className="crem-about-logo-wrap">
+              <img
+                src={CREM_LOGO_WHITE}
+                alt="CRÈM"
+                style={{
+                  width: "clamp(120px, 20vw, 200px)",
+                  height: "auto",
+                  objectFit: "contain",
+                  opacity: 0.12,
+                }}
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 關於 CRÈM ── */}
-      <section
-        style={{
-          padding: "5rem 0",
-          borderTop: "1px solid rgba(197,151,109,0.1)",
-        }}
-      >
-        <div className="container">
-          <div
-            ref={refAbout}
-            className="fade-up"
-            style={{ maxWidth: "680px" }}
-          >
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 400,
-                fontSize: "0.65rem",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "rgba(197,151,109,0.55)",
-                marginBottom: "1.25rem",
-              }}
-            >
-              {t("crem.about.label")}
-            </p>
-            <h2
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 200,
-                fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                color: "var(--deer-dark-text)",
-                letterSpacing: "0.1em",
-                lineHeight: 1.5,
-                marginBottom: "1.5rem",
-              }}
-            >
-              {t("crem.about.title")}
-            </h2>
-            <div
-              style={{
-                width: "32px",
-                height: "1px",
-                backgroundColor: "rgba(197,151,109,0.5)",
-                marginBottom: "1.75rem",
-              }}
-            />
-            <p
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(240,233,223,0.5)",
-                lineHeight: 2.1,
-                letterSpacing: "0.05em",
-                marginBottom: "1.5rem",
-              }}
-            >
-              {t("crem.about.desc1").split("\n").map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-            <p
-              style={{
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-                fontSize: "0.875rem",
-                color: "rgba(240,233,223,0.35)",
-                lineHeight: 2.1,
-                letterSpacing: "0.05em",
-              }}
-            >
-              {t("crem.about.desc2").split("\n").map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </p>
-            <a
-              href="https://crem.tw"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-deer-light"
-              style={{
-                display: "inline-block",
-                marginTop: "2.5rem",
-                fontSize: "0.8rem",
-              }}
-            >
-              {t("crem.about.btn")}
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
+      {/* ── Section 5: CTA ── */}
       <section
         ref={refCTA}
         style={{
@@ -913,21 +584,6 @@ export default function Crem() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        /* ── 蛋糕商品格子：手機版改為 2 欄 ── */
-        @media (max-width: 640px) {
-          .crem-cakes-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-        /* ── 手機版痛點格子：保持 2 欄但縮小 padding ── */
-        @media (max-width: 480px) {
-          .crem-cakes-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </main>
   );
 }

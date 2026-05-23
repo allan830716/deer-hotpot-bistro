@@ -2463,43 +2463,74 @@
   }
 }
 
-/* ── CRÈM 預訂流程圖 ─────────────────────────────────────────── */
-.crem-flow-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0;
-  max-width: 1000px;
-  margin: 0 auto;
+/* ── CRÈM 預訂流程、痛點、關於區塊 ────────────────────────────────────────────────── */
+
+/* 痛點格子 */
+.crem-pain-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
 }
 
-.crem-flow-item-group {
+.crem-pain-item {
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(197, 151, 109, 0.15);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 0;
+  gap: 0.625rem;
 }
 
-.crem-flow-card {
+.crem-pain-x {
+  color: rgba(197, 151, 109, 0.5);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.crem-pain-text {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 300;
+  font-size: clamp(0.75rem, 2.2vw, 0.875rem);
+  color: rgba(240, 233, 223, 0.55);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
+
+/* 流程橫向一目瞭然 */
+.crem-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.crem-step-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 1.25rem;
-  width: 180px;
-  border: 1px solid rgba(197, 151, 109, 0.15);
-  background: rgba(255, 255, 255, 0.02);
-  transition: border-color 0.3s ease, background 0.3s ease;
+  padding: 2rem 1rem;
+  border: 1px solid rgba(197, 151, 109, 0.12);
+  background: rgba(255, 255, 255, 0.015);
+  position: relative;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.crem-flow-card:hover {
-  border-color: rgba(197, 151, 109, 0.35);
+.crem-step-card:hover {
   background: rgba(197, 151, 109, 0.04);
+  border-color: rgba(197, 151, 109, 0.3);
 }
 
-.crem-flow-circle {
-  width: 44px;
-  height: 44px;
+/* 步驟之間的左邊框線移除，避免重複 */
+.crem-step-card + .crem-step-card {
+  border-left: none;
+}
+
+.crem-step-circle {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(197, 151, 109, 0.4);
   display: flex;
@@ -2507,53 +2538,62 @@
   justify-content: center;
   margin-bottom: 1.25rem;
   background: rgba(197, 151, 109, 0.05);
+  position: relative;
+  z-index: 1;
 }
 
-.crem-flow-icon {
-  margin-bottom: 1rem;
-  opacity: 0.85;
+/* 步驟間連接線（橫向） */
+.crem-step-connector {
+  position: absolute;
+  top: calc(2rem + 24px);
+  right: -1px;
+  width: 2px;
+  height: 0;
+  display: none;
 }
 
-.crem-flow-arrow {
+/* 關於 CRÈM 區塊排版 */
+.crem-about-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: center;
+  max-width: 860px;
+}
+
+.crem-about-text {
+  min-width: 0;
+}
+
+.crem-about-logo-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 0 0.25rem;
 }
 
-.crem-flow-arrow-h {
-  display: block;
-}
-
-.crem-flow-arrow-v {
-  display: none;
-}
-
+/* 手機版自適應 */
 @media (max-width: 767px) {
-  .crem-flow-wrapper {
-    flex-direction: column;
-    align-items: center;
+  .crem-pain-grid {
+    grid-template-columns: 1fr;
   }
-  .crem-flow-item-group {
-    flex-direction: column;
-    align-items: center;
+  .crem-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .crem-flow-card {
-    width: 260px;
+  .crem-step-card + .crem-step-card {
+    border-left: 1px solid rgba(197, 151, 109, 0.12);
   }
-  .crem-flow-arrow {
-    padding: 0.25rem 0;
+  .crem-step-card:nth-child(2n+1) + .crem-step-card {
+    border-left: none;
   }
-  .crem-flow-arrow-h {
+  .crem-about-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .crem-about-logo-wrap {
     display: none;
   }
-  .crem-flow-arrow-v {
-    display: block;
-  }
-}
-
-/* ── 交通與停車頁面 Transport ─────────────────────────────────── */
+}─ 交通與停車頁面 Transport ─────────────────────────────────── */
 
 /* 交通方式總覽卡片按鈕 */
 .transport-card-btn:hover {
