@@ -2498,37 +2498,34 @@
   letter-spacing: 0.03em;
   line-height: 1.5;
 }
-
-/* 流程橫向一目瞭然 */
-.crem-steps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  position: relative;
+/* S 型流程圖 */
+.crem-s-flow {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.crem-step-card {
+.crem-s-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(197, 151, 109, 0.1);
+  border: 1px solid rgba(197, 151, 109, 0.1);
+}
+
+.crem-s-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 1rem;
-  border: 1px solid rgba(197, 151, 109, 0.12);
-  background: rgba(255, 255, 255, 0.015);
-  position: relative;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  padding: 2.5rem 1.5rem;
+  background: rgba(10, 8, 7, 0.6);
+  transition: background 0.3s ease;
 }
 
-.crem-step-card:hover {
+.crem-s-card:hover {
   background: rgba(197, 151, 109, 0.04);
-  border-color: rgba(197, 151, 109, 0.3);
 }
 
-/* 步驟之間的左邊框線移除，避免重複 */
-.crem-step-card + .crem-step-card {
-  border-left: none;
-}
-
-.crem-step-circle {
+.crem-s-circle {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -2538,38 +2535,19 @@
   justify-content: center;
   margin-bottom: 1.25rem;
   background: rgba(197, 151, 109, 0.05);
-  position: relative;
-  z-index: 1;
 }
 
-/* 步驟間連接線（橫向） */
-.crem-step-connector {
-  position: absolute;
-  top: calc(2rem + 24px);
-  right: -1px;
-  width: 2px;
-  height: 0;
-  display: none;
-}
-
-/* 關於 CRÈM 區塊排版 */
-.crem-about-layout {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 4rem;
-  align-items: center;
-  max-width: 860px;
-}
-
-.crem-about-text {
-  min-width: 0;
-}
-
-.crem-about-logo-wrap {
+/* S 型曲線連接區 */
+.crem-s-curve-wrap {
+  padding: 0 1rem;
+  height: 80px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+}
+
+.crem-s-curve-svg {
+  width: 100%;
+  height: 80px;
 }
 
 /* 手機版自適應 */
@@ -2577,25 +2555,15 @@
   .crem-pain-grid {
     grid-template-columns: 1fr;
   }
-  .crem-steps-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .crem-step-card + .crem-step-card {
-    border-left: 1px solid rgba(197, 151, 109, 0.12);
-  }
-  .crem-step-card:nth-child(2n+1) + .crem-step-card {
-    border-left: none;
-  }
-  .crem-about-layout {
+  .crem-s-row {
     grid-template-columns: 1fr;
-    gap: 2rem;
   }
-  .crem-about-logo-wrap {
+  .crem-s-curve-wrap {
     display: none;
   }
-}─ 交通與停車頁面 Transport ─────────────────────────────────── */
+}
 
-/* 交通方式總覽卡片按鈕 */
+/* ── 交通與停車頁面 Transport ─────────────────────────────────────────────────── */
 .transport-card-btn:hover {
   border-color: rgba(197, 151, 109, 0.35) !important;
   background: rgba(197, 151, 109, 0.04) !important;
