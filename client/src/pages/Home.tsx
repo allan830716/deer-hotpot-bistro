@@ -18,6 +18,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // ── 空間照片（已上傳至 CDN）────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
@@ -76,8 +77,9 @@ function GoldLineCentered({ width = 40 }: { width?: number }) {
   );
 }
 
-// ── Section 1: Hero ───────────────────────────────────────────────────────
+// ── Section 1: Hero ─────────────────────────────────────────────────────
 function HeroSection() {
+  const { t } = useLanguage();
   return (
     <section
       style={{
@@ -128,7 +130,7 @@ function HeroSection() {
               marginBottom: "1.5rem",
             }}
           >
-            Deer's Hotpot Bistro · Taipei Xinyi
+            {t("home.tagline")}
           </p>
 
           <h1
@@ -142,11 +144,11 @@ function HeroSection() {
               marginBottom: "2.5rem",
             }}
           >
-            不是一頓火鍋，
+            {t("home.hero.line1")}
             <br />
-            是一場有節奏的
+            {t("home.hero.line2")}
             <br />
-            餐桌體驗。
+            {t("home.hero.line3")}
           </h1>
 
           <a
@@ -156,7 +158,7 @@ function HeroSection() {
             className="btn-deer-light"
             style={{ fontSize: "0.8rem" }}
           >
-            預約一場餐桌
+            {t("home.hero.cta")}
           </a>
         </div>
       </div>
@@ -190,6 +192,7 @@ function HeroSection() {
 // ── Section 2: 品牌轉折 ───────────────────────────────────────────────────
 function BrandPivotSection() {
   const ref = useFadeIn();
+  const { t } = useLanguage();
   return (
     <section
       className="section-lg"
@@ -201,7 +204,7 @@ function BrandPivotSection() {
             className="font-label mb-8"
             style={{ color: "var(--deer-gold)" }}
           >
-            Our Philosophy
+            {t("home.philosophy.label")}
           </p>
           <h2
             style={{
@@ -213,12 +216,12 @@ function BrandPivotSection() {
               letterSpacing: "0.08em",
             }}
           >
-            我們不做熱鬧的火鍋。
+            {t("home.philosophy.title1")}
             <br />
             <br />
-            我們在意的，
+            {t("home.philosophy.title2")}
             <br />
-            是一場餐桌的節奏。
+            {t("home.philosophy.title3")}
           </h2>
           <GoldLineCentered width={32} />
           <p
@@ -227,11 +230,10 @@ function BrandPivotSection() {
               fontSize: "0.875rem",
               lineHeight: 2,
               letterSpacing: "0.06em",
+              whiteSpace: "pre-line",
             }}
           >
-            前菜、湯底、熟成肉品、酒搭配、甜點收尾。
-            <br />
-            每一個環節，都是節奏的一部分。
+            {t("home.philosophy.desc")}
           </p>
         </div>
       </div>
@@ -240,35 +242,39 @@ function BrandPivotSection() {
 }
 
 // ── Section 3: 三核心 ─────────────────────────────────────────────────────
-const CORES = [
-  {
-    img: SOUP_IMG,
-    zh: "日本頂級乾貨",
-    en: "The Broth",
-    line1: "靜岡本枯節 · 北海道羅臼昆布 · 宮崎香信椎茸",
-    line2: "",
-    desc: "三種頂級日本乾貨，長時慢熬。鮮甜清澈，不添加人工甘味——湯底是料理的靈魂，不是背景。",
-  },
-  {
-    img: MEAT_IMG,
-    zh: "熟成肉品",
-    en: "The Cut",
-    line1: "SRF 極黑和牛 · 伊比利豬 · 草飼羊",
-    line2: "",
-    desc: "西餐等級肉種，濕式熟成處理。保留肉汁與脂肪香氣，讓火鍋也能有一點講究。",
-  },
-  {
-    img: DESSERT_IMG,
-    zh: "甜點與酒感",
-    en: "The Finale",
-    line1: "專業甜點師 · 侍酒師嚴選酒單",
-    line2: "",
-    desc: "甜點不是配角。從紅白氣泡酒搭配到餐後甜點收尾，這是我們反骨的個性——一場餐桌，不該在主食後就散場。",
-  },
-];
+function getCores(t: (key: string) => string) {
+  return [
+    {
+      img: SOUP_IMG,
+      zh: t("home.cores.soup.zh"),
+      en: t("home.cores.soup.en"),
+      line1: t("home.cores.soup.subtitle2"),
+      line2: "",
+      desc: t("home.cores.soup.desc2"),
+    },
+    {
+      img: MEAT_IMG,
+      zh: t("home.cores.meat.zh"),
+      en: t("home.cores.meat.en"),
+      line1: t("home.cores.meat.subtitle2"),
+      line2: "",
+      desc: t("home.cores.meat.desc2"),
+    },
+    {
+      img: DESSERT_IMG,
+      zh: t("home.cores.dessert.zh"),
+      en: t("home.cores.dessert.en"),
+      line1: t("home.cores.dessert.subtitle2"),
+      line2: "",
+      desc: t("home.cores.dessert.desc2"),
+    },
+  ];
+}
 
 function CoreSection() {
   const ref = useFadeIn(0.1);
+  const { t } = useLanguage();
+  const CORES = getCores(t);
   return (
     <section
       className="section"
@@ -277,7 +283,7 @@ function CoreSection() {
       <div className="container">
         <div ref={ref} className="fade-up text-center mb-16">
           <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
-            What We Do
+            {t("home.cores.label")}
           </p>
           <h2
             style={{
@@ -288,7 +294,7 @@ function CoreSection() {
               letterSpacing: "0.1em",
             }}
           >
-            三核心，構成一場完整的餐桌
+            {t("home.cores.title2")}
           </h2>
         </div>
 
@@ -302,6 +308,7 @@ function CoreSection() {
   );
 }
 
+type CoreItem = { img: string; zh: string; en: string; line1: string; line2: string; desc: string };
 function CoreCard({
   img,
   zh,
@@ -310,7 +317,7 @@ function CoreCard({
   line2,
   desc,
   delay,
-}: (typeof CORES)[0] & { delay: number }) {
+}: CoreItem & { delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -400,33 +407,19 @@ function CoreCard({
       </p>
     </div>
   );
+}// ── Section 4: 體驗敘事 ─────────────────────────────────────────────────────
+function getNarrative(t: (key: string) => string) {
+  return [
+    { step: "01", title: t("home.narrative.step1.title"), body: t("home.narrative.step1.body") },
+    { step: "02", title: t("home.narrative.step2.title"), body: t("home.narrative.step2.body") },
+    { step: "03", title: t("home.narrative.step3.title"), body: t("home.narrative.step3.body") },
+    { step: "04", title: t("home.narrative.step4.title"), body: t("home.narrative.step4.body") },
+  ];
 }
 
-// ── Section 4: 體驗敘事 ───────────────────────────────────────────────────
-const NARRATIVE = [
-  {
-    step: "01",
-    title: "前菜，讓味蕾開始",
-    body: "不是填飽，是鋪陳。\n一道前菜，讓整場餐桌的節奏慢慢展開。",
-  },
-  {
-    step: "02",
-    title: "湯開始後，節奏慢了下來",
-    body: "清澈的上湯，不搶食材的味道。\n讓每一口都有它應有的位置。",
-  },
-  {
-    step: "03",
-    title: "肉，不需要調味",
-    body: "熟成的肉品，自己就是答案。\n只需要湯，只需要時間。",
-  },
-  {
-    step: "04",
-    title: "最後，留一點時間給甜點",
-    body: "一場好的餐桌，不應該在主食結束後就散場。\n甜點，是把時間留給彼此的方式。",
-  },
-];
-
 function NarrativeSection() {
+  const { t } = useLanguage();
+  const NARRATIVE = getNarrative(t);
   return (
     <section
       className="section-lg"
@@ -438,7 +431,7 @@ function NarrativeSection() {
             className="font-label mb-4"
             style={{ color: "rgba(197,151,109,0.7)" }}
           >
-            The Experience
+            {t("home.narrative.label")}
           </p>
           <h2
             style={{
@@ -449,7 +442,7 @@ function NarrativeSection() {
               letterSpacing: "0.1em",
             }}
           >
-            一場餐桌的節奏，是這樣展開的。
+            {t("home.narrative.title")}
           </h2>
         </div>
 
@@ -462,7 +455,7 @@ function NarrativeSection() {
         {/* 輕量 CTA */}
         <div style={{ textAlign: "center", marginTop: "4rem", paddingTop: "3rem", borderTop: "1px solid rgba(197,151,109,0.15)" }}>
           <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: "rgba(240,233,223,0.55)", letterSpacing: "0.06em", marginBottom: "1.5rem" }}>
-            準備好了嗎？
+            {t("home.narrative.ctaReady")}
           </p>
           <a
             href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
@@ -470,19 +463,20 @@ function NarrativeSection() {
             rel="noopener noreferrer"
             className="btn-deer-outline"
           >
-            預約一場餐桌
+            {t("home.narrative.ctaBtn")}
           </a>
         </div>
       </div>
     </section>
   );
 }
+type NarrativeItemType = { step: string; title: string; body: string };
 function NarrativeItem({
   step,
   title,
   body,
   delay,
-}: (typeof NARRATIVE)[0] & { delay: number }) {
+}: NarrativeItemType & { delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -549,9 +543,10 @@ function NarrativeItem({
   );
 }
 
-// ── Section 5: 空間 ───────────────────────────────────────────────────────
+/// ── Section 5: 空間 ─────────────────────────────────────────────────────
 function SpaceSection() {
   const ref = useFadeIn(0.1);
+  const { t } = useLanguage();
   return (
     <section style={{ position: "relative", overflow: "hidden" }}>
       {/* 圖片 */}
@@ -597,13 +592,13 @@ function SpaceSection() {
               marginBottom: "1.5rem",
             }}
           >
-            一場屬於你們的餐桌，
+            {t("home.space.title2")}
             <br />
-            不需要理由。
+            {t("home.space.title2b")}
           </h2>
           <Link href="/space">
             <span className="btn-deer-light" style={{ fontSize: "0.8rem" }}>
-              空間體驗⇢
+              {t("home.space.cta")}
             </span>
           </Link>
         </div>
@@ -612,10 +607,11 @@ function SpaceSection() {
   );
 }
 
-// ── Section 6: 信任 ───────────────────────────────────────────────────────
+/// ── Section 6: 信任 ─────────────────────────────────────────────────────
 function TrustSection() {
   const ref = useFadeIn();
-  const { data: placeData, isLoading: placeLoading } = trpc.placeInfo.getReviews.useQuery();
+  const { t } = useLanguage();
+  const { data: placeData, isLoading: placeLoading } = trpc.placeInfo.getReviews.useQuery();;
   const rating = placeData?.rating ?? 4.6;
   const totalRatings = placeData?.totalRatings ?? 1593;
   const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
@@ -627,7 +623,7 @@ function TrustSection() {
       <div className="container-narrow text-center">
         <div ref={ref} className="fade-up">
           <p className="font-label mb-8" style={{ color: "var(--deer-gold)" }}>
-            Google Reviews
+            {t("home.trust.googleReviews")}
           </p>
 
            {/* 星評 */}
@@ -678,7 +674,7 @@ function TrustSection() {
               marginBottom: "1.5rem",
             }}
           >
-            {totalRatings.toLocaleString()} 則 Google 評論
+            {t("home.trust.reviewCount").replace("{n}", totalRatings.toLocaleString())}
           </p>
           <a
             href={GOOGLE_REVIEWS_URL}
@@ -699,7 +695,7 @@ function TrustSection() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.08)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.6)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.3)"; }}
           >
-            查看 Google 評論 ↗
+            {t("home.trust.viewReviews")}
           </a>
 
           <GoldLineCentered width={32} />
@@ -714,9 +710,9 @@ function TrustSection() {
               letterSpacing: "0.06em",
             }}
           >
-            我們不送禮換評論，
+            {t("home.trust.authentic1")}
             <br />
-            也不請客人留下評價。
+            {t("home.trust.authentic2")}
           </p>
           <p
             style={{
@@ -726,7 +722,7 @@ function TrustSection() {
               lineHeight: 1.9,
             }}
           >
-            每一則評論，都是真實的用餐記憶。
+            {t("home.trust.authenticSub")}
           </p>
 
 
@@ -734,34 +730,34 @@ function TrustSection() {
           {/* 獲獎敘述 */}
           <div style={{ marginTop: "3rem", borderTop: "1px solid rgba(197,151,109,0.12)", paddingTop: "2.5rem" }}>
             <p className="font-label mb-8" style={{ color: "rgba(197,151,109,0.5)" }}>
-              Recognition
+              {t("home.trust.recognition")}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
               <div>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
-                  2023 · 台北市府鍋物大賽
+                  {t("home.trust.award1.year")}
                 </p>
                 <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
-                  2023 台北十強鍋物
+                  {t("home.trust.award1.title")}
                 </p>
               </div>
               <div>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
-                  2024 · 台北市府鍋物大賽
+                  {t("home.trust.award2.year")}
                 </p>
                 <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
-                  2024 台灣 30 大鍋物
+                  {t("home.trust.award2.title")}
                 </p>
               </div>
               <div>
                 <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>
-                  2024 · &amp;Premium Japan
+                  {t("home.trust.award3.year")}
                 </p>
                 <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "var(--deer-text)", letterSpacing: "0.08em", lineHeight: 1.6 }}>
-                  日本生活品味雜誌《&amp;Premium》年度收錄
+                  {t("home.trust.award3.title")}
                 </p>
                 <p style={{ fontSize: "0.75rem", color: "var(--deer-sub)", marginTop: "0.4rem", lineHeight: 1.7 }}>
-                  以「美好生活指南」為概念，廣受歡迎且充滿質感氛圍的日本生活雜誌
+                  {t("home.trust.award3.desc")}
                 </p>
               </div>
             </div>
@@ -773,15 +769,18 @@ function TrustSection() {
 }
 
 // ── Section 6.8: CRÈM 一條龍服務 ────────────────────────────────────────────
-const CREM_STEPS = [
-  { num: "01", label: "預訂座位", desc: "透過 Inline 線上預訂，備註慶祝人與就餐時段" },
-  { num: "02", label: "選擇蛋糕", desc: "至 CRÈM 官網挑選專屬慶祝蛋糕，備註小鹿訂位資訊" },
-  { num: "03", label: "小鹿代勞", desc: "我們全程跟進 CRÈM 確認，確保蛋糕按時就位" },
-  { num: "04", label: "餐桌驚喜", desc: "餐後蛋糕登場，不需擔心一切，只需就座享受這場慶祝" },
-];
+function getCremSteps(t: (key: string) => string) {
+  return [
+    { num: "01", label: t("home.crem.step1.label"), desc: t("home.crem.step1.desc") },
+    { num: "02", label: t("home.crem.step2.label"), desc: t("home.crem.step2.desc") },
+    { num: "03", label: t("home.crem.step3.label"), desc: t("home.crem.step3.desc") },
+    { num: "04", label: t("home.crem.step4.label"), desc: t("home.crem.step4.desc") },
+  ];
+}
 
 function CremSection() {
   const ref = useFadeIn(0.08);
+  const { t } = useLanguage();
   const CREM_IMG = "/manus-storage/crem-cake_7f5629d5.jpg";
   const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
   const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
@@ -861,7 +860,7 @@ function CremSection() {
           padding: "0 2rem",
         }}>
           <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
-            一條龍慶祝服務，從餐桌到蛋糕。
+            {t("home.crem.title")}
           </h2>
         </div>
       </div>
@@ -873,9 +872,9 @@ function CremSection() {
         backgroundColor: "var(--deer-dark)",
       }}>
         <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 5vw, 2.5rem)", color: "#F0E9DF", letterSpacing: "0.1em", lineHeight: 1.5 }}>
-          一條龍慶祝服務，
+          {t("home.crem.titleMobile1")}
           <br />
-          從餐桌到蛋糕。
+          {t("home.crem.titleMobile2")}
         </h2>
       </div>
       {/* 文字說明 + 步驟 + CTA */}
@@ -884,25 +883,27 @@ function CremSection() {
           {/* 說明文字 */}
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
             <p className="crem-collab-desc" style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9rem", color: "rgba(240,233,223,0.5)", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto 2rem" }}>
-              初衷小鹿 × CRÈM 聯名，
+              {t("home.crem.desc1")}
               <br />
-              讓每一場慶祝都有專屬蛋糕。
+              {t("home.crem.desc2")}
               <br />
-              <span className="crem-collab-sub">由兩個品牌共創一場慶祝的完整設計。</span>
+              <span className="crem-collab-sub">{t("home.crem.desc3")}</span>
             </p>
           </div>
 
           {/* 步驟流程 */}
+          {(() => { const CREM_STEPS = getCremSteps(t); return (
           <div className="crem-steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0", marginBottom: "3rem", border: "1px solid rgba(197,151,109,0.12)", maxWidth: "860px", margin: "0 auto 3rem" }}>
             {CREM_STEPS.map((step, i) => (
               <CremStep key={i} {...step} delay={i * 100} />
             ))}
           </div>
+          ); })()}
 
           {/* CTA */}
           <div style={{ textAlign: "center" }}>
             <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.06em", marginBottom: "2rem" }}>
-              這是一場不需要擔心任何事的專屬慶祝。
+              {t("home.crem.ctaDesc")}
             </p>
             <a
               href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
@@ -911,7 +912,7 @@ function CremSection() {
               className="btn-deer-light"
               style={{ fontSize: "0.8rem" }}
             >
-              預約一場慶祝餐桌
+              {t("home.crem.ctaBtn")}
             </a>
           </div>
         </div>
@@ -920,7 +921,8 @@ function CremSection() {
   );
 }
 
-function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay: number }) {
+type CremStepItem = { num: string; label: string; desc: string };
+function CremStep({ num, label, desc, delay }: CremStepItem & { delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -983,15 +985,16 @@ function CremStep({ num, label, desc, delay }: (typeof CREM_STEPS)[0] & { delay:
           lineHeight: 1.9,
         }}
       >
-        {desc}
+      {desc}
       </p>
     </div>
   );
 }
 
-// ── Section 7: CTA ────────────────────────────────────────────────────────
+// ── Section 7: CTA ────────────────────────────────────────────────────────────────────────────
 function CTASection() {
   const ref = useFadeIn();
+  const { t } = useLanguage();
   return (
     <section
       className="section-lg"
@@ -1003,7 +1006,7 @@ function CTASection() {
             className="font-label mb-8"
             style={{ color: "rgba(197,151,109,0.7)" }}
           >
-            Reservation
+            {t("home.cta.label")}
           </p>
           <h2
             style={{
@@ -1015,7 +1018,7 @@ function CTASection() {
               marginBottom: "1.5rem",
             }}
           >
-            預約一場餐桌
+            {t("home.cta.title")}
           </h2>
           <p
             style={{
@@ -1026,7 +1029,7 @@ function CTASection() {
               letterSpacing: "0.06em",
             }}
           >
-            把時間，留給重要的人。
+            {t("home.cta.subtitle")}
           </p>
           <a
             href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
@@ -1034,7 +1037,7 @@ function CTASection() {
             rel="noopener noreferrer"
             className="btn-deer-light"
           >
-            立即預約
+            {t("home.cta.btn")}
           </a>
         </div>
       </div>

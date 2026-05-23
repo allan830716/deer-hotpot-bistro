@@ -1,12 +1,13 @@
 /*
  * 初衷小鹿 — 品牌故事 Brand.tsx
- * v2：全黑背景、加入空間圖片增加氛圍感
+ * v3：四語言支援
  */
 
 import { useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const HERO_IMG  = "/manus-storage/space_J_brand_3b560a56.jpg";
+const HERO_IMG = "/manus-storage/space_J_brand_3b560a56.jpg";
 
 function useFadeIn(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
@@ -31,14 +32,7 @@ function GoldLine() {
   return <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.6)", margin: "2rem 0" }} />;
 }
 
-const BRAND_COMMITMENTS = [
-  { en: "Broth First",    zh: "天然上湯",  desc: "以鰹節柴魚、多樣蔬果長時熬製，不添加人工甘味劑。湯底澄清透明，是食材本身的誠意。" },
-  { en: "Curated Cuts",  zh: "嚴選肉品",  desc: "經過濕式熟成處理，保留肉汁、脂肪香氣、提升柔嫩度，依部位特性搭配涮燙方式，每一片都有它應在的位置。" },
-  { en: "Present Service", zh: "在場服務", desc: "服務不催促節奏，不打擾對話。在場，但不佔據。讓餐桌屬於你們，讓時間屬於這一刻。" },
-  { en: "CRÈM Dessert",  zh: "慶祝蛋糕",  desc: "與 CRÈM 甜點品牌合作，提供一條龍慶祝服務，從餐桌到蛋糕，讓每個重要時刻都更加完整。" },
-];
-
-function StatItem({ num, label, delay }: { num: string; label: string; delay: number }) {
+function StatItem({ num, label, delay, href }: { num: string; label: string; delay: number; href?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -54,16 +48,26 @@ function StatItem({ num, label, delay }: { num: string; label: string; delay: nu
     observer.observe(el);
     return () => observer.disconnect();
   }, [delay]);
-
   return (
     <div ref={ref} className="fade-up">
-      <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(2rem, 4vw, 3rem)", color: "rgba(197,151,109,0.9)", lineHeight: 1, marginBottom: "0.5rem" }}>{num}</p>
-      <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.45)", letterSpacing: "0.06em", fontFamily: "'Noto Serif TC', serif", fontWeight: 300 }}>{label}</p>
+      {href ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(2rem, 4vw, 3rem)", color: "rgba(197,151,109,0.9)", lineHeight: 1, marginBottom: "0.5rem" }}>{num}</p>
+          <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.45)", letterSpacing: "0.06em", fontFamily: "'Noto Serif TC', serif", fontWeight: 300 }}>{label}</p>
+        </a>
+      ) : (
+        <>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(2rem, 4vw, 3rem)", color: "rgba(197,151,109,0.9)", lineHeight: 1, marginBottom: "0.5rem" }}>{num}</p>
+          <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.45)", letterSpacing: "0.06em", fontFamily: "'Noto Serif TC', serif", fontWeight: 300 }}>{label}</p>
+        </>
+      )}
     </div>
   );
 }
 
-function CommitmentCard({ en, zh, desc, delay }: (typeof BRAND_COMMITMENTS)[0] & { delay: number }) {
+type CommitmentItem = { en: string; zh: string; desc: string };
+
+function CommitmentCard({ en, zh, desc, delay }: CommitmentItem & { delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -79,7 +83,6 @@ function CommitmentCard({ en, zh, desc, delay }: (typeof BRAND_COMMITMENTS)[0] &
     observer.observe(el);
     return () => observer.disconnect();
   }, [delay]);
-
   return (
     <div ref={ref} className="fade-up" style={{ borderTop: "1px solid rgba(197,151,109,0.15)", paddingTop: "2rem" }}>
       <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.8)", marginBottom: "0.75rem" }}>{en}</p>
@@ -90,14 +93,23 @@ function CommitmentCard({ en, zh, desc, delay }: (typeof BRAND_COMMITMENTS)[0] &
 }
 
 export default function Brand() {
-  const heroRef       = useFadeIn(0);
-  const storyRef      = useFadeIn(100);
+  const { t } = useLanguage();
+  const heroRef        = useFadeIn(0);
+  const storyRef       = useFadeIn(100);
   const commitmentsRef = useFadeIn(0);
-  const quoteRef      = useFadeIn(0);
+  const quoteRef       = useFadeIn(0);
+
   const { data: placeData } = trpc.placeInfo.getReviews.useQuery();
   const liveRating = placeData?.rating ?? 4.6;
   const liveTotal  = placeData?.totalRatings ?? 1593;
   const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
+
+  const BRAND_COMMITMENTS: CommitmentItem[] = [
+    { en: t("brand.commitment.c1.en"), zh: t("brand.commitment.c1.zh"), desc: t("brand.commitment.c1.desc") },
+    { en: t("brand.commitment.c2.en"), zh: t("brand.commitment.c2.zh"), desc: t("brand.commitment.c2.desc") },
+    { en: t("brand.commitment.c3.en"), zh: t("brand.commitment.c3.zh"), desc: t("brand.commitment.c3.desc") },
+    { en: t("brand.commitment.c4.en"), zh: t("brand.commitment.c4.zh"), desc: t("brand.commitment.c4.desc") },
+  ];
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)" }}>
@@ -109,13 +121,13 @@ export default function Brand() {
         <div className="container" style={{ position: "relative", height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: "5rem" }}>
           <div ref={heroRef} className="fade-up" style={{ maxWidth: "560px" }}>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.7)", marginBottom: "1.5rem" }}>
-              Brand Story
+              {t("brand.hero.label")}
             </p>
             <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(2rem, 4vw, 3rem)", color: "#F0E9DF", letterSpacing: "0.08em", lineHeight: 1.5, marginBottom: "1.5rem" }}>
-              品牌故事
+              {t("brand.hero.title")}
             </h1>
             <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "1rem", color: "rgba(240,233,223,0.6)", lineHeight: 2, letterSpacing: "0.05em" }}>
-              人生最容易被遺忘的，就是初衷。
+              {t("brand.hero.subtitle")}
             </p>
           </div>
         </div>
@@ -128,39 +140,26 @@ export default function Brand() {
             {/* 左側：故事文字 */}
             <div ref={storyRef} className="fade-up">
               <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.8)", marginBottom: "1.5rem" }}>
-                The Origin
+                {t("brand.origin.label")}
               </p>
               <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", color: "rgba(240,233,223,0.9)", letterSpacing: "0.08em", marginBottom: "2rem", lineHeight: 1.6 }}>
-                一段環島，<br />一個頓悟。
+                {t("brand.origin.title")}
               </h2>
               <GoldLine />
               <div style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9375rem", color: "rgba(240,233,223,0.5)", lineHeight: 2.1, letterSpacing: "0.04em" }}>
-                <p style={{ marginBottom: "1.5rem" }}>
-                  創辦人小鹿早期由於迷惘自己的人生方向，開啟了一段環島之旅。
-                  直到旅途到台東初鹿時，受到一對原住民夫妻熱情的款待。
-                </p>
-                <p style={{ marginBottom: "1.5rem" }}>
-                  那對夫妻告訴他，「鹿」在原住民裡象徵著「純潔」、「簡單」。
-                  相處的過程中，他發現夫妻倆即使生活並不富裕，卻過得很滿足快樂。
-                </p>
-                <p>
-                  就像「鹿」的意思一樣，這種心靈上純粹的快樂，
-                  似乎就是人生最終要追求的目的地。
-                  在這趟旅程結束後，創辦人審視了自己的「初衷」，
-                  也找回初心，希望帶給更多迷途中的人，
-                  能重新找回屬於自己初衷「快樂的意義」，
-                  因而將店名取為「初衷小鹿」。
-                </p>
+                <p style={{ marginBottom: "1.5rem" }}>{t("brand.origin.p1")}</p>
+                <p style={{ marginBottom: "1.5rem" }}>{t("brand.origin.p2")}</p>
+                <p>{t("brand.origin.p3")}</p>
               </div>
             </div>
 
             {/* 右側：品牌數字 */}
             <div className="flex flex-col gap-12">
               {[
-                { num: "2019",   label: "創立於台北信義區" },
-                { num: liveRating.toFixed(1), label: `Google 評分（${liveTotal.toLocaleString()} 則評論）`, href: GOOGLE_REVIEWS_URL },
-                { num: "Top 10", label: "2023 台北鍋物大賽十強" },
-                { num: "Top 30", label: "2024 全台灣 30 大鍋物" },
+                { num: "2019",   label: t("brand.stats.founded") },
+                { num: liveRating.toFixed(1), label: `${t("brand.stats.rating")}（${liveTotal.toLocaleString()} ${t("brand.stats.reviews")}）`, href: GOOGLE_REVIEWS_URL },
+                { num: "Top 10", label: t("brand.stats.top10") },
+                { num: "Top 30", label: t("brand.stats.top30") },
               ].map((item, i) => (
                 <StatItem key={i} {...item} delay={i * 100} />
               ))}
@@ -169,17 +168,15 @@ export default function Brand() {
         </div>
       </section>
 
-
-
       {/* ── 我們的堅持 ── */}
       <section className="section" style={{ backgroundColor: "rgba(18,12,10,0.8)", borderTop: "1px solid rgba(197,151,109,0.08)" }}>
         <div className="container">
           <div ref={commitmentsRef} className="fade-up" style={{ marginBottom: "4rem" }}>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.8)", marginBottom: "1rem" }}>
-              Our Commitment
+              {t("brand.commitment.label")}
             </p>
             <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", color: "rgba(240,233,223,0.9)", letterSpacing: "0.08em" }}>
-              我們的堅持
+              {t("brand.commitment.title")}
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
@@ -195,19 +192,17 @@ export default function Brand() {
         <div className="container-narrow text-center">
           <div ref={quoteRef} className="fade-up">
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(197,151,109,0.5)", marginBottom: "2.5rem" }}>
-              Our Philosophy
+              {t("brand.quote.label")}
             </p>
             <blockquote style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.25rem, 2.5vw, 1.875rem)", color: "rgba(240,233,223,0.85)", lineHeight: 1.9, letterSpacing: "0.08em", borderLeft: "none", margin: 0, padding: 0 }}>
-              「湯底從來不是背景，<br />而是料理的靈魂。」
+              {t("brand.quote.text")}
             </blockquote>
             <div style={{ width: "32px", height: "1px", backgroundColor: "rgba(197,151,109,0.4)", margin: "2.5rem auto" }} />
             <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.9rem", color: "rgba(240,233,223,0.4)", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "480px", margin: "0 auto 2rem" }}>
-              以日本頂級乾貨與天然蔬果長時熬製，<br />
-              將鮮味慢慢收進每一口之中，只留食材本身的誠意。<br />
-              每一口湯，都是這份初衷最直接的表達。
+              {t("brand.quote.desc")}
             </p>
             <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.12em" }}>
-              Soul in every broth.
+              {t("brand.quote.en")}
             </p>
           </div>
         </div>

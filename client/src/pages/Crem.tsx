@@ -3,6 +3,7 @@
  * 介紹 CRÈM 品牌、聯名服務流程，並提供連結至 crem.tw
  */
 import { useEffect, useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 function useFadeIn(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -29,34 +30,19 @@ const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
 const CREM_IMG  = "/manus-storage/crem-cake-carnation_bf93218f.jpg";
 const CREM_INTERIOR = "/manus-storage/crem-interior_2c8fe91b.webp";
 
-const STEPS = [
-  {
-    num: "01",
-    title: "預訂座位",
-    desc: "透過 Inline 線上預訂初衷小鹿，備註慶祝人姓名與就餐時段。",
-  },
-  {
-    num: "02",
-    title: "選擇蛋糕",
-    desc: "前往 CRÈM 官網（crem.tw）挑選專屬慶祝蛋糕，備註初衷小鹿訂位資訊。",
-  },
-  {
-    num: "03",
-    title: "小鹿代勞",
-    desc: "我們全程跟進 CRÈM 確認，確保蛋糕在對的時間準時就位。",
-  },
-  {
-    num: "04",
-    title: "餐桌驚喜",
-    desc: "餐後蛋糕登場，不需擔心任何事，只需就座享受這場慶祝。",
-  },
-];
-
 export default function Crem() {
+  const { t } = useLanguage();
   const ref1 = useFadeIn(0.1);
   const ref2 = useFadeIn(0.1);
   const ref3 = useFadeIn(0.1);
   const ref4 = useFadeIn(0.1);
+
+  const STEPS = [
+    { num: "01", title: t("crem.step1.title"), desc: t("crem.step1.desc") },
+    { num: "02", title: t("crem.step2.title"), desc: t("crem.step2.desc") },
+    { num: "03", title: t("crem.step3.title"), desc: t("crem.step3.desc") },
+    { num: "04", title: t("crem.step4.title"), desc: t("crem.step4.desc") },
+  ];
 
   return (
     <main
@@ -138,7 +124,7 @@ export default function Crem() {
                   marginBottom: "1rem",
                 }}
               >
-                Exclusive Collaboration
+                {t("crem.banner.label")}
               </p>
               <h1
                 style={{
@@ -151,7 +137,7 @@ export default function Crem() {
                   marginBottom: "1.5rem",
                 }}
               >
-                CRÈM蛋糕上桌預訂
+                {t("crem.banner.title")}
               </h1>
               <p
                 style={{
@@ -164,7 +150,7 @@ export default function Crem() {
                   marginBottom: "1.5rem",
                 }}
               >
-                × CRÈM 聯名共創
+                {t("crem.banner.subtitle")}
               </p>
               <p
                 style={{
@@ -178,9 +164,9 @@ export default function Crem() {
                   margin: "0 auto",
                 }}
               >
-                由兩個品牌共創一場慶祝的完整設計。
-                <br />
-                從餐桌到蛋糕，讓每個重要時刻都更加完整。
+                {t("crem.banner.desc").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
             </div>
           </div>
@@ -225,7 +211,7 @@ export default function Crem() {
                   marginBottom: "1.25rem",
                 }}
               >
-                About CRÈM
+                {t("crem.about.label")}
               </p>
               <h2
                 style={{
@@ -238,9 +224,7 @@ export default function Crem() {
                   marginBottom: "1.5rem",
                 }}
               >
-                座落台北信義區的
-                <br />
-                奶油甜點專賣店
+                {t("crem.about.title")}
               </h2>
               <div
                 style={{
@@ -281,8 +265,9 @@ export default function Crem() {
                   marginBottom: "1.5rem",
                 }}
               >
-                CRÈM 專注於創作高品質的奶油甜點，圍繞著「鮮奶油 & 奶油」這核心食材。
-                通過對奶油的深入研究，將不同原物料與奶油搭配，創造出每一款奶油甜點的味覺平衡與極致風味。
+                {t("crem.about.desc1").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
               <p
                 style={{
@@ -294,8 +279,9 @@ export default function Crem() {
                   letterSpacing: "0.05em",
                 }}
               >
-                對 CRÈM 來說，奶油的選擇並非一味追求頂級，而是以對奶油的專業了解，
-                發掘其與其他食材的完美相容性，讓顧客能在一口之間感受細膩與豐富的層次。
+                {t("crem.about.desc2").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
               <a
                 href="https://crem.tw"
@@ -308,7 +294,7 @@ export default function Crem() {
                   fontSize: "0.8rem",
                 }}
               >
-                前往 CRÈM 官網
+                {t("crem.about.btn")}
               </a>
             </div>
 
@@ -336,7 +322,7 @@ export default function Crem() {
                 className="font-label mb-4"
                 style={{ color: "rgba(197,151,109,0.6)" }}
               >
-                How It Works
+                {t("crem.steps.label")}
               </p>
               <h2
                 style={{
@@ -348,12 +334,11 @@ export default function Crem() {
                   lineHeight: 1.7,
                 }}
               >
-                四個步驟，
-                <br />
-                完成一場完整的慶祝。
+                {t("crem.steps.title").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
             </div>
-
             {/* 流程圖：桌機橫向 / 手機縱向 */}
             <div className="crem-flow-wrapper">
               {STEPS.map((step, i) => (
@@ -458,13 +443,13 @@ export default function Crem() {
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              全程由初衷小鹿協助溝通，您只需安心就座。
+              {t("crem.steps.hint")}
             </p>
           </div>
         </div>
       </section>
 
-            {/* ── CTA ── */}
+      {/* ── CTA ── */}
       <section
         style={{
           padding: "6rem 0",
@@ -485,9 +470,9 @@ export default function Crem() {
               marginBottom: "3rem",
             }}
           >
-            準備好讓這場慶祝
-            <br />
-            更加完整了嗎？
+            {t("crem.cta.title").split("\n").map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
           </p>
           <div
             style={{
@@ -504,7 +489,7 @@ export default function Crem() {
               className="btn-deer-light"
               style={{ fontSize: "0.8rem" }}
             >
-              預約初衷小鹿
+              {t("crem.cta.btn1")}
             </a>
             <a
               href="https://crem.tw"
@@ -535,7 +520,7 @@ export default function Crem() {
                 (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
               }}
             >
-              前往 CRÈM 選蛋糕
+              {t("crem.cta.btn2")}
             </a>
           </div>
         </div>

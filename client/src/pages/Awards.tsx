@@ -7,6 +7,7 @@
 
 import { useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // ── CDN 圖片 ────────────────────────────────────────────────────────────────
 const AWARDS_HERO = "/manus-storage/triangler_DeersHotpotBistro19_a3f32aa8.jpg";
@@ -98,6 +99,7 @@ const MEDIA_LINKS = [
 ];
 
 export default function Awards() {
+  const { t } = useLanguage();
   const ref1 = useFadeIn(0.1);
   const ref2 = useFadeIn(0.1);
   const ref3 = useFadeIn(0.1);
@@ -105,6 +107,36 @@ export default function Awards() {
   const ref5 = useFadeIn(0.1);
   const ref6 = useFadeIn(0.1);
   const { data: placeData } = trpc.placeInfo.getReviews.useQuery();
+  const MEDIA_LINKS_I18N = [
+    {
+      pub: "Vogue Taiwan",
+      title: t("awards.media.vogue.title"),
+      desc: t("awards.media.vogue.desc"),
+      url: "https://www.vogue.com.tw/article/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-%E9%8D%8B%E7%89%A9",
+      img: "/manus-storage/media-vogue_3d3c94b6.webp",
+    },
+    {
+      pub: "工商時報",
+      title: t("awards.media.chinatimes.title"),
+      desc: t("awards.media.chinatimes.desc"),
+      url: "https://www.ctee.com.tw/news/20230930700224-431207",
+      img: "/manus-storage/media-chinatimes_1b9ec7a4.png",
+    },
+    {
+      pub: "ELLE",
+      title: t("awards.media.elle.title"),
+      desc: t("awards.media.elle.desc"),
+      url: "https://www.elle.com.tw/life/foodie/g46059914/taipei-big-dome-foods/",
+      img: "/manus-storage/media-elle_b69c8ed0.webp",
+    },
+    {
+      pub: "旅讀 Or",
+      title: t("awards.media.or.title"),
+      desc: t("awards.media.or.desc"),
+      url: "https://today.line.me/tw/v3/article/PG7PxnM",
+      img: "/manus-storage/media-or_610baf69.webp",
+    },
+  ];
 
   return (
     <main
@@ -157,7 +189,7 @@ export default function Awards() {
               marginBottom: "1.25rem",
             }}
           >
-            Achievements &amp; Press
+            {t("awards.hero.label")}
           </p>
           <h1
             style={{
@@ -170,7 +202,7 @@ export default function Awards() {
               marginBottom: "1.5rem",
             }}
           >
-            獲獎殊榮／雜誌專訪
+            {t("awards.hero.title")}
           </h1>
           <div
             style={{
@@ -191,9 +223,9 @@ export default function Awards() {
               maxWidth: "480px",
             }}
           >
-            每一份認可，都是一個提醒——
-            <br />
-            讓我們繼續把每一場餐桌做得更好。
+            {t("awards.hero.desc").split("\n").map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
           </p>
         </div>
       </section>
@@ -230,7 +262,7 @@ export default function Awards() {
                     marginBottom: "1.25rem",
                   }}
                 >
-                  2023 · 台北市府鍋物大賽
+                  {t("awards.taipei10.label")}
                 </p>
                 <h2
                   style={{
@@ -243,7 +275,7 @@ export default function Awards() {
                     marginBottom: "0.5rem",
                   }}
                 >
-                  2023 台北十強鍋物
+                  {t("awards.taipei10.title")}
                 </h2>
                 <p
                   style={{
@@ -255,7 +287,7 @@ export default function Awards() {
                     marginBottom: "2rem",
                   }}
                 >
-                  Taipei International Hotpot Awards — Top 10
+                  {t("awards.taipei10.subtitle")}
                 </p>
                 <GoldLine />
                 <p
@@ -268,8 +300,9 @@ export default function Awards() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  在台北數百家鍋物餐廳中，以湯頭工藝、食材選品與整體用餐體驗，
-                  獲評審評選為年度十強之列。
+                  {t("awards.taipei10.desc").split("\n").map((line, i, arr) => (
+                    <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                  ))}
                 </p>
               </div>
               <div
@@ -344,7 +377,7 @@ export default function Awards() {
                   marginBottom: "1.25rem",
                 }}
               >
-                2024 · 台北市府鍋物大賽
+                {t("awards.taiwan30.label")}
               </p>
               <h2
                 style={{
@@ -357,7 +390,7 @@ export default function Awards() {
                   marginBottom: "0.5rem",
                 }}
               >
-                2024 台灣 30 大鍋物
+                {t("awards.taiwan30.title")}
               </h2>
               <p
                 style={{
@@ -369,7 +402,7 @@ export default function Awards() {
                   marginBottom: "2rem",
                 }}
               >
-                Taiwan International Hotpot Awards — Top 30
+                {t("awards.taiwan30.subtitle")}
               </p>
               <GoldLine />
               <p
@@ -382,8 +415,9 @@ export default function Awards() {
                   letterSpacing: "0.05em",
                 }}
               >
-                從台北到全台，在更大的競技場中再次獲得評審認可，
-                入選台灣年度三十大鍋物餐廳。
+                {t("awards.taiwan30.desc").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
             </div>
           </div>
@@ -422,7 +456,7 @@ export default function Awards() {
                   marginBottom: "0.5rem",
                 }}
               >
-                日本生活品味雜誌《&amp;Premium》
+                {t("awards.premium.title")}
               </h2>
               <p
                 style={{
@@ -434,7 +468,7 @@ export default function Awards() {
                   marginBottom: "2rem",
                 }}
               >
-                The Guide To A Better Life
+                {t("awards.premium.subtitle")}
               </p>
               <GoldLine />
               <p
@@ -447,9 +481,9 @@ export default function Awards() {
                   letterSpacing: "0.05em",
                 }}
               >
-                以「美好生活指南」為核心概念的日本知名生活雜誌《&amp;Premium》，
-                分別於 2024 年 7 月號及 10 月號兩度收錄初衷小鹿，
-                作為台北值得一訪的品味餐廳代表。
+                {t("awards.premium.desc").split("\n").map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </p>
             </div>
 
@@ -509,8 +543,7 @@ export default function Awards() {
                     letterSpacing: "0.04em",
                   }}
                 >
-                  7 月號以台北美食為主題，
-                  收錄初衷小鹿作為代表性品味餐廳。
+                  {t("awards.premium.jul.desc")}
                 </p>
               </div>
 
@@ -562,8 +595,7 @@ export default function Awards() {
                     letterSpacing: "0.04em",
                   }}
                 >
-                  10 月號再度收錄，
-                  持續作為台北品味生活的推薦選擇。
+                  {t("awards.premium.oct.desc")}
                 </p>
               </div>
             </div>
@@ -588,7 +620,7 @@ export default function Awards() {
                 marginBottom: "1.25rem",
               }}
             >
-              Press Coverage
+              {t("awards.media.label")}
             </p>
             <h2
               style={{
@@ -601,7 +633,7 @@ export default function Awards() {
                 marginBottom: "2rem",
               }}
             >
-              媒體報導
+              {t("awards.media.title")}
             </h2>
             <GoldLine />
             <style>{`
@@ -621,7 +653,7 @@ export default function Awards() {
                 maxWidth: "860px",
               }}
             >
-              {MEDIA_LINKS.map((item, i) => (
+              {MEDIA_LINKS_I18N.map((item, i) => (
                 <a
                   key={i}
                   href={item.url}
@@ -835,8 +867,8 @@ export default function Awards() {
                   }}
                 >
                   {placeData
-                    ? `${placeData.totalRatings.toLocaleString()} 則真實評論`
-                    : "1,600+ 則真實評論"}
+                    ? `${placeData.totalRatings.toLocaleString()} ${t("awards.google.reviewsUnit")}`
+                    : t("awards.google.reviewsDefault")}
                 </p>
                 {/* 點擊提示 */}
                 <p
@@ -849,7 +881,7 @@ export default function Awards() {
                     textTransform: "uppercase",
                   }}
                 >
-                  在 Google Maps 查看全部評論 ↗
+                  {t("awards.google.viewAll")}
                 </p>
               </div>
             </div>
@@ -862,9 +894,9 @@ export default function Awards() {
               }}
             >
               {[
-                "從不請客人主動評論",
-                "從不做評論送禮活動",
-                "從不花錢購買假評論",
+                t("awards.google.rule1"),
+                t("awards.google.rule2"),
+                t("awards.google.rule3"),
               ].map((item, i) => (
                 <div
                   key={i}
@@ -912,9 +944,9 @@ export default function Awards() {
                 marginTop: "2rem",
               }}
             >
-              一點一滴收集每一位客人真實的反饋，
-              <br />
-              成為我們每個進步的方針。
+              {t("awards.google.desc").split("\n").map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
         </div>
@@ -940,9 +972,9 @@ export default function Awards() {
               marginBottom: "2.5rem",
             }}
           >
-            這些認可，讓我們繼續做好
-            <br />
-            每一場餐桌。
+            {t("awards.cta.title").split("\n").map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
           </p>
           <a
             href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
@@ -951,7 +983,7 @@ export default function Awards() {
             className="btn-deer-light"
             style={{ fontSize: "0.8rem" }}
           >
-            預約一場餐桌
+            {t("awards.cta.btn")}
           </a>
         </div>
       </section>

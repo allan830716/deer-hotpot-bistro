@@ -3,24 +3,21 @@
  * ─────────────────────────────────────────────
  * mobile-first 一頁式設計
  * Section 1: Hero
- * Section 2: 交通方式總覽（4 卡片）
- * Section 3: 捷運資訊
- * Section 4: 公車資訊
- * Section 5: 開車與停車建議（3 停車卡）
- * Section 6: 交通決策引導
- * Section 7: 品牌插畫地圖
- * Section 8: Google Map 嵌入
- * Section 9: 手機底部 Sticky 快速按鈕
+ * Section 2: 品牌插畫地圖
+ * Section 3: 交通方式總覽（4 卡片）
+ * Section 4: 捷運資訊
+ * Section 5: 公車資訊
+ * Section 6: 開車與停車建議
+ * Section 7: 交通決策引導
+ * Section 8: 手機底部 Sticky 快速按鈕
  */
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-
-const DEER_LOGO = "/manus-storage/deer-logo-white_5580d538.webp";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // ── 常數 ──────────────────────────────────────────────────────────────────
 const HERO_IMG = "/manus-storage/hero-space_100d3e43.jpg";
-const MAP_IMG = "/manus-storage/transport-map-v5_a1bd3d13.svg";
 
 const RESTAURANT_ADDRESS = "台北市信義區忠孝東路四段553巷6弄15號";
 const GOOGLE_MAPS_NAV = "https://maps.google.com/?q=初衷小鹿+Deer%27s+Hotpot+Bistro&daddr=台北市信義區忠孝東路四段553巷6弄15號";
@@ -67,6 +64,7 @@ function GoldLine({ centered = false }: { centered?: boolean }) {
 
 // ── Section 1: Hero ───────────────────────────────────────────────────────
 function HeroSection() {
+  const { t } = useLanguage();
   const scrollToParking = () => {
     document.getElementById("section-parking")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -121,7 +119,7 @@ function HeroSection() {
             marginBottom: "1.5rem",
           }}
         >
-          Getting Here · 交通指南
+          {t("transport.hero.label")}
         </p>
 
         <h1
@@ -133,11 +131,10 @@ function HeroSection() {
             color: "#F0E9DF",
             letterSpacing: "0.08em",
             marginBottom: "1.25rem",
+            whiteSpace: "pre-line",
           }}
         >
-          如何順利抵達
-          <br />
-          初衷小鹿
+          {t("transport.hero.title")}
         </h1>
 
         <p
@@ -147,11 +144,10 @@ function HeroSection() {
             lineHeight: 1.9,
             letterSpacing: "0.06em",
             marginBottom: "2.5rem",
+            whiteSpace: "pre-line",
           }}
         >
-          位於信義區巷弄內
-          <br />
-          建議提前查看交通與停車方式
+          {t("transport.hero.subtitle")}
         </p>
 
         <div
@@ -169,14 +165,14 @@ function HeroSection() {
             className="btn-deer-light"
             style={{ fontSize: "0.8rem", padding: "0.75rem 1.75rem" }}
           >
-            導航至餐廳
+            {t("transport.hero.navigate.btn")}
           </a>
           <button
             onClick={scrollToParking}
             className="btn-deer-light"
             style={{ fontSize: "0.8rem", padding: "0.75rem 1.75rem" }}
           >
-            查看停車建議
+            {t("transport.hero.parking.btn")}
           </button>
         </div>
 
@@ -215,66 +211,68 @@ function HeroSection() {
 }
 
 // ── Section 2: 交通方式總覽 ───────────────────────────────────────────────
-const TRANSPORT_CARDS = [
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="5" y="2" width="14" height="20" rx="2"/>
-        <line x1="12" y1="18" x2="12" y2="18.01"/>
-        <line x1="9" y1="6" x2="15" y2="6"/>
-      </svg>
-    ),
-    en: "MRT",
-    zh: "捷運",
-    desc: "板南線至「市政府站」\n步行約 5 分鐘",
-    anchor: "section-mrt",
-  },
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2"/>
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-        <line x1="12" y1="12" x2="12" y2="16"/>
-        <line x1="10" y1="14" x2="14" y2="14"/>
-      </svg>
-    ),
-    en: "Bus",
-    zh: "公車",
-    desc: "「市府轉運站」或「聯合報」站點下車\n步行約 2 分鐘",
-    anchor: "section-bus",
-  },
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5h-2"/>
-        <circle cx="7" cy="17" r="2"/>
-        <circle cx="17" cy="17" r="2"/>
-        <path d="M13 3v5h5"/>
-      </svg>
-    ),
-    en: "Drive",
-    zh: "開車",
-    desc: "巷內停車位有限\n建議直接前往指定停車場",
-    anchor: "section-parking",
-  },
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="5" r="2"/>
-        <path d="M12 7v6l3 3"/>
-        <path d="M9 13l-3 4"/>
-        <path d="M15 13l3 4"/>
-      </svg>
-    ),
-    en: "Walk",
-    zh: "步行",
-    desc: "鄰近松菸、信義商圈，可由市政府站、松菸方向步行前往",
-    anchor: "section-mrt",
-  },
-];
-
 function TransportOverviewSection() {
+  const { t } = useLanguage();
   const ref = useFadeIn();
+
+  const TRANSPORT_CARDS = [
+    {
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2"/>
+          <line x1="12" y1="18" x2="12" y2="18.01"/>
+          <line x1="9" y1="6" x2="15" y2="6"/>
+        </svg>
+      ),
+      en: t("transport.card.mrt.en"),
+      zh: t("transport.card.mrt.zh"),
+      desc: t("transport.card.mrt.desc"),
+      anchor: "section-mrt",
+    },
+    {
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+          <line x1="12" y1="12" x2="12" y2="16"/>
+          <line x1="10" y1="14" x2="14" y2="14"/>
+        </svg>
+      ),
+      en: t("transport.card.bus.en"),
+      zh: t("transport.card.bus.zh"),
+      desc: t("transport.card.bus.desc"),
+      anchor: "section-bus",
+    },
+    {
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5h-2"/>
+          <circle cx="7" cy="17" r="2"/>
+          <circle cx="17" cy="17" r="2"/>
+          <path d="M13 3v5h5"/>
+        </svg>
+      ),
+      en: t("transport.card.drive.en"),
+      zh: t("transport.card.drive.zh"),
+      desc: t("transport.card.drive.desc"),
+      anchor: "section-parking",
+    },
+    {
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="5" r="2"/>
+          <path d="M12 7v6l3 3"/>
+          <path d="M9 13l-3 4"/>
+          <path d="M15 13l3 4"/>
+        </svg>
+      ),
+      en: t("transport.card.taxi.en"),
+      zh: t("transport.card.taxi.zh"),
+      desc: t("transport.card.taxi.desc"),
+      anchor: "section-mrt",
+    },
+  ];
+
   return (
     <section
       style={{
@@ -286,7 +284,7 @@ function TransportOverviewSection() {
         <div ref={ref} className="fade-up">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
-              How to Arrive
+              {t("transport.overview.label")}
             </p>
             <h2
               style={{
@@ -297,7 +295,7 @@ function TransportOverviewSection() {
                 letterSpacing: "0.1em",
               }}
             >
-              選擇最適合你的抵達方式
+              {t("transport.overview.title")}
             </h2>
           </div>
 
@@ -376,6 +374,7 @@ function TransportOverviewSection() {
 
 // ── Section 3: 捷運資訊 ───────────────────────────────────────────────────
 function MrtSection() {
+  const { t } = useLanguage();
   const ref = useFadeIn();
   return (
     <section
@@ -388,7 +387,7 @@ function MrtSection() {
       <div className="container-narrow">
         <div ref={ref} className="fade-up">
           <p className="font-label mb-4" style={{ color: "rgba(197,151,109,0.6)" }}>
-            MRT · 捷運
+            MRT · {t("transport.mrt.label")}
           </p>
           <h2
             style={{
@@ -400,7 +399,7 @@ function MrtSection() {
               marginBottom: "0.5rem",
             }}
           >
-            搭乘捷運
+            {t("transport.mrt.title")}
           </h2>
           <GoldLine />
 
@@ -445,10 +444,10 @@ function MrtSection() {
                     letterSpacing: "0.08em",
                   }}
                 >
-                  板南線 · 市政府站
+                  {t("transport.mrt.line")}
                 </p>
                 <p style={{ fontSize: "0.75rem", color: "rgba(197,151,109,0.6)", letterSpacing: "0.06em" }}>
-                  Taipei City Hall Station
+                  {t("transport.mrt.line.sub")}
                 </p>
               </div>
             </div>
@@ -457,19 +456,19 @@ function MrtSection() {
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
                 <span style={{ color: "var(--deer-gold)", fontSize: "0.75rem", marginTop: "0.2rem", flexShrink: 0 }}>01</span>
                 <p style={{ fontSize: "0.875rem", color: "rgba(240,233,223,0.7)", lineHeight: 1.8 }}>
-                  由<strong style={{ color: "var(--deer-dark-text)" }}>1 號出口</strong>出站
+                  {t("transport.mrt.step1")}
                 </p>
               </div>
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
                 <span style={{ color: "var(--deer-gold)", fontSize: "0.75rem", marginTop: "0.2rem", flexShrink: 0 }}>02</span>
                 <p style={{ fontSize: "0.875rem", color: "rgba(240,233,223,0.7)", lineHeight: 1.8 }}>
-                  沿忠孝東路四段往西步行，進入 553 巷後左轉 6 弄
+                  {t("transport.mrt.step2")}
                 </p>
               </div>
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
                 <span style={{ color: "var(--deer-gold)", fontSize: "0.75rem", marginTop: "0.2rem", flexShrink: 0 }}>03</span>
                 <p style={{ fontSize: "0.875rem", color: "rgba(240,233,223,0.7)", lineHeight: 1.8 }}>
-                  步行約 <strong style={{ color: "var(--deer-dark-text)" }}>400 公尺，5 分鐘</strong>可抵達
+                  {t("transport.mrt.step3")}
                 </p>
               </div>
             </div>
@@ -482,21 +481,8 @@ function MrtSection() {
             className="btn-deer-light"
             style={{ fontSize: "0.8rem", display: "inline-block", marginBottom: "1.5rem" }}
           >
-            從市政府站導航
+            {t("transport.mrt.navigate.btn")}
           </a>
-
-          <p
-            style={{
-              fontSize: "0.8rem",
-              color: "rgba(197,151,109,0.45)",
-              lineHeight: 1.8,
-              letterSpacing: "0.04em",
-              borderLeft: "1px solid rgba(197,151,109,0.2)",
-              paddingLeft: "1rem",
-            }}
-          >
-            若攜帶長輩、兒童或遇到下雨天，建議預留較多步行時間，或考慮搭乘計程車直達。
-          </p>
         </div>
       </div>
     </section>
@@ -504,21 +490,23 @@ function MrtSection() {
 }
 
 // ── Section 4: 公車資訊 ───────────────────────────────────────────────────
-const BUS_STOPS = [
-  {
-    name: "市府轉運站",
-    walk: "步行約 5 分鐘",
-    routes: "202、212、612、647、忠孝幹線、棕 7 等",
-  },
-  {
-    name: "聯合報",
-    walk: "步行約 2 分鐘",
-    routes: "多路公車停靠，可依 Google Maps 即時查詢",
-  },
-];
-
 function BusSection() {
+  const { t } = useLanguage();
   const ref = useFadeIn();
+
+  const BUS_STOPS = [
+    {
+      name: "市府轉運站",
+      walk: "步行約 5 分鐘",
+      routes: "202、212、612、647、忠孝幹線、棕 7 等",
+    },
+    {
+      name: "聯合報",
+      walk: "步行約 2 分鐘",
+      routes: "多路公車停靠，可依 Google Maps 即時查詢",
+    },
+  ];
+
   return (
     <section
       id="section-bus"
@@ -530,7 +518,7 @@ function BusSection() {
       <div className="container-narrow">
         <div ref={ref} className="fade-up">
           <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
-            Bus · 公車
+            Bus · {t("transport.bus.label")}
           </p>
           <h2
             style={{
@@ -542,20 +530,9 @@ function BusSection() {
               marginBottom: "0.5rem",
             }}
           >
-            搭乘公車
+            {t("transport.bus.title")}
           </h2>
           <GoldLine />
-
-          <p
-            style={{
-              fontSize: "0.875rem",
-              color: "var(--deer-sub)",
-              lineHeight: 1.9,
-              marginBottom: "2rem",
-            }}
-          >
-            可選擇於以下站點下車，再步行前往初衷小鹿。
-          </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
             {BUS_STOPS.map((stop) => (
@@ -622,7 +599,7 @@ function BusSection() {
             className="btn-deer"
             style={{ fontSize: "0.8rem", display: "inline-block" }}
           >
-            查詢公車路線
+            {t("transport.bus.navigate.btn")}
           </a>
         </div>
       </div>
@@ -631,44 +608,43 @@ function BusSection() {
 }
 
 // ── Section 5: 開車與停車建議 ─────────────────────────────────────────────
-const PARKING_LOTS = [
-  {
-    badge: "首選",
-    badgeColor: "#C5976D",
-    name: "松山高中地下停車場",
-    address: "基隆路一段 156 號地下",
-    walk: "步行約 3 分鐘",
-    feature: "距離最近，適合快速抵達",
-    spaces: "約 226 格，24 小時營業",
-    nav: PARKING_1_NAV,
-    navLabel: "導航",
-  },
-  {
-    badge: "備選",
-    badgeColor: "#6B8B5E",
-    name: "俥亭停車基隆路二場",
-    address: "基隆路一段 176 巷 1 號",
-    walk: "步行約 2 分鐘",
-    feature: "鄰近餐廳，適合快速停車",
-    spaces: "24 小時營業，車位數量請当場確認",
-    nav: PARKING_2_NAV,
-    navLabel: "導航",
-  },
-  {
-    badge: "假日備案",
-    badgeColor: "#5E7A8B",
-    name: "臺北文創大樓收費停車場",
-    address: "信義區菸廠路 88 號",
-    walk: "步行約 8 分鐘",
-    feature: "松菸園區內，車位充足，適合假日尖峰時段",
-    spaces: "24 小時營業，建議提前查詢即時車位",
-    nav: PARKING_3_NAV,
-    navLabel: "導航",
-  },
-];
-
 function ParkingSection() {
+  const { t } = useLanguage();
   const ref = useFadeIn();
+
+  const PARKING_LOTS = [
+    {
+      badge: "首選",
+      badgeColor: "#C5976D",
+      name: "松山高中地下停車場",
+      address: "基隆路一段 156 號地下",
+      walk: "步行約 3 分鐘",
+      feature: "距離最近，適合快速抵達",
+      spaces: "約 226 格，24 小時營業",
+      nav: PARKING_1_NAV,
+    },
+    {
+      badge: "備選",
+      badgeColor: "#6B8B5E",
+      name: "俥亭停車基隆路二場",
+      address: "基隆路一段 176 巷 1 號",
+      walk: "步行約 2 分鐘",
+      feature: "鄰近餐廳，適合快速停車",
+      spaces: "24 小時營業，車位數量請当場確認",
+      nav: PARKING_2_NAV,
+    },
+    {
+      badge: "假日備案",
+      badgeColor: "#5E7A8B",
+      name: "臺北文創大樓收費停車場",
+      address: "信義區菸廠路 88 號",
+      walk: "步行約 8 分鐘",
+      feature: "松菸園區內，車位充足，適合假日尖峰時段",
+      spaces: "24 小時營業，建議提前查詢即時車位",
+      nav: PARKING_3_NAV,
+    },
+  ];
+
   return (
     <section
       id="section-parking"
@@ -681,7 +657,7 @@ function ParkingSection() {
         <div ref={ref} className="fade-up">
           <div style={{ marginBottom: "3rem" }}>
             <p className="font-label mb-4" style={{ color: "rgba(197,151,109,0.6)" }}>
-              Parking · 停車
+              Parking · {t("transport.parking.label")}
             </p>
             <h2
               style={{
@@ -693,7 +669,7 @@ function ParkingSection() {
                 marginBottom: "0.75rem",
               }}
             >
-              開車前往
+              {t("transport.parking.title")}
             </h2>
             <GoldLine />
             <p
@@ -704,7 +680,7 @@ function ParkingSection() {
                 maxWidth: "480px",
               }}
             >
-              初衷小鹿位於巷弄內，周邊路邊停車位有限，建議直接停放至鄰近停車場後步行前往。
+              {t("transport.parking.desc")}
             </p>
           </div>
 
@@ -765,21 +741,21 @@ function ParkingSection() {
                 {/* 資訊列 */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.25rem" }}>
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>步行距離</span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>{t("transport.parking.walk")}</span>
                     <span style={{ fontSize: "0.875rem", color: "var(--deer-dark-text)", fontFamily: "'Noto Serif TC', serif" }}>
                       {lot.walk}
                     </span>
                   </div>
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>特點</span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>{t("transport.parking.feature")}</span>
                     <span style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.6)" }}>{lot.feature}</span>
                   </div>
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>車位</span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>{t("transport.parking.spaces")}</span>
                     <span style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.5)" }}>{lot.spaces}</span>
                   </div>
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>地址</span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--deer-gold)", minWidth: "60px" }}>{t("transport.parking.address")}</span>
                     <span style={{ fontSize: "0.775rem", color: "rgba(240,233,223,0.4)" }}>{lot.address}</span>
                   </div>
                 </div>
@@ -791,7 +767,7 @@ function ParkingSection() {
                   className="btn-deer-light"
                   style={{ fontSize: "0.775rem", padding: "0.625rem 1.5rem", display: "inline-block" }}
                 >
-                  {lot.navLabel}
+                  {t("transport.parking.navigate.btn")}
                 </a>
               </div>
             ))}
@@ -803,36 +779,33 @@ function ParkingSection() {
 }
 
 // ── Section 6: 交通決策引導 ───────────────────────────────────────────────
-const DECISIONS = [
-  {
-    situation: "想最方便",
-    suggestion: "搭捷運到市政府站，再步行前往",
-    anchor: "section-mrt",
-  },
-  {
-    situation: "想快速停車",
-    suggestion: "優先停松山高中地下停車場",
-    anchor: "section-parking",
-  },
-  {
-    situation: "不想找車位",
-    suggestion: "可選俥亭停車基隆路二場，鄰近餐廳且車位穩定",
-    anchor: "section-parking",
-  },
-  {
-    situation: "假日或晚餐尖峰",
-    suggestion: "假日建議停臺北文創大樓停車場，車位充足",
-    anchor: "section-parking",
-  },
-  {
-    situation: "下雨或帶長輩小孩",
-    suggestion: "建議搭車至店附近再步行，或直接叫計程車",
-    anchor: "section-mrt",
-  },
-];
-
 function DecisionSection() {
+  const { t } = useLanguage();
   const ref = useFadeIn();
+
+  const DECISIONS = [
+    {
+      situation: t("transport.decision.d1.situation"),
+      suggestion: t("transport.decision.d1.suggestion"),
+      anchor: "section-mrt",
+    },
+    {
+      situation: t("transport.decision.d2.situation"),
+      suggestion: t("transport.decision.d2.suggestion"),
+      anchor: "section-bus",
+    },
+    {
+      situation: t("transport.decision.d3.situation"),
+      suggestion: t("transport.decision.d3.suggestion"),
+      anchor: "section-parking",
+    },
+    {
+      situation: t("transport.decision.d4.situation"),
+      suggestion: t("transport.decision.d4.suggestion"),
+      anchor: "section-hero",
+    },
+  ];
+
   return (
     <section
       style={{
@@ -843,7 +816,7 @@ function DecisionSection() {
       <div className="container-narrow">
         <div ref={ref} className="fade-up">
           <p className="font-label mb-4" style={{ color: "var(--deer-gold)" }}>
-            Quick Guide
+            {t("transport.decision.label")}
           </p>
           <h2
             style={{
@@ -853,11 +826,10 @@ function DecisionSection() {
               color: "var(--deer-text)",
               letterSpacing: "0.1em",
               marginBottom: "0.5rem",
+              whiteSpace: "pre-line",
             }}
           >
-            不知道怎麼來？
-            <br />
-            可以這樣選
+            {t("transport.decision.title")}
           </h2>
           <GoldLine />
 
@@ -928,7 +900,6 @@ function DecisionSection() {
 }
 
 // ── Section 7: 品牌插畫地圖 ───────────────────────────────────────────────
-// ── 地圖放大 Lightbox ─────────────────────────────────────────────────────
 function MapLightbox({ onClose, children }: { onClose: () => void; children: React.ReactNode }) {
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -985,82 +956,8 @@ function MapLightbox({ onClose, children }: { onClose: () => void; children: Rea
   );
 }
 
-// ── 地圖地標資料 ──────────────────────────────────────────────────────────
-const MAP_MARKERS = [
-  {
-    id: "deer",
-    type: "restaurant" as const,
-    label: "初衷小鹿",
-    sublabel: "",
-    walk: "",
-    x: 310, y: 310,
-    mapsUrl: GOOGLE_MAPS_NAV,
-    color: "#C5976D",
-  },
-  {
-    id: "parking1",
-    type: "parking" as const,
-    label: "松山高中地下停車場",
-    sublabel: "基隆路一段156號",
-    walk: "步行 3 分鐘",
-    x: 390, y: 205,
-    mapsUrl: PARKING_1_NAV,
-    color: "#6BAA8E",
-  },
-  {
-    id: "parking2",
-    type: "parking" as const,
-    label: "俥亭停車基隆路二場",
-    sublabel: "基隆路一段176巷1號",
-    walk: "步行 2 分鐘",
-    x: 420, y: 285,
-    mapsUrl: PARKING_2_NAV,
-    color: "#6BAA8E",
-  },
-  {
-    id: "parking3",
-    type: "parking" as const,
-    label: "臺北文創大樓停車場",
-    sublabel: "菸廠路88號",
-    walk: "步行 8 分鐘",
-    x: 130, y: 115,
-    mapsUrl: PARKING_3_NAV,
-    color: "#6BAA8E",
-  },
-  {
-    id: "bus1",
-    type: "bus" as const,
-    label: "聯合報站",
-    sublabel: "忠孝東路四段555號",
-    walk: "步行 2 分鐘",
-    x: 280, y: 415,
-    mapsUrl: "https://maps.google.com/?q=聯合報站+台北市信義區忠孝東路四段555號",
-    color: "#C5976D",
-  },
-  {
-    id: "bus2",
-    type: "bus" as const,
-    label: "市府轉運站",
-    sublabel: "忠孝東路五段6號",
-    walk: "步行 5 分鐘",
-    x: 490, y: 430,
-    mapsUrl: BUS_QUERY,
-    color: "#C5976D",
-  },
-  {
-    id: "mrt",
-    type: "mrt" as const,
-    label: "市政府捷運站",
-    sublabel: "板南線 1號出口",
-    walk: "步行 5 分鐘",
-    x: 530, y: 395,
-    mapsUrl: MRT_NAV,
-    color: "#7EB8D4",
-  },
-];
-
-
 function IllustrationMapSection() {
+  const { t } = useLanguage();
   const ref = useFadeIn();
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
@@ -1073,7 +970,7 @@ function IllustrationMapSection() {
           {/* 標題 */}
           <div style={{ textAlign: "center", marginBottom: "2rem" }}>
             <p className="font-label mb-4" style={{ color: "rgba(197,151,109,0.6)" }}>
-              Illustrated Map
+              {t("transport.map.label")}
             </p>
             <h2
               style={{
@@ -1084,7 +981,7 @@ function IllustrationMapSection() {
                 letterSpacing: "0.1em",
               }}
             >
-              周邊交通示意圖
+              {t("transport.map.title")}
             </h2>
           </div>
 
@@ -1098,7 +995,7 @@ function IllustrationMapSection() {
               lineHeight: 0,
             }}
             onClick={() => setLightboxOpen(true)}
-            title="點擊放大地圖"
+            title={t("transport.map.zoom")}
           >
             {/* 放大提示 */}
             <div
@@ -1116,7 +1013,7 @@ function IllustrationMapSection() {
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              點擊放大
+              {t("transport.map.zoom")}
             </div>
             <img
               src="/manus-storage/transport-map-custom_a48b7aa9.png"
@@ -1152,6 +1049,7 @@ function IllustrationMapSection() {
 
 // ── Section 8: 手機底部 Sticky 快速按鈕 ──────────────────────────────────
 function StickyBottomBar() {
+  const { t } = useLanguage();
   return (
     <div className="transport-sticky-bar">
       <a
@@ -1164,7 +1062,7 @@ function StickyBottomBar() {
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
           <circle cx="12" cy="9" r="2.5"/>
         </svg>
-        導航至餐廳
+        {t("transport.sticky.navigate")}
       </a>
       <button
         onClick={() => document.getElementById("section-mrt")?.scrollIntoView({ behavior: "smooth" })}
@@ -1174,7 +1072,7 @@ function StickyBottomBar() {
           <rect x="5" y="2" width="14" height="20" rx="2"/>
           <line x1="12" y1="18" x2="12" y2="18.01"/>
         </svg>
-        捷運怎麼走
+        {t("transport.sticky.mrt")}
       </button>
       <button
         onClick={() => document.getElementById("section-parking")?.scrollIntoView({ behavior: "smooth" })}
@@ -1184,7 +1082,7 @@ function StickyBottomBar() {
           <rect x="3" y="3" width="18" height="18" rx="2"/>
           <text x="12" y="16" textAnchor="middle" fontSize="10" fill="currentColor" stroke="none" fontWeight="bold">P</text>
         </svg>
-        停車建議
+        {t("transport.sticky.parking")}
       </button>
     </div>
   );

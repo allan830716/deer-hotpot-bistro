@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MapView } from "@/components/Map";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const PHOTOS = {
   A: "/manus-storage/59409685_2179218615493222_8552773285119524864_o_8ea95551.jpg",
@@ -212,6 +213,7 @@ const T = {
 };
 
 export default function Space() {
+  const { t } = useLanguage();
   const [lightbox, setLightbox] = useState<string | null>(null);
   const open = (src: string) => setLightbox(src);
   const close = () => setLightbox(null);
@@ -242,15 +244,14 @@ export default function Space() {
           display: "flex", flexDirection: "column", alignItems: "flex-start",
           justifyContent: "flex-end", padding: "0 6vw 6vh",
         }}>
-          <div ref={heroRef} className="sp-fade">
-            <p style={{ ...T.label, color: "rgba(197,151,109,0.75)", marginBottom: "1rem" }}>Space Experience</p>
+          <div ref={heroRef} className="sp-fade">            <p style={{ ...T.label, color: "rgba(197,151,109,0.75)", marginBottom: "1rem" }}>{t("space.hero.label")}</p>
             <h1 style={{
               fontFamily: "'Noto Serif TC', serif", fontWeight: 200,
               fontSize: "clamp(1.8rem, 4.5vw, 4rem)",
               color: "rgba(240,233,223,0.9)", letterSpacing: "0.1em",
               lineHeight: 1.35, marginBottom: "1.5rem",
             }}>
-              空間<br />體驗
+              {t("space.hero.title")}
             </h1>
             <div style={{ width: "36px", height: "1px", backgroundColor: "rgba(197,151,109,0.65)" }} />
           </div>
@@ -264,18 +265,18 @@ export default function Space() {
             fontFamily: "'Noto Serif TC', serif", fontWeight: 200,
             fontSize: "clamp(1rem, 2vw, 1.35rem)",
             color: "rgba(240,233,223,0.7)", lineHeight: 2.1, letterSpacing: "0.08em",
+            whiteSpace: "pre-line",
           }}>
-            空間不只是背景。<br />
-            它是這頓飯的第一句話。
+            {t("space.intro.p1")}
           </p>
           <div style={{ width: "28px", height: "1px", backgroundColor: "rgba(197,151,109,0.45)", margin: "2rem 0" }} />
           <p style={{
             fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
             fontSize: "0.9rem", color: "rgba(240,233,223,0.38)",
             lineHeight: 2.1, letterSpacing: "0.05em",
+            whiteSpace: "pre-line",
           }}>
-            黑磚、木質、暖銅燈具。<br />
-            每一處細節，都是為了讓你專注於眼前的人。
+            {t("space.intro.p2")}
           </p>
         </div>
       </section>
@@ -283,8 +284,8 @@ export default function Space() {
       {/* 01 外觀與入口 */}
       <section className="sp-sec">
         <div ref={sec1Ref} className="sp-fade" style={{ padding: "0 6vw 2rem" }}>
-          <p style={T.label}>01 — Exterior</p>
-          <h2 style={T.secTitle}>外觀與入口</h2>
+          <p style={T.label}>{t("space.sec1.label")}</p>
+          <h2 style={T.secTitle}>{t("space.sec1.title")}</h2>
         </div>
         <div className="sp-grid-exterior">
           <Photo src={PHOTOS.B} delay={0} onClick={() => open(PHOTOS.B)} />
@@ -295,8 +296,8 @@ export default function Space() {
       {/* 02 用餐空間 */}
       <section className="sp-sec">
         <div ref={sec2Ref} className="sp-fade" style={{ padding: "0 6vw 2rem", textAlign: "right" }}>
-          <p style={T.label}>02 — Dining Area</p>
-          <h2 style={T.secTitle}>用餐空間</h2>
+          <p style={T.label}>{t("space.sec2.label")}</p>
+          <h2 style={T.secTitle}>{t("space.sec2.title")}</h2>
         </div>
         <Photo src={PHOTOS.D} delay={0} className="sp-dining-main" onClick={() => open(PHOTOS.D)} />
         <div className="sp-grid-dining">
@@ -313,21 +314,21 @@ export default function Space() {
             fontWeight: 300, fontSize: "clamp(1.1rem, 2.2vw, 1.6rem)",
             color: "rgba(197,151,109,0.8)", lineHeight: 1.9, letterSpacing: "0.03em",
           }}>
-            "The right distance between tables<br />is a form of respect."
+            {t("space.quote.en")}
           </p>
           <div style={{ width: "22px", height: "1px", backgroundColor: "rgba(197,151,109,0.35)", margin: "1.75rem auto" }} />
           <p style={{
             fontFamily: "'Noto Serif TC', serif", fontWeight: 300,
             fontSize: "0.8rem", color: "rgba(240,233,223,0.3)", letterSpacing: "0.12em",
-          }}>桌與桌之間的距離，是一種尊重。</p>
+          }}>{t("space.quote.zh")}</p>
         </div>
       </section>
 
       {/* 03 細節與吧台 */}
       <section style={{ padding: "4rem 0 3rem" }}>
         <div ref={sec3Ref} className="sp-fade" style={{ padding: "0 6vw 2rem" }}>
-          <p style={T.label}>03 — Details & Bar</p>
-          <h2 style={T.secTitle}>細節與吧台</h2>
+          <p style={T.label}>{t("space.sec3.label")}</p>
+          <h2 style={T.secTitle}>{t("space.sec3.title")}</h2>
         </div>
         <div className="sp-grid-detail-a">
           <Photo src={PHOTOS.G} delay={0} onClick={() => open(PHOTOS.G)} />
@@ -342,8 +343,8 @@ export default function Space() {
       {/* 04 位置與導航 */}
       <section style={{ padding: "5rem 6vw 0", backgroundColor: "var(--deer-dark)" }}>
         <div style={{ marginBottom: "2rem" }}>
-          <p style={{ ...T.label, marginBottom: "0.75rem" }}>04 — Location</p>
-          <h2 style={{ ...T.secTitle, marginBottom: "0.5rem" }}>位置與導航</h2>
+          <p style={{ ...T.label, marginBottom: "0.75rem" }}>{t("space.sec4.label")}</p>
+          <h2 style={{ ...T.secTitle, marginBottom: "0.5rem" }}>{t("space.sec4.title")}</h2>
           <p style={{ fontSize: "0.8rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.06em", lineHeight: 1.8 }}>
             台北市信義區忠孝東路四段 553 巷 6 弄 15 號
           </p>
@@ -408,7 +409,7 @@ export default function Space() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.25)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.15)"; }}
           >
-            ↗ 立即導航
+            {t("space.navigate.btn")}
           </a>
           <a
             href="https://maps.app.goo.gl/aWRwfie8rDpdxK277"
@@ -428,7 +429,7 @@ export default function Space() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.45)"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.85)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.2)"; (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.55)"; }}
           >
-            在 Google Maps 查看
+            {t("space.googlemaps.btn")}
           </a>
         </div>
       </section>
@@ -444,9 +445,7 @@ export default function Space() {
             lineHeight: 1.9, margin: "0 0 2rem",
             borderLeft: "none", padding: 0,
           }}>
-            有些氛圍，
-            <br />
-            是照片說不清楚的。
+            {t("space.cta.quote")}
           </blockquote>
           <div style={{ width: "22px", height: "1px", backgroundColor: "rgba(197,151,109,0.3)", margin: "0 auto 2.5rem" }} />
           <a
@@ -472,7 +471,7 @@ export default function Space() {
               (e.currentTarget as HTMLElement).style.color = "rgba(197,151,109,0.6)";
             }}
           >
-            Reserve a Table
+            {t("space.reserve.btn")}
           </a>
         </div>
       </section>

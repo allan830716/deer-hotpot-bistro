@@ -29,15 +29,23 @@ import Transport from "./pages/Transport";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./contexts/CartContext";
 import { useCart } from "./contexts/CartContext";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Globe } from "lucide-react";
+import { useLanguage, type Language } from "./contexts/LanguageContext";
 
-const NAV_LINKS = [
-  { href: "/", label: "首頁" },
-  { href: "/brand", label: "品牌故事" },
-  { href: "/menu", label: "菜單" },
-  { href: "/space", label: "空間體驗" },
-  { href: "/awards", label: "獲獎殊榮/雜誌專訪" },
-  { href: "/transport", label: "交通與停車" },
+const NAV_LINK_KEYS = [
+  { href: "/", key: "nav.home" },
+  { href: "/brand", key: "nav.brand" },
+  { href: "/menu", key: "nav.menu" },
+  { href: "/space", key: "nav.space" },
+  { href: "/awards", key: "nav.awards" },
+  { href: "/transport", key: "nav.transport" },
+];
+
+const LANG_OPTIONS: { code: Language; label: string }[] = [
+  { code: "zh-TW", label: "繁中" },
+  { code: "en",    label: "EN" },
+  { code: "ja",    label: "日文" },
+  { code: "ko",    label: "한국어" },
 ];
 
 const RESERVATION_URL = "https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw";
@@ -72,10 +80,122 @@ function NavCartBtn() {
   );
 }
 
+// ── 語言切換器元件 ──────────────────────────────────────────────────────────
+function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
+  const { lang, setLang } = useLanguage();
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  // 點擊外部關閉
+  React.useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  const currentLabel = LANG_OPTIONS.find((o) => o.code === lang)?.label ?? "繁中";
+
+  if (compact) {
+    // 手機版：4 個按鈕橫排
+    return (
+      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" as const }}>
+        {LANG_OPTIONS.map((opt) => (
+          <button
+            key={opt.code}
+            onClick={() => setLang(opt.code)}
+            style={{
+              background: lang === opt.code ? "rgba(197,151,109,0.18)" : "transparent",
+              border: lang === opt.code ? "1px solid rgba(197,151,109,0.7)" : "1px solid rgba(255,255,255,0.15)",
+              color: lang === opt.code ? "var(--deer-gold)" : "rgba(240,233,223,0.5)",
+              fontSize: "0.75rem",
+              letterSpacing: "0.06em",
+              padding: "0.35rem 0.75rem",
+              cursor: "pointer",
+              fontFamily: "'Noto Serif TC', serif",
+              transition: "all 0.2s ease",
+            }}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  // 桌機版：下拉選單
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          display: "flex", alignItems: "center", gap: "0.35rem",
+          background: "transparent",
+          border: "1px solid rgba(197,151,109,0.3)",
+          color: "rgba(197,151,109,0.85)",
+          fontSize: "0.72rem",
+          letterSpacing: "0.08em",
+          padding: "0.35rem 0.7rem",
+          cursor: "pointer",
+          fontFamily: "'Noto Serif TC', serif",
+          transition: "all 0.2s ease",
+        }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.3)"; }}
+        aria-label="切換語言"
+      >
+        <Globe size={12} strokeWidth={1.5} />
+        <span>{currentLabel}</span>
+        <span style={{ fontSize: "0.55rem", opacity: 0.6, marginLeft: "0.1rem" }}>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div style={{
+          position: "absolute", top: "calc(100% + 6px)", right: 0,
+          backgroundColor: "rgba(18,12,10,0.98)",
+          backdropFilter: "blur(16px)",
+          border: "1px solid rgba(197,151,109,0.2)",
+          minWidth: "90px",
+          zIndex: 300,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+        }}>
+          {LANG_OPTIONS.map((opt) => (
+            <button
+              key={opt.code}
+              onClick={() => { setLang(opt.code); setOpen(false); }}
+              style={{
+                display: "block", width: "100%",
+                background: lang === opt.code ? "rgba(197,151,109,0.12)" : "transparent",
+                border: "none",
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                color: lang === opt.code ? "var(--deer-gold)" : "rgba(240,233,223,0.6)",
+                fontSize: "0.75rem",
+                letterSpacing: "0.08em",
+                padding: "0.6rem 1rem",
+                cursor: "pointer",
+                textAlign: "left" as const,
+                fontFamily: "'Noto Serif TC', serif",
+                transition: "background 0.15s ease, color 0.15s ease",
+              }}
+              onMouseEnter={(e) => { if (lang !== opt.code) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+              onMouseLeave={(e) => { if (lang !== opt.code) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -119,8 +239,8 @@ function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
-            {NAV_LINKS.map((link) => (
+          <nav style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+            {NAV_LINK_KEYS.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span
                   style={{
@@ -134,11 +254,12 @@ function Navbar() {
                   onMouseEnter={(e) => { if (location !== link.href) (e.target as HTMLElement).style.color = "rgba(240,233,223,0.85)"; }}
                   onMouseLeave={(e) => { if (location !== link.href) (e.target as HTMLElement).style.color = "rgba(240,233,223,0.55)"; }}
                 >
-                  {link.label}
+                  {t(link.key)}
                 </span>
               </Link>
             ))}
             <NavCartBtn />
+            <LanguageSwitcher />
             <Link href="/crem">
               <span
                 style={{
@@ -160,7 +281,7 @@ function Navbar() {
                   }
                 }}
               >
-                CRÈM 蛋糕上桌預訂
+                {t("nav.crem")}
               </span>
             </Link>
             <a
@@ -175,7 +296,7 @@ function Navbar() {
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
             >
-              立即訂位
+              {t("nav.reserve")}
             </a>
           </nav>
 
@@ -218,7 +339,7 @@ function Navbar() {
           zIndex: 210, background: "none", border: "none",
           cursor: "pointer", padding: "0.5rem",
         }}
-        aria-label={menuOpen ? "關閉選單" : "開啟選單"}
+        aria-label={menuOpen ? t("nav.close") : t("nav.open")}
         aria-expanded={menuOpen}
       >
         <div style={{ width: "22px", height: "16px", position: "relative" }}>
@@ -281,7 +402,7 @@ function Navbar() {
       >
         {/* 導覽連結 */}
         <nav style={{ flex: 1 }}>
-          {NAV_LINKS.map((link, i) => (
+          {NAV_LINK_KEYS.map((link, i) => (
             <Link key={link.href} href={link.href}>
               <div style={{
                 padding: "1rem 0",
@@ -294,7 +415,7 @@ function Navbar() {
                 opacity: menuOpen ? 1 : 0,
                 transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + i * 45}ms, opacity 0.35s ease ${60 + i * 45}ms`,
               }}>
-                {link.label}
+                {t(link.key)}
               </div>
             </Link>
           ))}
@@ -309,10 +430,10 @@ function Navbar() {
               letterSpacing: "0.1em", cursor: "pointer",
               transform: menuOpen ? "translateX(0)" : "translateX(16px)",
               opacity: menuOpen ? 1 : 0,
-              transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + NAV_LINKS.length * 45}ms, opacity 0.35s ease ${60 + NAV_LINKS.length * 45}ms`,
+              transition: `transform 0.4s cubic-bezier(0.4,0,0.2,1) ${80 + NAV_LINK_KEYS.length * 45}ms, opacity 0.35s ease ${60 + NAV_LINK_KEYS.length * 45}ms`,
               display: "none", alignItems: "center", gap: "0.5rem",
             }}>
-              <ShoppingCart size={14} /> 生鮮商店
+              <ShoppingCart size={14} /> {t("nav.shop")}
             </div>
           </Link>
         </nav>
@@ -332,7 +453,7 @@ function Navbar() {
               transform: menuOpen ? "translateY(0)" : "translateY(8px)",
               transition: "opacity 0.35s ease 320ms, transform 0.4s ease 320ms",
             }}
-          >CRÈM 蛋糕上桌預訂</div>
+          >{t("nav.crem")}</div>
         </Link>
 
         {/* 訂位按鈕 */}
@@ -350,13 +471,26 @@ function Navbar() {
             transform: menuOpen ? "translateY(0)" : "translateY(8px)",
             transition: "opacity 0.35s ease 380ms, transform 0.4s ease 380ms",
           }}
-        >立即訂位</a>
+        >{t("nav.reserve")}</a>
+
+        {/* 語言切換器 — 手機版抽屜底部 */}
+        <div style={{
+          marginTop: "1.5rem",
+          paddingTop: "1.25rem",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          opacity: menuOpen ? 1 : 0,
+          transform: menuOpen ? "translateY(0)" : "translateY(8px)",
+          transition: "opacity 0.35s ease 440ms, transform 0.4s ease 440ms",
+        }}>
+          <LanguageSwitcher compact />
+        </div>
       </div>
     </>
   );
 }
 
 function Footer() {
+  const { t } = useLanguage();
   return (
     <footer style={{ backgroundColor: "var(--deer-dark)", borderTop: "1px solid rgba(197,151,109,0.12)", padding: "4rem 2rem" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "3rem" }}>
@@ -366,23 +500,23 @@ function Footer() {
         </div>
 
         <div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Contact</p>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>{t("footer.contact")}</p>
           <a href="tel:+886227658585" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", display: "block", lineHeight: 2, transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>02-2765-8585</a>
         </div>
         <div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Hours</p>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>{t("footer.hours")}</p>
           <p style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", lineHeight: 2 }}>
-            星期一　12:00–15:00　18:00–22:00<br />
-            星期二　12:00–15:00　18:00–22:00<br />
-            星期三　12:00–15:00　18:00–22:00<br />
-            星期四　12:00–15:00　18:00–22:00<br />
-            星期五　12:00–15:00　17:30–22:30<br />
-            星期六　11:30–15:00　17:30–22:30<br />
-            星期日　11:30–15:00　17:30–22:30
+            {t("footer.hours.mon")}　12:00–15:00　18:00–22:00<br />
+            {t("footer.hours.tue")}　12:00–15:00　18:00–22:00<br />
+            {t("footer.hours.wed")}　12:00–15:00　18:00–22:00<br />
+            {t("footer.hours.thu")}　12:00–15:00　18:00–22:00<br />
+            {t("footer.hours.fri")}　12:00–15:00　17:30–22:30<br />
+            {t("footer.hours.sat")}　11:30–15:00　17:30–22:30<br />
+            {t("footer.hours.sun")}　11:30–15:00　17:30–22:30
           </p>
         </div>
         <div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>Follow</p>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--deer-gold)", marginBottom: "1rem" }}>{t("footer.follow")}</p>
           <a href="https://www.instagram.com/originalpot_official/?hl=zh-tw" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", display: "block", marginBottom: "0.5rem", transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>Instagram</a>
           <a href="https://www.facebook.com/deershotpotbistro/?locale=zh_TW" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(197,151,109,0.8)";}} onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.color="rgba(240,233,223,0.4)";}}>Facebook</a>
         </div>
@@ -393,9 +527,9 @@ function Footer() {
           {/* 左欄：地址資訊 */}
           <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1.5rem" }}>
             <div>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.7)", marginBottom: "1rem" }}>Find Us</p>
-              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.75)", lineHeight: 2, letterSpacing: "0.06em", marginBottom: "0.25rem" }}>台北市信義區</p>
-              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.75)", lineHeight: 2, letterSpacing: "0.06em", marginBottom: "1.5rem" }}>忠孝東路四段 553 巷 6 弄 15 號</p>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.7)", marginBottom: "1rem" }}>{t("footer.findUs")}</p>
+              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.75)", lineHeight: 2, letterSpacing: "0.06em", marginBottom: "0.25rem" }}>{t("footer.address.city")}</p>
+              <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.875rem", color: "rgba(240,233,223,0.75)", lineHeight: 2, letterSpacing: "0.06em", marginBottom: "1.5rem" }}>{t("footer.address.street")}</p>
               <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "0.75rem", color: "rgba(240,233,223,0.35)", letterSpacing: "0.08em", lineHeight: 1.8 }}>Zhongxiao E. Rd. Sec. 4, Lane 553<br />Alley 6, No. 15, Xinyi Dist., Taipei</p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
@@ -407,7 +541,7 @@ function Footer() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)"; }}
               >
-                立即導航
+                {t("footer.navigate")}
               </a>
               <a
                 href="https://maps.app.goo.gl/aWRwfie8rDpdxK277"
@@ -417,7 +551,7 @@ function Footer() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.6)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(240,233,223,0.3)"; }}
               >
-                在 Google Maps 查看
+                {t("footer.viewOnMaps")}
               </a>
             </div>
           </div>
@@ -440,9 +574,9 @@ function Footer() {
       <div style={{ maxWidth: "1280px", margin: "2.5rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2rem" }}>
         <div style={{ display: "flex", flexWrap: "wrap" as const, alignItems: "center", justifyContent: "space-between", gap: "1.25rem" }}>
           <div>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>Getting Here</p>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(197,151,109,0.55)", marginBottom: "0.5rem" }}>{t("footer.gettingHere")}</p>
             <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.5)", letterSpacing: "0.06em" }}>
-              捷運、開車、停車建議——詳見交通與停車頁面
+              {t("footer.transportDesc")}
             </p>
           </div>
           <Link
@@ -464,13 +598,13 @@ function Footer() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.7)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(197,151,109,0.35)"; }}
           >
-            交通與停車 →
+            {t("footer.transportLink")}
           </Link>
         </div>
       </div>
 
       <div style={{ maxWidth: "1280px", margin: "2rem auto 0", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.5rem", textAlign: "center" }}>
-        <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>© 2026 初衷小鹿 Deer's Hotpot Bistro. All rights reserved.</p>
+        <p style={{ fontSize: "0.75rem", color: "rgba(240,233,223,0.2)", letterSpacing: "0.08em" }}>{t("footer.copyright")}</p>
       </div>
     </footer>
   );
