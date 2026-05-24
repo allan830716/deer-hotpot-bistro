@@ -278,8 +278,10 @@ export default function Crem() {
           /* 手機版輪播：只顯示圖片，隱藏文字 */
           .crem-carousel-slide-inner { flex-direction: column !important; min-height: unset !important; }
           .crem-carousel-slide-text { display: none !important; }
-          .crem-carousel-slide-img { flex: unset !important; width: 100% !important; min-height: 260px; display: flex; align-items: center; justify-content: center; }
-          .crem-carousel-slide-img img { object-fit: contain !important; background-color: #111; width: 100% !important; height: auto !important; max-height: 320px; display: block; }
+          .crem-carousel-slide-img { flex: unset !important; width: 100% !important; }
+          /* 手機版輪播容器：移除左右 padding，箭頭隱藏 */
+          .crem-carousel-outer { padding: 0 !important; }
+          .crem-carousel-arrow { display: none !important; }
         }
         @media (min-width: 768px) {
           .crem-flow-mobile { display: none !important; }
@@ -298,9 +300,9 @@ export default function Crem() {
           padding: "1.75rem 1.5rem 1.5rem",
           borderBottom: "1px solid rgba(197,151,109,0.1)",
         }}>
-          <img src={DEER_LOGO} alt="初衷小鹿" style={{ height: "clamp(44px, 7vw, 64px)", width: "auto", objectFit: "contain" }} />
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(1.5rem, 4vw, 2.5rem)", color: "rgba(197,151,109,0.4)", lineHeight: 1 }}>×</span>
-          <img src={CREM_LOGO} alt="CRÈM" style={{ height: "clamp(44px, 7vw, 64px)", width: "auto", objectFit: "contain" }} />
+          <img src={DEER_LOGO} alt="初衷小鹿" style={{ height: "clamp(56px, 9vw, 88px)", width: "auto", objectFit: "contain" }} />
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(1.8rem, 5vw, 3rem)", color: "rgba(197,151,109,0.4)", lineHeight: 1 }}>×</span>
+          <img src={CREM_LOGO} alt="CRÈM" style={{ height: "clamp(56px, 9vw, 88px)", width: "auto", objectFit: "contain" }} />
         </div>
 
         {/* 全寬 Hero 圖片 */}
@@ -321,9 +323,8 @@ export default function Crem() {
           <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.75rem, 4vw, 2.75rem)", color: textMain, letterSpacing: "0.08em", lineHeight: 1.45, marginBottom: "1.25rem" }}>
             CRÈM 蛋糕上桌預訂
           </h1>
-          <p style={{ color: textSub, fontSize: "0.9rem", lineHeight: 2, letterSpacing: "0.06em" }}>
-            由兩個品牌共創一場慶祝的完整設計。<br />
-            從餐桌到蛋糕，讓每個重要時刻都更加完整。
+          <p style={{ color: textSub, fontSize: "0.9rem", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto" }}>
+            由兩個品牌共創一場慶祝的完整設計。從餐桌到蛋糕，讓每個重要時刻都更加完整。
           </p>
         </div>
       </section>
@@ -342,7 +343,7 @@ export default function Crem() {
                 一條龍預定服務
               </h2>
               <p style={{ color: textSub, fontSize: "0.875rem", lineHeight: 1.9 }}>
-                想在重要的日子好好慶祝，卻總是被這些事情打亂？
+                想在重要的日子好好慶祝，<br />卻總是被這些事情打亂？
               </p>
             </div>
 
@@ -480,20 +481,20 @@ export default function Crem() {
           <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
             <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>How To Order</p>
             <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2rem)", color: textMain, letterSpacing: "0.08em" }}>
-              訂購方式
+              預訂方式
             </h2>
           </div>
 
-          {/* 輪播主體：position:relative 讓箭頭絕對定位在圖片上 */}
-          <div style={{ position: "relative" }}>
+          {/* 輪播主體：padding左右留出箭頭空間 */}
+          <div className="crem-carousel-outer" style={{ position: "relative", padding: "0 56px" }}>
             <div
               ref={containerRef}
               className="crem-carousel-wrap"
               style={{
                 width: "100%",
                 overflow: "hidden",
-                borderRadius: "12px",
-                border: "1px solid rgba(197,151,109,0.18)",
+                borderRadius: "0",
+                border: "none",
                 backgroundColor: "#111",
                 cursor: isMouseDragging.current ? "grabbing" : "grab",
                 userSelect: "none",
@@ -525,112 +526,51 @@ export default function Crem() {
                     key={i}
                     style={{ width: `${100 / total}%`, flexShrink: 0 }}
                   >
-                    {s.stepNum === null ? (
-                      /* 介紹幻燈片：全寬圖片 */
-                      <div style={{ aspectRatio: "16/7", overflow: "hidden" }}>
-                        <img
-                          src={s.img}
-                          alt={s.title}
-                          loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
-                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
-                        />
-                      </div>
-                    ) : (
-                      /* STEP 幻燈片：左文字 + 右圖片 */
-                      <div
-                        className="crem-carousel-slide-inner"
-                        style={{ display: "flex", alignItems: "stretch", minHeight: "480px" }}
-                      >
-                        {/* 左側文字 */}
-                        <div
-                          className="crem-carousel-slide-text"
-                          style={{
-                            flex: "0 0 40%",
-                            padding: "2.5rem 2rem 2.5rem 2.5rem",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            borderRight: "1px solid rgba(197,151,109,0.12)",
-                          }}
-                        >
-                          <div style={{
-                            width: "52px", height: "52px",
-                            border: "1.5px solid rgba(197,151,109,0.75)",
-                            borderRadius: "50%",
-                            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                            marginBottom: "1.25rem",
-                          }}>
-                            <span style={{ color: "rgba(197,151,109,0.65)", fontSize: "0.45rem", letterSpacing: "0.15em", lineHeight: 1 }}>STEP</span>
-                            <span style={{ color: gold, fontSize: "1.3rem", fontWeight: 300, lineHeight: 1 }}>{s.stepNum}</span>
-                          </div>
-                          <h3 style={{
-                            fontFamily: "'Noto Serif TC', serif",
-                            fontWeight: 200,
-                            fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
-                            color: textMain,
-                            letterSpacing: "0.06em",
-                            lineHeight: 1.45,
-                            marginBottom: "0.5rem",
-                          }}>
-                            {s.title}
-                          </h3>
-                          <p style={{ color: goldFaint, fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "1rem" }}>{s.titleEn}</p>
-                          <p style={{ color: "rgba(240,233,223,0.78)", fontSize: "clamp(0.8rem, 1.3vw, 0.9rem)", lineHeight: 1.85 }}>{s.desc}</p>
-                          {s.descEn && (
-                            <p style={{ color: "rgba(197,151,109,0.55)", fontSize: "0.62rem", lineHeight: 1.7, marginTop: "0.5rem" }}>{s.descEn}</p>
-                          )}
-                        </div>
-                        {/* 右側圖片 */}
-              <div
-                        className="crem-carousel-slide-img"
-                        style={{ flex: "1", overflow: "hidden", backgroundColor: "#111" }}
-                      >
-                        <img
-                          src={s.img}
-                          alt={s.title}
-                          loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
-                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", objectPosition: "center top", pointerEvents: "none" }}
-                        />
-                      </div>
-                      </div>
-                    )}
+                    <div style={{ width: "100%", backgroundColor: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <img
+                        src={s.img}
+                        alt={s.title}
+                        loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
+                        style={{ width: "100%", height: "auto", display: "block", objectFit: "contain", pointerEvents: "none" }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* 左右箭頭：絕對定位在輪播容器內左右兩側 */}
+            {/* 左右箭頭：移到輪播容器外側，不遮擋圖片 */}
             <button
+              className="crem-carousel-arrow"
               onClick={prev}
               aria-label="上一步"
               style={{
-                position: "absolute", left: "0.75rem", top: "50%",
+                position: "absolute", left: "-52px", top: "50%",
                 transform: "translateY(-50%)", zIndex: 20,
-                width: "44px", height: "44px", borderRadius: "50%",
-                border: "none", backgroundColor: "rgba(30,20,15,0.72)",
-                color: "#fff", cursor: "pointer", fontSize: "1.6rem",
+                width: "40px", height: "40px", borderRadius: "50%",
+                border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(10,8,7,0.85)",
+                color: gold, cursor: "pointer", fontSize: "1.4rem",
                 lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "background-color 0.2s ease",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
+                transition: "all 0.2s ease",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.2)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(10,8,7,0.85)"; }}
             >‹</button>
             <button
+              className="crem-carousel-arrow"
               onClick={next}
               aria-label="下一步"
               style={{
-                position: "absolute", right: "0.75rem", top: "50%",
+                position: "absolute", right: "-52px", top: "50%",
                 transform: "translateY(-50%)", zIndex: 20,
-                width: "44px", height: "44px", borderRadius: "50%",
-                border: "none", backgroundColor: "rgba(30,20,15,0.72)",
-                color: "#fff", cursor: "pointer", fontSize: "1.6rem",
+                width: "40px", height: "40px", borderRadius: "50%",
+                border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(10,8,7,0.85)",
+                color: gold, cursor: "pointer", fontSize: "1.4rem",
                 lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "background-color 0.2s ease",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
+                transition: "all 0.2s ease",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.2)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(10,8,7,0.85)"; }}
             >›</button>
           </div>
 
@@ -694,10 +634,7 @@ export default function Crem() {
           }}>
             開始預訂您的專屬蛋糕
           </h2>
-          <p style={{ color: textSub, fontSize: "0.875rem", lineHeight: 2, marginBottom: "2.5rem" }}>
-            前往 CRÈM 官網選擇口味與尺寸，<br />
-            記得在產品頁面選擇「有訂位初衷小鹿」。
-          </p>
+
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
             <a
               href="https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97"
