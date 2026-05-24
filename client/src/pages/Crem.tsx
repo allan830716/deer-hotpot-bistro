@@ -159,6 +159,11 @@ export default function Crem() {
 
   // ── 輪播狀態（仿菜單頁機制）──────────────────────────────────────────────
   const [currentIndex, setCurrentIndex] = useState(0);
+  // ── 手機版滑動暗示 ────────────────────────────────────────────────────────
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
+  const [peekOffset, setPeekOffset] = useState(0);
+  const carouselSectionRef = useRef<HTMLDivElement>(null);
+  const peekDone = useRef(false);
   const [dragDelta, setDragDelta] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -256,8 +261,40 @@ export default function Crem() {
     isMouseDragging.current = false;
   };
 
-  const offsetPx = containerWidth > 0 ? -(safeIndex * containerWidth) + dragDelta : 0;
+  const offsetPx = containerWidth > 0 ? -(safeIndex * containerWidth) + dragDelta + peekOffset : 0;
   const trackTranslate = `translateX(${offsetPx}px)`;
+
+  // ── Peek 動畫：當輪播進入視窗時，執行一次輕微左移暗示 ──────────────────
+  useEffect(() => {
+    const section = carouselSectionRef.current;
+    if (!section || peekDone.current) return;
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !peekDone.current) {
+          peekDone.current = true;
+          // 延遲 600ms 後執行 peek 動畫
+          setTimeout(() => {
+            setPeekOffset(-28); // 向左偏移 28px（暗示右邊還有內容）
+            setTimeout(() => {
+              setPeekOffset(0); // 回正
+              // 3 秒後隱藏提示文字
+              setTimeout(() => setShowSwipeHint(false), 3000);
+            }, 500);
+          }, 600);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // 當使用者滑動後隱藏提示
+  const handleSwipeInteraction = () => {
+    if (showSwipeHint) setShowSwipeHint(false);
+  };
 
   const gold = "rgba(197,151,109,1)";
   const goldFaint = "rgba(197,151,109,0.5)";
@@ -474,7 +511,7 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 3: 訂購方式（連續滑動輪播）══ */}
-      <section style={{ padding: "5rem 0 4rem", borderBottom: "1px solid rgba(197,151,109,0.1)", backgroundColor: "#090706" }}>
+      <section ref={carouselSectionRef} style={{ padding: "5rem 0 4rem", borderBottom: "1px solid rgba(197,151,109,0.1)", backgroundColor: "#090706" }}>
         <div className="container" style={{ maxWidth: "1100px" }}>
 
           {/* 標題 */}
@@ -499,7 +536,7 @@ export default function Crem() {
                 cursor: isMouseDragging.current ? "grabbing" : "grab",
                 userSelect: "none",
               }}
-              onTouchStart={handleTouchStart}
+              onTouchStart={(e) => { handleSwipeInteraction(); handleTouchStart(e); }}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
               onMouseDown={handleMouseDown}
@@ -592,6 +629,33 @@ export default function Crem() {
                 }}
               />
             ))}
+          </div>
+
+          {/* 手機版滑動提示 */}
+          <div style={{
+            textAlign: "center",
+            marginTop: "0.75rem",
+            height: "20px",
+            opacity: showSwipeHint ? 1 : 0,
+            transition: "opacity 0.8s ease",
+            pointerEvents: "none",
+          }}>
+            <span style={{
+              color: "rgba(197,151,109,0.55)",
+              fontSize: "0.65rem",
+              letterSpacing: "0.12em",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}>
+              <svg viewBox="0 0 20 20" fill="none" style={{ width: 14, height: 14 }}>
+                <path d="M12 10H4M4 10L7 7M4 10L7 13" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              滑動查看步驟
+              <svg viewBox="0 0 20 20" fill="none" style={{ width: 14, height: 14 }}>
+                <path d="M8 10h8M16 10l-3-3M16 10l-3 3" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
           </div>
 
           {/* 步驟標籤列 */}
