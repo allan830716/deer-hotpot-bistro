@@ -2671,3 +2671,30 @@
     opacity: 0;
   }
 }
+
+/* ── CRÈM 頁面：輪播 CTA 按鈕（只在手機版顯示）── */
+.crem-carousel-cta {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .crem-carousel-cta {
+    display: none;
+  }
+  /* 電腦版輪播箭頭顯示 */
+  .crem-carousel-arrow {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 767px) {
+  /* 手機版輪播箭頭隱藏（改用滑動） */
+  .crem-carousel-arrow {
+    display: none !important;
+  }
+  /* 手機版輪播外層移除 padding（箭頭已隱藏） */
+  .crem-carousel-outer {
+    padding: 0 !important;
+  }
+}

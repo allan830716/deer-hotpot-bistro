@@ -631,6 +631,41 @@ export default function Crem() {
             ))}
           </div>
 
+          {/* 手機版：滑到最後一張時顯示 CTA 按鈕 */}
+          <div
+            className="crem-carousel-cta"
+            style={{
+              textAlign: "center",
+              marginTop: "1.25rem",
+              height: "48px",
+              opacity: safeIndex === total - 1 ? 1 : 0,
+              transform: safeIndex === total - 1 ? "translateY(0)" : "translateY(8px)",
+              transition: "opacity 0.5s ease, transform 0.5s ease",
+              pointerEvents: safeIndex === total - 1 ? "auto" : "none",
+            }}
+          >
+            <a
+              href="https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-block",
+                backgroundColor: "rgba(197,151,109,0.15)",
+                border: "1px solid rgba(197,151,109,0.75)",
+                color: "rgba(197,151,109,1)",
+                padding: "0.65rem 2rem",
+                fontSize: "0.78rem",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                fontFamily: "'Noto Serif TC', serif",
+                fontWeight: 300,
+              }}
+            >
+              立即前往預訂
+            </a>
+          </div>
+
           {/* 手機版滑動提示 */}
           <div style={{
             textAlign: "center",
