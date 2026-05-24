@@ -32,11 +32,11 @@ function useFadeIn(threshold = 0.1) {
 
 // ── 圖片 CDN 路徑 ──────────────────────────────────────────────────────────
 const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
-// Hero 左圖：CRÈM 鮮奶油蛋糕照片（含蛋糕俯拍 + CRÈM 黑盒包裝）
-const HERO_LEFT = "/manus-storage/crem-cake_7f5629d5.jpg";
-// Hero 右圖：初衷小鹿餐廳空間
-const HERO_RIGHT = "/manus-storage/59301147_2179218135493270_2323651919307866112_o_0536430f.jpg";
-// 訂購方式輪播
+// Hero 圖片：新版蛋糕 + CRÈM 黑盒合照
+const HERO_IMG = "/manus-storage/crem-hero-new_b5d70f72.jpg";
+// CRÈM 原始 Logo
+const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
+// 訂購方式輪播介紹圖
 const HOW_TO_ORDER_HERO = "/manus-storage/crem-how-to-order-hero_9e446791.webp";
 const STEP1_IMG = "/manus-storage/crem-step1-flavor_672c25e8.webp";
 const STEP2_IMG = "/manus-storage/crem-step2-booking_7694680f.webp";
@@ -77,8 +77,8 @@ const FLOW_STEPS = [
         <path d="M16 22h8M16 17h8" strokeLinecap="round"/>
       </svg>
     ),
-    zh: "訂位時同步預約",
-    sub: "訂位時可以同步\n預約蛋糕服務",
+    zh: "冷藏配送",
+    sub: "低溫冷藏\n省去取貨",
   },
   {
     icon: (
@@ -88,8 +88,8 @@ const FLOW_STEPS = [
         <circle cx="15" cy="21" r="3"/>
       </svg>
     ),
-    zh: "專車冷藏配送",
-    sub: "低溫冷藏\n省去取貨",
+    zh: "專人安排上桌",
+    sub: "蠟燭 / 擺盤\n時機提前安排",
   },
   {
     icon: (
@@ -98,8 +98,8 @@ const FLOW_STEPS = [
         <path d="M14 20l4 4 8-8" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    zh: "專人安排上桌",
-    sub: "蠟燭 / 擺盤\n時機提前安排",
+    zh: "把時間留給重要的人",
+    sub: "剩下的\n交給我們",
   },
 ];
 
@@ -182,11 +182,9 @@ export default function Crem() {
           padding: "1.75rem 1.5rem 1.5rem",
           borderBottom: "1px solid rgba(197,151,109,0.1)",
         }}>
-          <img src={DEER_LOGO} alt="初衷小鹿" style={{ height: "clamp(36px, 6vw, 56px)", width: "auto", objectFit: "contain" }} />
+          <img src={DEER_LOGO} alt="初衷小鹿" style={{ height: "clamp(44px, 7vw, 64px)", width: "auto", objectFit: "contain" }} />
           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(1.5rem, 4vw, 2.5rem)", color: "rgba(197,151,109,0.4)", lineHeight: 1 }}>×</span>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 300, fontSize: "clamp(1.5rem, 4vw, 2.5rem)", letterSpacing: "0.2em", color: "#fff", lineHeight: 1 }}>
-            CR<span style={{ fontSize: "0.85em" }}>È</span>M
-          </div>
+          <img src={CREM_LOGO} alt="CRÈM" style={{ height: "clamp(44px, 7vw, 64px)", width: "auto", objectFit: "contain" }} />
         </div>
 
         {/* 響應式媒體查詢 */}
@@ -211,7 +209,7 @@ export default function Crem() {
         {/* 全寬 Hero 圖片 — 電腦版與手機版均為全寬 */}
         <div style={{ position: "relative", width: "100%", lineHeight: 0, overflow: "hidden" }}>
           <img
-            src={HOW_TO_ORDER_HERO}
+            src={HERO_IMG}
             alt="CRÈM × 初衷小鹿 慶祝一條龍服務"
             style={{
               width: "100%",
@@ -325,9 +323,9 @@ export default function Crem() {
                     </div>
                     {i < FLOW_STEPS.length - 1 && (
                       <div style={{ display: "flex", alignItems: "center", paddingTop: "20px", flexShrink: 0 }}>
-                        <svg viewBox="0 0 44 24" fill="none" style={{ width: "44px", height: "24px" }}>
-                          <path d="M0 12 Q11 0 22 12 Q33 24 44 12" stroke="rgba(197,151,109,0.5)" strokeWidth="1.2" fill="none"/>
-                          <path d="M39 9 L44 12 L39 15" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg viewBox="0 0 44 16" fill="none" style={{ width: "44px", height: "16px" }}>
+                          <line x1="0" y1="8" x2="38" y2="8" stroke="rgba(197,151,109,0.5)" strokeWidth="1.2"/>
+                          <path d="M35 4 L44 8 L35 12" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
                     )}
@@ -369,9 +367,9 @@ export default function Crem() {
                     </div>
                     {i < FLOW_STEPS.length - 1 && (
                       <div style={{ display: "flex", justifyContent: "flex-start", paddingLeft: "28px", width: "100%", margin: "0.25rem 0" }}>
-                        <svg viewBox="0 0 24 28" fill="none" style={{ width: "24px", height: "28px" }}>
-                          <path d="M12 0 Q0 14 12 28" stroke="rgba(197,151,109,0.5)" strokeWidth="1.2" fill="none"/>
-                          <path d="M9 23 L12 28 L15 23" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg viewBox="0 0 16 28" fill="none" style={{ width: "16px", height: "28px" }}>
+                          <line x1="8" y1="0" x2="8" y2="22" stroke="rgba(197,151,109,0.5)" strokeWidth="1.2"/>
+                          <path d="M4 19 L8 28 L12 19" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
                     )}
@@ -463,58 +461,14 @@ export default function Crem() {
               )}
             </div>
 
-            {/* 手機版輪播：介紹幻燈片全寬圖片，STEP 幻燈片圖片在上+文字在下 */}
+            {/* 手機版輪播：純圖片，完整顯示不裁切 */}
             <div className="crem-carousel-mobile" style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(197,151,109,0.18)", backgroundColor: "#111" }}>
-              {step.stepNum === null ? (
-                /* 介紹幻燈片：全寬圖片 */
-                <img
-                  key={`mobile-intro`}
-                  src={step.img}
-                  alt={step.title}
-                  style={{ width: "100%", display: "block", objectFit: "cover", aspectRatio: "16/9" }}
-                />
-              ) : (
-                /* STEP 幻燈片：圖片在上 + 文字在下 */
-                <>
-                  <div style={{ position: "relative" }}>
-                    <img
-                      key={`mobile-img-${currentSlide}`}
-                      src={step.img}
-                      alt={step.title}
-                      style={{ width: "100%", height: "220px", objectFit: "cover", display: "block", objectPosition: "center top" }}
-                    />
-                    <div style={{
-                      position: "absolute", top: "1rem", left: "1rem",
-                      width: "44px", height: "44px",
-                      border: "1.5px solid rgba(197,151,109,0.75)",
-                      borderRadius: "50%",
-                      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                      backgroundColor: "rgba(9,7,6,0.7)",
-                    }}>
-                      <span style={{ color: "rgba(197,151,109,0.65)", fontSize: "0.4rem", letterSpacing: "0.15em", lineHeight: 1 }}>STEP</span>
-                      <span style={{ color: gold, fontSize: "1.1rem", fontWeight: 300, lineHeight: 1 }}>{step.stepNum}</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "1.5rem 1.5rem 1.75rem", borderTop: "1px solid rgba(197,151,109,0.12)" }}>
-                    <h3 style={{
-                      fontFamily: "'Noto Serif TC', serif",
-                      fontWeight: 200,
-                      fontSize: "1.15rem",
-                      color: textMain,
-                      letterSpacing: "0.06em",
-                      lineHeight: 1.5,
-                      marginBottom: "0.4rem",
-                    }}>
-                      {step.title}
-                    </h3>
-                    <p style={{ color: goldFaint, fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "0.75rem" }}>{step.titleEn}</p>
-                    <p style={{ color: "rgba(240,233,223,0.78)", fontSize: "0.875rem", lineHeight: 1.85 }}>{step.desc}</p>
-                    {step.descEn && (
-                      <p style={{ color: "rgba(197,151,109,0.55)", fontSize: "0.68rem", lineHeight: 1.7, marginTop: "0.5rem" }}>{step.descEn}</p>
-                    )}
-                  </div>
-                </>
-              )}
+              <img
+                key={`mobile-${currentSlide}`}
+                src={step.img}
+                alt={step.title}
+                style={{ width: "100%", display: "block", objectFit: "contain", maxHeight: "70vw" }}
+              />
             </div>
 
             {/* 左右箭頭（半覆蓋在輪播容器邊緣）*/}
@@ -592,24 +546,7 @@ export default function Crem() {
         </div>
       </section>
 
-      {/* ══ Section 4: 預訂期間 ══ */}
-      <section style={{ borderBottom: "1px solid rgba(197,151,109,0.1)", overflow: "hidden" }}>
-        {/* 橫幅圖 — 完整顯示，不重複說明 */}
-        <img
-          src={PREORDER_BANNER}
-          alt="預訂期間 PRE-ORDER WINDOW"
-          style={{ width: "100%", display: "block", objectFit: "cover" }}
-        />
 
-        {/* 簡短說明（不重複橫幅圖內容）*/}
-        <div ref={refPreorder} className="fade-up container" style={{ maxWidth: "680px", padding: "3rem 2rem 3.5rem", textAlign: "center" }}>
-          <p style={{ color: textSub, fontSize: "0.875rem", lineHeight: 2, letterSpacing: "0.04em" }}>
-            CRÈM 每月分兩批公布蛋糕口味並開放預訂。<br />
-            請在開放期間內至 CRÈM 官網完成預訂，<br />
-            並在結帳備註填寫初衷小鹿訂位資訊。
-          </p>
-        </div>
-      </section>
 
       {/* ══ Section 5: CTA ══ */}
       <section style={{ padding: "5rem 2rem", textAlign: "center", backgroundColor: "#0A0807" }}>
@@ -654,32 +591,10 @@ export default function Crem() {
               前往 CRÈM 選蛋糕
             </a>
 
-            {/* LINE 詢問按鈕 */}
-            <a
-              href="https://lin.ee/7bieQmT"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                color: "rgba(240,233,223,0.5)",
-                fontSize: "0.75rem",
-                letterSpacing: "0.1em",
-                textDecoration: "none",
-                transition: "color 0.3s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(197,151,109,0.8)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(240,233,223,0.5)")}
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 16, height: 16 }}>
-                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-              </svg>
-              LINE 詢問蛋糕預訂
-            </a>
+
           </div>
 
-          <p style={{ color: "rgba(240,233,223,0.22)", fontSize: "0.68rem", marginTop: "2rem", letterSpacing: "0.06em" }}>
+          <p style={{ color: "rgba(240,233,223,0.55)", fontSize: "0.72rem", marginTop: "2rem", letterSpacing: "0.04em" }}>
             ＊預訂蛋糕請在 CRÈM 官網下單，請勿直接在初衷小鹿留言
           </p>
         </div>
