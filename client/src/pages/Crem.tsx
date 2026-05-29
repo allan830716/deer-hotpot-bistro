@@ -736,7 +736,7 @@ export default function Crem() {
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
             <a
-              href="https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97"
+              href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
               target="_blank"
               rel="noopener noreferrer"
               style={{
