@@ -476,11 +476,22 @@ export default function Crem() {
 
         {/* 全寬 Hero 圖片 */}
         <div style={{ width: "100%", lineHeight: 0 }}>
-          <img
-            src={HERO_IMG}
-            alt="CRÈM × 初衷小鹿 慶祝一條龍服務"
-            style={{ width: "100%", display: "block", objectFit: "cover", aspectRatio: "16/7" }}
-          />
+          <style>{`
+            @media (min-width: 768px) {
+              .crem-hero-img-wrap {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+              }
+            }
+          `}</style>
+          <div className="crem-hero-img-wrap">
+            <img
+              src={HERO_IMG}
+              alt="CRÈM × 初衷小鹿 慶祝一條龍服務"
+              style={{ width: "100%", display: "block", objectFit: "cover", aspectRatio: "16/7" }}
+            />
+          </div>
         </div>
 
         {/* 主標題 */}
