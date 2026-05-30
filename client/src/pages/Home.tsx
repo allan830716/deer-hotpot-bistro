@@ -906,7 +906,7 @@ function CremSection() {
               {t("home.crem.ctaDesc")}
             </p>
             <a
-              href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+              href="https://deersbistro.tw/crem"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-deer-light"
