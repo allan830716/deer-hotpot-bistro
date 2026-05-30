@@ -364,7 +364,7 @@ export default function Crem() {
             letterSpacing: "0.08em",
             marginBottom: "1rem",
           }}>
-            開始預訂您的專屬蛋糕
+            開始預訂您的專屬「慶祝服務」
           </h2>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
