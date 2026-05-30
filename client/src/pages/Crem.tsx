@@ -1,12 +1,9 @@
 /*
- * CRÈM 蛋糕上桌預訂頁面 (v7 — 輪播連續滑動版)
+ * CRÈM 蛋糕上桌預訂頁面 (v8 — 靜態圖片版)
  * ─────────────────────────────────────────────
- * 修正項目：
- * 1. 輪播：採用菜單頁相同的 translateX track 連續滑動機制，放大輪播，箭頭移入圖片容器內
- * 2. 流程圖：箭頭垂直置中對齊圖示中心，圖示更新對應文字
- * 3. 手機版「慶祝蛋糕 × 餐廳」加 <br/> 避免斷句
+ * 修正：移除輪播，預訂方式改為靜態圖片呈現
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 function useFadeIn(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,12 +29,7 @@ function useFadeIn(threshold = 0.1) {
 const DEER_LOGO = "/manus-storage/deer-logo-white_a35020cd.webp";
 const HERO_IMG = "/manus-storage/crem-hero-new_b5d70f72.jpg";
 const CREM_LOGO = "/manus-storage/crem-logo-white_f9b62a3f.webp";
-const HOW_TO_ORDER_HERO = "/manus-storage/crem-how-to-order-hero_9e446791.webp";
-const STEP1_IMG = "/manus-storage/crem-step1-flavor_672c25e8.webp";
-const STEP2_IMG = "/manus-storage/crem-step2-booking_7694680f.webp";
-const STEP3_IMG = "/manus-storage/crem-step3-checkout_7f71404e.webp";
-const STEP4_IMG = "/manus-storage/crem-step4-notes_160b6582.webp";
-const STEP5_IMG = "/manus-storage/crem-step5-done2_2e613f78.png";
+const ORDER_GUIDE_IMG = "/manus-storage/crem-order-guide_bdd840ee.webp";
 
 // ── 痛點資料 ────────────────────────────────────────────────────────────────
 const PAIN_POINTS = [
@@ -50,7 +42,6 @@ const PAIN_POINTS = [
 ];
 
 // ── 流程步驟 ────────────────────────────────────────────────────────────────
-// 圖示：1=日曆(線上選口味) 2=冷藏箱(冷藏配送) 3=服務生(專人安排上桌) 4=愛心(把時間留給重要的人)
 const FLOW_STEPS = [
   {
     icon: (
@@ -101,200 +92,10 @@ const FLOW_STEPS = [
   },
 ];
 
-// ── 訂購方式輪播資料 ─────────────────────────────────────────────────────────
-const ORDER_STEPS = [
-  {
-    img: HOW_TO_ORDER_HERO,
-    stepNum: null as number | null,
-    title: "如何預訂慶祝一條龍服務？",
-    titleEn: "HOW TO ORDER",
-    desc: "只需簡單幾步，我們將為您安排專屬於您的慶祝時刻。",
-    descEn: "CAKE × RESERVATION × CELEBRATION",
-  },
-  {
-    img: STEP1_IMG,
-    stepNum: 1 as number | null,
-    title: "選擇口味",
-    titleEn: "CHOOSE FLAVOR",
-    desc: "挑選您喜歡的蛋糕口味與尺寸，開啟美好慶祝的第一步！",
-    descEn: "Select your favorite cake flavor and size.",
-  },
-  {
-    img: STEP2_IMG,
-    stepNum: 2 as number | null,
-    title: "點選「是否有訂位？」",
-    titleEn: "CHECK BOOKING",
-    desc: "在產品頁面中，點選「是否有訂位初衷小鹿？」選擇「有，下一頁結帳頁面備註填上訂位」",
-    descEn: "Select whether you have a reservation.",
-  },
-  {
-    img: STEP3_IMG,
-    stepNum: 3 as number | null,
-    title: "前往結帳頁面",
-    titleEn: "GO TO CHECKOUT",
-    desc: "確認商品與數量後，點選「立即購買」前往結帳頁面。",
-    descEn: 'Click "立即購買" to proceed to checkout.',
-  },
-  {
-    img: STEP4_IMG,
-    stepNum: 4 as number | null,
-    title: "填寫訂單備註",
-    titleEn: "FILL IN ORDER NOTES",
-    desc: "在結帳頁面的「訂單備註」中，填寫訂位大名 / 時間 / 電話，讓我們為您安排最完美的蛋糕！",
-    descEn: "Name / Time / Phone Number",
-  },
-  {
-    img: STEP5_IMG,
-    stepNum: 5 as number | null,
-    title: "預訂完成！",
-    titleEn: "ALL SET",
-    desc: "感謝您預訂「慶祝一條龍服務」！我們將用心為您打造專屬的完美時刻。",
-    descEn: "Thank you for choosing our celebration service!",
-  },
-];
-
 export default function Crem() {
   const refService = useFadeIn(0.08);
+  const refOrder = useFadeIn(0.08);
   const refCta = useFadeIn(0.1);
-
-  // ── 輪播狀態（仿菜單頁機制）──────────────────────────────────────────────
-  const [currentIndex, setCurrentIndex] = useState(0);
-  // ── 手機版滑動暗示 ────────────────────────────────────────────────────────
-  const [showSwipeHint, setShowSwipeHint] = useState(true);
-  const [peekOffset, setPeekOffset] = useState(0);
-  const carouselSectionRef = useRef<HTMLDivElement>(null);
-  const peekDone = useRef(false);
-  const [dragDelta, setDragDelta] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const isHorizontal = useRef<boolean | null>(null);
-  const mouseStartX = useRef<number | null>(null);
-  const isMouseDragging = useRef(false);
-
-  const total = ORDER_STEPS.length;
-  const safeIndex = Math.max(0, Math.min(currentIndex, total - 1));
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(entries => {
-      for (const entry of entries) setContainerWidth(entry.contentRect.width);
-    });
-    ro.observe(el);
-    setContainerWidth(el.offsetWidth);
-    return () => ro.disconnect();
-  }, []);
-
-  const goTo = useCallback((newIndex: number) => {
-    setCurrentIndex(Math.max(0, Math.min(newIndex, total - 1)));
-    setDragDelta(0);
-  }, [total]);
-
-  const prev = useCallback(() => goTo((safeIndex - 1 + total) % total), [safeIndex, total, goTo]);
-  const next = useCallback(() => goTo((safeIndex + 1) % total), [safeIndex, total, goTo]);
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") prev();
-      if (e.key === "ArrowRight") next();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [prev, next]);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-    isHorizontal.current = null;
-    setDragDelta(0);
-  };
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
-    const dx = e.touches[0].clientX - touchStartX.current;
-    const dy = e.touches[0].clientY - touchStartY.current;
-    if (isHorizontal.current === null) {
-      if (Math.abs(dx) > Math.abs(dy) + 5) isHorizontal.current = true;
-      else if (Math.abs(dy) > Math.abs(dx) + 5) isHorizontal.current = false;
-    }
-    if (isHorizontal.current) {
-      e.preventDefault();
-      setDragDelta(dx);
-      setIsDragging(true);
-    }
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (isHorizontal.current && Math.abs(dx) > 50) {
-      if (dx < 0) next(); else prev();
-    } else setDragDelta(0);
-    setIsDragging(false);
-    touchStartX.current = null;
-    touchStartY.current = null;
-    isHorizontal.current = null;
-  };
-  const handleMouseDown = (e: React.MouseEvent) => {
-    mouseStartX.current = e.clientX;
-    isMouseDragging.current = false;
-    setDragDelta(0);
-  };
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (mouseStartX.current === null) return;
-    const dx = e.clientX - mouseStartX.current;
-    if (Math.abs(dx) > 8) {
-      isMouseDragging.current = true;
-      setDragDelta(dx);
-      setIsDragging(true);
-    }
-  };
-  const handleMouseUp = (e: React.MouseEvent) => {
-    if (mouseStartX.current === null) return;
-    const dx = e.clientX - mouseStartX.current;
-    if (isMouseDragging.current && Math.abs(dx) > 50) {
-      if (dx < 0) next(); else prev();
-    } else setDragDelta(0);
-    setIsDragging(false);
-    mouseStartX.current = null;
-    isMouseDragging.current = false;
-  };
-
-  const offsetPx = containerWidth > 0 ? -(safeIndex * containerWidth) + dragDelta + peekOffset : 0;
-  const trackTranslate = `translateX(${offsetPx}px)`;
-
-  // ── Peek 動畫：當輪播進入視窗時，執行一次輕微左移暗示 ──────────────────
-  useEffect(() => {
-    const section = carouselSectionRef.current;
-    if (!section || peekDone.current) return;
-    const isMobile = window.innerWidth < 768;
-    if (!isMobile) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !peekDone.current) {
-          peekDone.current = true;
-          // 延遲 600ms 後執行 peek 動畫
-          setTimeout(() => {
-            setPeekOffset(-28); // 向左偏移 28px（暗示右邊還有內容）
-            setTimeout(() => {
-              setPeekOffset(0); // 回正
-              // 3 秒後隱藏提示文字
-              setTimeout(() => setShowSwipeHint(false), 3000);
-            }, 500);
-          }, 600);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
-  // 當使用者滑動後隱藏提示
-  const handleSwipeInteraction = () => {
-    if (showSwipeHint) setShowSwipeHint(false);
-  };
 
   const gold = "rgba(197,151,109,1)";
   const goldFaint = "rgba(197,151,109,0.5)";
@@ -310,21 +111,11 @@ export default function Crem() {
           .crem-flow-desktop { display: none !important; }
           .crem-flow-mobile { display: flex !important; }
           .crem-pain-grid { grid-template-columns: 1fr !important; }
-          .crem-step-tabs { gap: 0 !important; }
-          .crem-step-tab { padding: 0.4rem 0.5rem !important; font-size: 0.62rem !important; }
-          /* 手機版輪播：只顯示圖片，隱藏文字 */
-          .crem-carousel-slide-inner { flex-direction: column !important; min-height: unset !important; }
-          .crem-carousel-slide-text { display: none !important; }
-          .crem-carousel-slide-img { flex: unset !important; width: 100% !important; }
-          /* 手機版輪播容器：移除左右 padding，箭頭隱藏 */
-          .crem-carousel-outer { padding: 0 !important; }
-          .crem-carousel-arrow { display: none !important; }
         }
         @media (min-width: 768px) {
           .crem-flow-mobile { display: none !important; }
           .crem-flow-desktop { display: flex !important; }
         }
-        .crem-carousel-wrap { touch-action: pan-y; }
       `}</style>
 
       {/* ══ Section 1: Hero ══ */}
@@ -416,16 +207,15 @@ export default function Crem() {
                 After · 一條龍服務流程
               </p>
 
-              {/* 電腦版：橫向排列 — 箭頭與圖示垂直中心對齊 */}
+              {/* 電腦版：橫向排列 */}
               <div className="crem-flow-desktop" style={{
                 display: "flex",
-                alignItems: "flex-start",   /* 頂部對齊，箭頭用 paddingTop 手動對齊圖示中心 */
+                alignItems: "flex-start",
                 justifyContent: "center",
                 gap: 0,
               }}>
                 {FLOW_STEPS.map((s, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                    {/* 步驟卡片：圖示 + 文字，自身 flex-col */}
                     <div style={{
                       display: "flex",
                       flexDirection: "column",
@@ -448,7 +238,6 @@ export default function Crem() {
                       <p style={{ color: textMain, fontSize: "0.85rem", letterSpacing: "0.04em", marginBottom: "0.4rem", lineHeight: 1.4 }}>{s.zh}</p>
                       <p style={{ color: textSub, fontSize: "0.72rem", lineHeight: 1.65, whiteSpace: "pre-line" }}>{s.sub}</p>
                     </div>
-                    {/* 箭頭：paddingTop 32px = 圖示高度64px / 2 - 箭頭高度16px / 2 = 28px，讓箭頭中心對齊圖示中心 */}
                     {i < FLOW_STEPS.length - 1 && (
                       <div style={{ display: "flex", alignItems: "center", flexShrink: 0, paddingTop: "24px" }}>
                         <svg viewBox="0 0 44 16" fill="none" style={{ width: "44px", height: "16px" }}>
@@ -510,212 +299,56 @@ export default function Crem() {
         </div>
       </section>
 
-      {/* ══ Section 3: 訂購方式（連續滑動輪播）══ */}
-      <section ref={carouselSectionRef} style={{ padding: "5rem 0 4rem", borderBottom: "1px solid rgba(197,151,109,0.1)", backgroundColor: "#090706" }}>
-        <div className="container" style={{ maxWidth: "1100px" }}>
+      {/* ══ Section 3: 預訂方式（靜態圖片）══ */}
+      <section style={{ padding: "5rem 0 4rem", borderBottom: "1px solid rgba(197,151,109,0.1)", backgroundColor: "#090706" }}>
+        <div className="container" style={{ maxWidth: "900px" }}>
+          <div ref={refOrder} className="fade-up">
 
-          {/* 標題 */}
-          <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-            <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>How To Order</p>
-            <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2rem)", color: textMain, letterSpacing: "0.08em" }}>
-              預訂方式
-            </h2>
-          </div>
-
-          {/* 輪播主體：padding左右留出箭頭空間 */}
-          <div className="crem-carousel-outer" style={{ position: "relative", padding: "0 56px" }}>
-            <div
-              ref={containerRef}
-              className="crem-carousel-wrap"
-              style={{
-                width: "100%",
-                overflow: "hidden",
-                borderRadius: "0",
-                border: "none",
-                backgroundColor: "#111",
-                cursor: isMouseDragging.current ? "grabbing" : "grab",
-                userSelect: "none",
-              }}
-              onTouchStart={(e) => { handleSwipeInteraction(); handleTouchStart(e); }}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={() => {
-                if (mouseStartX.current !== null) {
-                  setDragDelta(0);
-                  setIsDragging(false);
-                  mouseStartX.current = null;
-                  isMouseDragging.current = false;
-                }
-              }}
-            >
-              {/* Track：所有幻燈片橫向排列 */}
-              <div style={{
-                display: "flex",
-                width: `${total * 100}%`,
-                transform: trackTranslate,
-                transition: isDragging ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-              }}>
-                {ORDER_STEPS.map((s, i) => (
-                  <div
-                    key={i}
-                    style={{ width: `${100 / total}%`, flexShrink: 0 }}
-                  >
-                    <div style={{ width: "100%", backgroundColor: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <img
-                        src={s.img}
-                        alt={s.title}
-                        loading={Math.abs(i - safeIndex) <= 1 ? "eager" : "lazy"}
-                        style={{ width: "100%", height: "auto", display: "block", objectFit: "contain", pointerEvents: "none" }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            {/* 標題 */}
+            <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+              <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>How To Order</p>
+              <h2 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.5rem, 3vw, 2rem)", color: textMain, letterSpacing: "0.08em" }}>
+                預訂方式
+              </h2>
             </div>
 
-            {/* 左右箭頭：移到輪播容器外側，不遮擋圖片 */}
-            <button
-              className="crem-carousel-arrow"
-              onClick={prev}
-              aria-label="上一步"
-              style={{
-                position: "absolute", left: "-52px", top: "50%",
-                transform: "translateY(-50%)", zIndex: 20,
-                width: "40px", height: "40px", borderRadius: "50%",
-                border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(10,8,7,0.85)",
-                color: gold, cursor: "pointer", fontSize: "1.4rem",
-                lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.2)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(10,8,7,0.85)"; }}
-            >‹</button>
-            <button
-              className="crem-carousel-arrow"
-              onClick={next}
-              aria-label="下一步"
-              style={{
-                position: "absolute", right: "-52px", top: "50%",
-                transform: "translateY(-50%)", zIndex: 20,
-                width: "40px", height: "40px", borderRadius: "50%",
-                border: "1px solid rgba(197,151,109,0.35)", backgroundColor: "rgba(10,8,7,0.85)",
-                color: gold, cursor: "pointer", fontSize: "1.4rem",
-                lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.2)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(10,8,7,0.85)"; }}
-            >›</button>
-          </div>
-
-          {/* 指示點 */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginTop: "1.5rem" }}>
-            {ORDER_STEPS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                style={{
-                  width: i === safeIndex ? "24px" : "8px",
-                  height: "8px",
-                  borderRadius: "4px",
-                  border: "none",
-                  backgroundColor: i === safeIndex ? gold : "rgba(197,151,109,0.22)",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  padding: 0,
-                }}
+            {/* 靜態圖片 */}
+            <div style={{ width: "100%", lineHeight: 0 }}>
+              <img
+                src={ORDER_GUIDE_IMG}
+                alt="CRÈM 預訂方式 — 專屬慶祝流程"
+                style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
               />
-            ))}
-          </div>
+            </div>
 
-          {/* 手機版：滑到最後一張時顯示 CTA 按鈕 */}
-          <div
-            className="crem-carousel-cta"
-            style={{
-              textAlign: "center",
-              marginTop: "1.25rem",
-              height: "48px",
-              opacity: safeIndex === total - 1 ? 1 : 0,
-              transform: safeIndex === total - 1 ? "translateY(0)" : "translateY(8px)",
-              transition: "opacity 0.5s ease, transform 0.5s ease",
-              pointerEvents: safeIndex === total - 1 ? "auto" : "none",
-            }}
-          >
-            <a
-              href="https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-block",
-                backgroundColor: "rgba(197,151,109,0.15)",
-                border: "1px solid rgba(197,151,109,0.75)",
-                color: "rgba(197,151,109,1)",
-                padding: "0.65rem 2rem",
-                fontSize: "0.78rem",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                fontFamily: "'Noto Serif TC', serif",
-                fontWeight: 300,
-              }}
-            >
-              立即前往預訂
-            </a>
-          </div>
-
-          {/* 手機版滑動提示 */}
-          <div style={{
-            textAlign: "center",
-            marginTop: "0.75rem",
-            height: "20px",
-            opacity: showSwipeHint ? 1 : 0,
-            transition: "opacity 0.8s ease",
-            pointerEvents: "none",
-          }}>
-            <span style={{
-              color: "rgba(197,151,109,0.55)",
-              fontSize: "0.65rem",
-              letterSpacing: "0.12em",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.4rem",
-            }}>
-              <svg viewBox="0 0 20 20" fill="none" style={{ width: 14, height: 14 }}>
-                <path d="M12 10H4M4 10L7 7M4 10L7 13" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              滑動查看步驟
-              <svg viewBox="0 0 20 20" fill="none" style={{ width: 14, height: 14 }}>
-                <path d="M8 10h8M16 10l-3-3M16 10l-3 3" stroke="rgba(197,151,109,0.7)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
-          </div>
-
-          {/* 步驟標籤列 */}
-          <div className="crem-step-tabs" style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "0", marginTop: "0.75rem" }}>
-            {ORDER_STEPS.map((s, i) => (
-              <button
-                key={i}
-                className="crem-step-tab"
-                onClick={() => goTo(i)}
+            {/* CTA 按鈕 */}
+            <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+              <a
+                href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  background: "none", border: "none", cursor: "pointer",
-                  padding: "0.4rem 0.875rem",
-                  color: i === safeIndex ? gold : "rgba(240,233,223,0.3)",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.06em",
-                  whiteSpace: "nowrap",
-                  transition: "color 0.3s",
-                  borderBottom: i === safeIndex ? `1px solid ${goldFaint}` : "1px solid transparent",
+                  display: "inline-block",
+                  backgroundColor: "rgba(197,151,109,0.15)",
+                  border: "1px solid rgba(197,151,109,0.75)",
+                  color: gold,
+                  padding: "0.85rem 2.5rem",
+                  fontSize: "0.82rem",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  fontFamily: "'Noto Serif TC', serif",
+                  fontWeight: 300,
+                  transition: "background-color 0.3s",
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(197,151,109,0.25)")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(197,151,109,0.15)")}
               >
-                {s.stepNum ? `STEP ${s.stepNum}` : "介紹"}
-              </button>
-            ))}
-          </div>
+                立即前往預訂
+              </a>
+            </div>
 
+          </div>
         </div>
       </section>
 
