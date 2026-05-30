@@ -6,7 +6,7 @@
  *   2. Before/After 互動式 Slider（拖拉分割線）
  *   3. CTA 按鈕視覺優化（金色漸層背景 + 光暈效果）
  */
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
 function useFadeIn(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -86,7 +86,7 @@ const FLOW_STEPS = [
   },
 ];
 
-// ── 痛點對比（Slider 版）────────────────────────────────────────────────────
+// ── 痛點對比（靜態版）────────────────────────────────────────────────────
 const CONTRASTS = [
   {
     before: "壽星在旁，還要偷偷協調",
@@ -102,144 +102,62 @@ const CONTRASTS = [
   },
 ];
 
-// ── Before/After Slider 元件 ─────────────────────────────────────────────
-function BeforeAfterSlider() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [sliderPos, setSliderPos] = useState(50); // 0-100 %
-  const isDragging = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleMove = useCallback((clientX: number) => {
-    if (!isDragging.current || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const pos = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
-    setSliderPos(pos);
-  }, []);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => handleMove(e.clientX), [handleMove]);
-  const handleTouchMove = useCallback((e: TouchEvent) => handleMove(e.touches[0].clientX), [handleMove]);
-  const stopDrag = useCallback(() => { isDragging.current = false; }, []);
-
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", stopDrag);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", stopDrag);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", stopDrag);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", stopDrag);
-    };
-  }, [handleMouseMove, handleTouchMove, stopDrag]);
-
+// ── Before/After 靜態對比列元件 ─────────────────────────────────────────────
+function BeforeAfterStatic() {
   const gold = "rgba(197,151,109,1)";
-  const textMain = "#F0E9DF";
   const textSub = "rgba(240,233,223,0.45)";
-
   return (
     <div>
-      {/* 分頁標籤 */}
-      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem", justifyContent: "center" }}>
-        {CONTRASTS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => { setActiveIndex(i); setSliderPos(50); }}
-            style={{
-              width: "8px", height: "8px", borderRadius: "50%", border: "none", cursor: "pointer",
-              backgroundColor: i === activeIndex ? gold : "rgba(197,151,109,0.25)",
-              transition: "background-color 0.3s, transform 0.2s",
-              transform: i === activeIndex ? "scale(1.3)" : "scale(1)",
-              padding: 0,
-            }}
-          />
+      {/* 欄標題 */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 48px 1fr",
+        marginBottom: "0.75rem",
+        padding: "0 0.5rem",
+      }}>
+        <p style={{ color: "rgba(240,233,223,0.3)", fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", textAlign: "center" }}>Before</p>
+        <span />
+        <p style={{ color: gold, fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", textAlign: "center" }}>After</p>
+      </div>
+      {/* 對比列 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        {CONTRASTS.map((c, i) => (
+          <div key={i} style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 48px 1fr",
+            alignItems: "center",
+            border: "1px solid rgba(197,151,109,0.12)",
+            borderRadius: "8px",
+            overflow: "hidden",
+          }}>
+            {/* Before */}
+            <div style={{
+              padding: "1rem 1.25rem",
+              backgroundColor: "rgba(255,255,255,0.015)",
+              display: "flex", alignItems: "center", gap: "0.75rem",
+            }}>
+              <span style={{ color: "rgba(240,233,223,0.25)", fontSize: "1rem", flexShrink: 0, lineHeight: 1 }}>×</span>
+              <span style={{ color: "rgba(240,233,223,0.4)", fontSize: "0.85rem", lineHeight: 1.6 }}>{c.before}</span>
+            </div>
+            {/* 箭頭 */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(197,151,109,0.04)" }}>
+              <svg viewBox="0 0 20 16" fill="none" style={{ width: "20px", height: "16px" }}>
+                <line x1="0" y1="8" x2="14" y2="8" stroke="rgba(197,151,109,0.4)" strokeWidth="1.2"/>
+                <path d="M11 4 L20 8 L11 12" stroke="rgba(197,151,109,0.6)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            {/* After */}
+            <div style={{
+              padding: "1rem 1.25rem",
+              backgroundColor: "rgba(197,151,109,0.05)",
+              display: "flex", alignItems: "center", gap: "0.75rem",
+            }}>
+              <span style={{ color: gold, fontSize: "1rem", flexShrink: 0, lineHeight: 1 }}>✓</span>
+              <span style={{ color: "rgba(240,233,223,0.85)", fontSize: "0.85rem", lineHeight: 1.6 }}>{c.after}</span>
+            </div>
+          </div>
         ))}
       </div>
-
-      {/* Slider 主體 */}
-      <div
-        ref={containerRef}
-        style={{
-          position: "relative",
-          userSelect: "none",
-          cursor: "ew-resize",
-          borderRadius: "12px",
-          overflow: "hidden",
-          border: "1px solid rgba(197,151,109,0.18)",
-          height: "120px",
-        }}
-        onMouseDown={() => { isDragging.current = true; }}
-        onTouchStart={() => { isDragging.current = true; }}
-      >
-        {/* Before 面板（全寬底層） */}
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundColor: "rgba(255,255,255,0.02)",
-          display: "flex", alignItems: "center",
-          padding: "0 2rem",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <span style={{ color: "rgba(240,233,223,0.25)", fontSize: "1.1rem", flexShrink: 0 }}>×</span>
-            <span style={{ color: "rgba(240,233,223,0.4)", fontSize: "0.9rem", lineHeight: 1.6 }}>
-              {CONTRASTS[activeIndex].before}
-            </span>
-          </div>
-        </div>
-
-        {/* After 面板（依 sliderPos 裁切） */}
-        <div style={{
-          position: "absolute", inset: 0,
-          clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
-          backgroundColor: "rgba(197,151,109,0.07)",
-          display: "flex", alignItems: "center",
-          padding: "0 2rem",
-          transition: isDragging.current ? "none" : "clip-path 0.05s",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <span style={{ color: gold, fontSize: "1.1rem", flexShrink: 0 }}>✓</span>
-            <span style={{ color: "rgba(240,233,223,0.9)", fontSize: "0.9rem", lineHeight: 1.6 }}>
-              {CONTRASTS[activeIndex].after}
-            </span>
-          </div>
-        </div>
-
-        {/* 分割線 */}
-        <div style={{
-          position: "absolute", top: 0, bottom: 0,
-          left: `${sliderPos}%`,
-          transform: "translateX(-50%)",
-          width: "2px",
-          backgroundColor: gold,
-          pointerEvents: "none",
-        }}>
-          {/* 拖拉把手 */}
-          <div style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "36px", height: "36px",
-            borderRadius: "50%",
-            backgroundColor: "#0A0807",
-            border: `2px solid ${gold}`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 0 12px rgba(197,151,109,0.4)`,
-          }}>
-            <svg viewBox="0 0 20 20" fill="none" style={{ width: 16, height: 16 }}>
-              <path d="M6 10h8M6 10l3-3M6 10l3 3M14 10l-3-3M14 10l-3 3" stroke={gold} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      {/* Before / After 標籤 */}
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.75rem", padding: "0 0.5rem" }}>
-        <p style={{ color: textSub, fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>Before</p>
-        <p style={{ color: gold, fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>After</p>
-      </div>
-
-      {/* 提示文字 */}
-      <p style={{ textAlign: "center", color: "rgba(197,151,109,0.35)", fontSize: "0.68rem", marginTop: "0.75rem", letterSpacing: "0.06em" }}>
-        ← 拖拉滑桿切換 →
-      </p>
     </div>
   );
 }
@@ -386,7 +304,7 @@ export default function Crem() {
                       backgroundColor: "rgba(197,151,109,0.03)",
                     }}
                   >
-                    <p style={{ color: goldFaint, fontSize: "0.6rem", letterSpacing: "0.2em", marginBottom: "0.75rem", fontFamily: "'Cormorant Garamond', serif" }}>{s.step}</p>
+                    <p style={{ color: gold, fontSize: "1.1rem", letterSpacing: "0.12em", marginBottom: "0.6rem", fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}>{s.step}</p>
                     <div className="flow-icon" style={{ marginBottom: "1rem" }}>{s.icon}</div>
                     <p className="flow-title" style={{ color: "rgba(240,233,223,0.85)", fontSize: "0.85rem", letterSpacing: "0.04em", marginBottom: "0.4rem", lineHeight: 1.4 }}>{s.zh}</p>
                     <p style={{ color: textSub, fontSize: "0.72rem", lineHeight: 1.65, whiteSpace: "pre-line" }}>{s.sub}</p>
@@ -413,7 +331,7 @@ export default function Crem() {
                   >
                     <div className="flow-icon" style={{ flexShrink: 0 }}>{s.icon}</div>
                     <div>
-                      <p style={{ color: goldFaint, fontSize: "0.58rem", letterSpacing: "0.18em", marginBottom: "0.2rem", fontFamily: "'Cormorant Garamond', serif" }}>{s.step}</p>
+                      <p style={{ color: gold, fontSize: "1rem", letterSpacing: "0.12em", marginBottom: "0.2rem", fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}>{s.step}</p>
                       <p className="flow-title" style={{ color: "rgba(240,233,223,0.85)", fontSize: "0.9rem", letterSpacing: "0.04em", marginBottom: "0.25rem", lineHeight: 1.4 }}>{s.zh}</p>
                       <p style={{ color: textSub, fontSize: "0.75rem", lineHeight: 1.6, whiteSpace: "pre-line" }}>{s.sub}</p>
                     </div>
@@ -446,7 +364,7 @@ export default function Crem() {
                 不用再偷偷協調、不用擔心取貨時間、<br />不用讓壽星看到你在忙。
               </p>
             </div>
-            <BeforeAfterSlider />
+            <BeforeAfterStatic />
           </div>
         </div>
       </section>
