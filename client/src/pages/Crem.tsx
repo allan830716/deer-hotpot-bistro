@@ -6,7 +6,7 @@
  *   2. Before/After 互動式 Slider（拖拉分割線）
  *   3. CTA 按鈕視覺優化（金色漸層背景 + 光暈效果）
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function useFadeIn(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -101,6 +101,140 @@ const CONTRASTS = [
     after:  "專人安排，驚喜完整呈現",
   },
 ];
+
+// ── 專屬慶祝流程圖片（淡入 + 點擊放大）──────────────────────────────
+function OrderGuideImage() {
+  const [lightbox, setLightbox] = useState(false);
+  const imgRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("order-img-visible");
+          obs.unobserve(el);
+        }
+      },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // 鎖定 body 滾動
+  useEffect(() => {
+    if (lightbox) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [lightbox]);
+
+  return (
+    <>
+      {/* 圖片容器：淡入動畫 + 點擊提示 */}
+      <div
+        ref={imgRef}
+        onClick={() => setLightbox(true)}
+        style={{
+          width: "100%",
+          lineHeight: 0,
+          cursor: "zoom-in",
+          position: "relative",
+          opacity: 0,
+          transform: "translateY(16px)",
+          transition: "opacity 1s ease, transform 1s ease",
+        }}
+        className="order-img-wrap"
+      >
+        <img
+          src={ORDER_GUIDE_IMG}
+          alt="CRÈM 預訂方式 — 專屬慶祝流程"
+          style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
+        />
+        {/* 點擊放大提示標籤 */}
+        <div style={{
+          position: "absolute",
+          bottom: "0.75rem",
+          right: "0.75rem",
+          backgroundColor: "rgba(10,8,7,0.65)",
+          border: "1px solid rgba(197,151,109,0.4)",
+          borderRadius: "4px",
+          padding: "0.3rem 0.55rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.3rem",
+          pointerEvents: "none",
+        }}>
+          <svg viewBox="0 0 16 16" fill="none" stroke="rgba(197,151,109,0.85)" strokeWidth="1.5" style={{ width: 13, height: 13 }}>
+            <circle cx="6.5" cy="6.5" r="4.5"/>
+            <line x1="10" y1="10" x2="14" y2="14" strokeLinecap="round"/>
+            <line x1="4.5" y1="6.5" x2="8.5" y2="6.5" strokeLinecap="round"/>
+            <line x1="6.5" y1="4.5" x2="6.5" y2="8.5" strokeLinecap="round"/>
+          </svg>
+          <span style={{ color: "rgba(197,151,109,0.85)", fontSize: "0.65rem", letterSpacing: "0.08em" }}>點擊放大</span>
+        </div>
+      </div>
+
+      {/* Lightbox 層 */}
+      {lightbox && (
+        <div
+          onClick={() => setLightbox(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 200,
+            backgroundColor: "rgba(0,0,0,0.92)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+            cursor: "zoom-out",
+          }}
+        >
+          <img
+            src={ORDER_GUIDE_IMG}
+            alt="CRÈM 專屬慶祝流程"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "92vh",
+              objectFit: "contain",
+              borderRadius: "4px",
+              boxShadow: "0 8px 48px rgba(0,0,0,0.6)",
+            }}
+            onClick={e => e.stopPropagation()}
+          />
+          {/* 關閉按鈕 */}
+          <button
+            onClick={() => setLightbox(false)}
+            style={{
+              position: "absolute",
+              top: "1rem",
+              right: "1rem",
+              background: "rgba(197,151,109,0.15)",
+              border: "1px solid rgba(197,151,109,0.4)",
+              borderRadius: "50%",
+              width: "2.25rem",
+              height: "2.25rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "rgba(197,151,109,0.9)",
+              fontSize: "1.1rem",
+              lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
 
 // ── Before/After 靜態對比列元件 ─────────────────────────────────────────────
 function BeforeAfterStatic() {
@@ -277,6 +411,12 @@ export default function Crem() {
         }
         @media (min-width: 768px) {
           .crem-float-btn { display: none !important; }
+        }
+
+        /* 預訂方式圖片淡入 */
+        .order-img-visible {
+          opacity: 1 !important;
+          transform: translateY(0) !important;
         }
 
         /* CTA 手機版文字 */
@@ -459,13 +599,7 @@ export default function Crem() {
                 預訂方式
               </h2>
             </div>
-            <div style={{ width: "100%", lineHeight: 0 }}>
-              <img
-                src={ORDER_GUIDE_IMG}
-                alt="CRÈM 預訂方式 — 專屬慶祝流程"
-                style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
-              />
-            </div>
+            <OrderGuideImage />
           </div>
         </div>
       </section>
@@ -527,34 +661,7 @@ export default function Crem() {
           </p>
         </div>
       </section>
-      {/* 手機版固定懸浮預訂按鈕（右下角，避開客服按鈕） */}
-      <a
-        className="crem-float-btn"
-        href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: "none",
-          position: "fixed",
-          bottom: "5.5rem",
-          right: "1.25rem",
-          zIndex: 40,
-          padding: "0.7rem 1.2rem",
-          background: "linear-gradient(135deg, rgba(197,151,109,0.9) 0%, rgba(160,115,70,0.9) 100%)",
-          border: "none",
-          color: "#0A0807",
-          fontSize: "0.78rem",
-          letterSpacing: "0.12em",
-          fontFamily: "'Noto Serif TC', serif",
-          fontWeight: 500,
-          textDecoration: "none",
-          borderRadius: "2px",
-          boxShadow: "0 4px 20px rgba(197,151,109,0.35)",
-          whiteSpace: "nowrap",
-        }}
-      >
-        選 CRÈM 蛋糕
-      </a>
+
     </main>
   );
 }
