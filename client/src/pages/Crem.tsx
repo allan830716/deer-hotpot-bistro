@@ -105,6 +105,29 @@ const CONTRASTS = [
 // ── Before/After 靜態對比列元件 ─────────────────────────────────────────────
 function BeforeAfterStatic() {
   const gold = "rgba(197,151,109,1)";
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    rowRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              el.classList.add("ba-row-enter");
+            }, i * 80);
+            obs.unobserve(el);
+          }
+        },
+        { threshold: 0.2 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach(o => o.disconnect());
+  }, []);
+
   return (
     <div>
       {/* 欄標題 */}
@@ -121,16 +144,20 @@ function BeforeAfterStatic() {
       {/* 對比列 */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
         {CONTRASTS.map((c, i) => (
-          <div key={i} style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 32px 1fr",
-            alignItems: "stretch",
-            border: "1px solid rgba(197,151,109,0.12)",
-            borderRadius: "8px",
-            overflow: "hidden",
-          }}>
+          <div
+            key={i}
+            ref={el => { rowRefs.current[i] = el; }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 32px 1fr",
+              alignItems: "stretch",
+              border: "1px solid rgba(197,151,109,0.12)",
+              borderRadius: "8px",
+              overflow: "hidden",
+            }}
+          >
             {/* Before */}
-            <div style={{
+            <div className="ba-before" style={{
               padding: "clamp(0.6rem, 2vw, 1rem) clamp(0.6rem, 2.5vw, 1.25rem)",
               backgroundColor: "rgba(255,255,255,0.015)",
               display: "flex", alignItems: "center", gap: "0.5rem",
@@ -139,14 +166,14 @@ function BeforeAfterStatic() {
               <span style={{ color: "rgba(240,233,223,0.4)", fontSize: "clamp(0.72rem, 2.2vw, 0.85rem)", lineHeight: 1.55 }}>{c.before}</span>
             </div>
             {/* 箭頭 */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(197,151,109,0.04)", minHeight: "100%" }}>
+            <div className="ba-arrow" style={{ display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(197,151,109,0.04)", minHeight: "100%" }}>
               <svg viewBox="0 0 16 12" fill="none" style={{ width: "14px", height: "12px", flexShrink: 0 }}>
                 <line x1="0" y1="6" x2="10" y2="6" stroke="rgba(197,151,109,0.4)" strokeWidth="1.2"/>
                 <path d="M8 3 L16 6 L8 9" stroke="rgba(197,151,109,0.6)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
             {/* After */}
-            <div style={{
+            <div className="ba-after" style={{
               padding: "clamp(0.6rem, 2vw, 1rem) clamp(0.6rem, 2.5vw, 1.25rem)",
               backgroundColor: "rgba(197,151,109,0.05)",
               display: "flex", alignItems: "center", gap: "0.5rem",
@@ -211,6 +238,59 @@ export default function Crem() {
         }
         .flow-title {
           transition: color 0.3s;
+        }
+
+        /* Before/After 進場動畫 */
+        @keyframes slideInLeft {
+          from { opacity: 0; transform: translateX(-24px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(24px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .ba-row-enter .ba-before {
+          animation: slideInLeft 0.45s ease forwards;
+        }
+        .ba-row-enter .ba-arrow {
+          animation: fadeInUp 0.45s 0.1s ease both;
+        }
+        .ba-row-enter .ba-after {
+          animation: slideInRight 0.45s 0.05s ease forwards;
+        }
+        .ba-row-enter .ba-before,
+        .ba-row-enter .ba-arrow,
+        .ba-row-enter .ba-after {
+          opacity: 0;
+        }
+
+        /* 手機版固定懸浮預訂按鈕 */
+        @media (max-width: 767px) {
+          .crem-float-btn {
+            display: flex !important;
+          }
+          /* 底部留白避免被懸浮按鈕運蓋 */
+          main { padding-bottom: 72px !important; }
+        }
+        @media (min-width: 768px) {
+          .crem-float-btn { display: none !important; }
+        }
+
+        /* CTA 手機版文字 */
+        @media (max-width: 767px) {
+          .crem-cta-title {
+            font-size: 1.4rem !important;
+            letter-spacing: 0.04em !important;
+            word-break: keep-all !important;
+          }
+          .crem-cta-sub {
+            font-size: 0.8rem !important;
+            padding: 0 1rem;
+          }
         }
 
         /* CTA 按鈕 */
@@ -411,10 +491,12 @@ export default function Crem() {
             color: textMain,
             letterSpacing: "0.08em",
             marginBottom: "0.75rem",
-          }}>
+          }}
+          className="crem-cta-title"
+          >
             開始預訂您的專屬「慶祝服務」
           </h2>
-          <p style={{ color: textSub, fontSize: "0.875rem", lineHeight: 1.9, marginBottom: "2.5rem" }}>
+          <p className="crem-cta-sub" style={{ color: textSub, fontSize: "0.875rem", lineHeight: 1.9, marginBottom: "2.5rem" }}>
             從選蛋糕到上桌，我們幫你安排好每一個細節。
           </p>
 
@@ -446,6 +528,68 @@ export default function Crem() {
           </p>
         </div>
       </section>
+      {/* 手機版固定懸浮預訂按鈕 */}
+      <div
+        className="crem-float-btn"
+        style={{
+          display: "none",
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          padding: "0.75rem 1.25rem",
+          backgroundColor: "rgba(10,8,7,0.92)",
+          borderTop: "1px solid rgba(197,151,109,0.2)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "0.75rem",
+        }}
+      >
+        <a
+          href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            flex: 1,
+            textAlign: "center",
+            padding: "0.75rem 1rem",
+            border: "1px solid rgba(197,151,109,0.5)",
+            color: "rgba(197,151,109,0.85)",
+            fontSize: "0.8rem",
+            letterSpacing: "0.12em",
+            fontFamily: "'Noto Serif TC', serif",
+            fontWeight: 300,
+            textDecoration: "none",
+            borderRadius: "2px",
+          }}
+        >
+          立即訂位
+        </a>
+        <a
+          href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            flex: 1,
+            textAlign: "center",
+            padding: "0.75rem 1rem",
+            background: "linear-gradient(135deg, rgba(197,151,109,0.25) 0%, rgba(197,151,109,0.12) 100%)",
+            border: "1px solid rgba(197,151,109,0.7)",
+            color: "rgba(197,151,109,1)",
+            fontSize: "0.8rem",
+            letterSpacing: "0.12em",
+            fontFamily: "'Noto Serif TC', serif",
+            fontWeight: 300,
+            textDecoration: "none",
+            borderRadius: "2px",
+          }}
+        >
+          選 CRÈM 蛋糕
+        </a>
+      </div>
     </main>
   );
 }
