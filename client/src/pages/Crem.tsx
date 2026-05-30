@@ -105,55 +105,54 @@ const CONTRASTS = [
 // ── Before/After 靜態對比列元件 ─────────────────────────────────────────────
 function BeforeAfterStatic() {
   const gold = "rgba(197,151,109,1)";
-  const textSub = "rgba(240,233,223,0.45)";
   return (
     <div>
       {/* 欄標題 */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "1fr 48px 1fr",
+        gridTemplateColumns: "1fr 32px 1fr",
         marginBottom: "0.75rem",
-        padding: "0 0.5rem",
+        padding: "0 0.25rem",
       }}>
         <p style={{ color: "rgba(240,233,223,0.3)", fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", textAlign: "center" }}>Before</p>
         <span />
         <p style={{ color: gold, fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", textAlign: "center" }}>After</p>
       </div>
       {/* 對比列 */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
         {CONTRASTS.map((c, i) => (
           <div key={i} style={{
             display: "grid",
-            gridTemplateColumns: "1fr 48px 1fr",
-            alignItems: "center",
+            gridTemplateColumns: "1fr 32px 1fr",
+            alignItems: "stretch",
             border: "1px solid rgba(197,151,109,0.12)",
             borderRadius: "8px",
             overflow: "hidden",
           }}>
             {/* Before */}
             <div style={{
-              padding: "1rem 1.25rem",
+              padding: "clamp(0.6rem, 2vw, 1rem) clamp(0.6rem, 2.5vw, 1.25rem)",
               backgroundColor: "rgba(255,255,255,0.015)",
-              display: "flex", alignItems: "center", gap: "0.75rem",
+              display: "flex", alignItems: "center", gap: "0.5rem",
             }}>
-              <span style={{ color: "rgba(240,233,223,0.25)", fontSize: "1rem", flexShrink: 0, lineHeight: 1 }}>×</span>
-              <span style={{ color: "rgba(240,233,223,0.4)", fontSize: "0.85rem", lineHeight: 1.6 }}>{c.before}</span>
+              <span style={{ color: "rgba(240,233,223,0.25)", fontSize: "0.85rem", flexShrink: 0, lineHeight: 1 }}>×</span>
+              <span style={{ color: "rgba(240,233,223,0.4)", fontSize: "clamp(0.72rem, 2.2vw, 0.85rem)", lineHeight: 1.55 }}>{c.before}</span>
             </div>
             {/* 箭頭 */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(197,151,109,0.04)" }}>
-              <svg viewBox="0 0 20 16" fill="none" style={{ width: "20px", height: "16px" }}>
-                <line x1="0" y1="8" x2="14" y2="8" stroke="rgba(197,151,109,0.4)" strokeWidth="1.2"/>
-                <path d="M11 4 L20 8 L11 12" stroke="rgba(197,151,109,0.6)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(197,151,109,0.04)", minHeight: "100%" }}>
+              <svg viewBox="0 0 16 12" fill="none" style={{ width: "14px", height: "12px", flexShrink: 0 }}>
+                <line x1="0" y1="6" x2="10" y2="6" stroke="rgba(197,151,109,0.4)" strokeWidth="1.2"/>
+                <path d="M8 3 L16 6 L8 9" stroke="rgba(197,151,109,0.6)" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
             {/* After */}
             <div style={{
-              padding: "1rem 1.25rem",
+              padding: "clamp(0.6rem, 2vw, 1rem) clamp(0.6rem, 2.5vw, 1.25rem)",
               backgroundColor: "rgba(197,151,109,0.05)",
-              display: "flex", alignItems: "center", gap: "0.75rem",
+              display: "flex", alignItems: "center", gap: "0.5rem",
             }}>
-              <span style={{ color: gold, fontSize: "1rem", flexShrink: 0, lineHeight: 1 }}>✓</span>
-              <span style={{ color: "rgba(240,233,223,0.85)", fontSize: "0.85rem", lineHeight: 1.6 }}>{c.after}</span>
+              <span style={{ color: gold, fontSize: "0.85rem", flexShrink: 0, lineHeight: 1 }}>✓</span>
+              <span style={{ color: "rgba(240,233,223,0.85)", fontSize: "clamp(0.72rem, 2.2vw, 0.85rem)", lineHeight: 1.55 }}>{c.after}</span>
             </div>
           </div>
         ))}
@@ -181,6 +180,8 @@ export default function Crem() {
         @media (max-width: 767px) {
           .crem-flow-desktop { display: none !important; }
           .crem-flow-mobile  { display: flex !important; }
+          .crem-section { padding-top: 3rem !important; padding-bottom: 2.5rem !important; }
+          .crem-container { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
         }
         @media (min-width: 768px) {
           .crem-flow-mobile  { display: none !important; }
@@ -278,8 +279,8 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 2: 一條龍服務是什麼（流程圖 + Hover）══════════════════ */}
-      <section style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)" }}>
-        <div className="container" style={{ maxWidth: "960px" }}>
+      <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)" }}>
+        <div className="container crem-container" style={{ maxWidth: "960px" }}>
           <div ref={refFlow} className="fade-up">
             <div style={{ marginBottom: "3rem" }}>
               <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>How It Works</p>
@@ -352,8 +353,8 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 3: 為什麼選我們（互動式 Slider）══════════════════════ */}
-      <section style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)", backgroundColor: "#090706" }}>
-        <div className="container" style={{ maxWidth: "700px" }}>
+      <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)", backgroundColor: "#090706" }}>
+        <div className="container crem-container" style={{ maxWidth: "700px" }}>
           <div ref={refWhy} className="fade-up">
             <div style={{ textAlign: "center", marginBottom: "3rem" }}>
               <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>Why This Service</p>
@@ -370,8 +371,8 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 4: 怎麼訂（靜態圖片）══════════════════════════════════ */}
-      <section style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)" }}>
-        <div className="container" style={{ maxWidth: "900px" }}>
+      <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)" }}>
+        <div className="container crem-container" style={{ maxWidth: "900px" }}>
           <div ref={refOrder} className="fade-up">
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
               <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>How To Order</p>
