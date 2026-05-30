@@ -321,32 +321,7 @@ export default function Crem() {
               />
             </div>
 
-            {/* CTA 按鈕 */}
-            <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
-              <a
-                href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "inline-block",
-                  backgroundColor: "rgba(197,151,109,0.15)",
-                  border: "1px solid rgba(197,151,109,0.75)",
-                  color: gold,
-                  padding: "0.85rem 2.5rem",
-                  fontSize: "0.82rem",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  fontFamily: "'Noto Serif TC', serif",
-                  fontWeight: 300,
-                  transition: "background-color 0.3s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(197,151,109,0.25)")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(197,151,109,0.15)")}
-              >
-                立即前往預訂
-              </a>
-            </div>
+
 
           </div>
         </div>
