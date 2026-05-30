@@ -590,7 +590,7 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 4: 怎麼訂（靜態圖片）══════════════════════════════════ */}
-      <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)" }}>
+      <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)", marginBottom: '-52px' }}>
         <div className="container crem-container" style={{ maxWidth: "900px" }}>
           <div ref={refOrder} className="fade-up">
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
@@ -605,7 +605,7 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 5: CTA（視覺優化版）══════════════════════════════════ */}
-      <section style={{ padding: "6rem 2rem", textAlign: "center", backgroundColor: "#0A0807", position: "relative", overflow: "hidden" }}>
+      <section style={{ padding: "6rem 2rem", textAlign: "center", backgroundColor: "#0A0807", position: "relative", overflow: "hidden", paddingBottom: '25px', paddingTop: '8px' }}>
         {/* 背景光暈裝飾 */}
         <div style={{
           position: "absolute", top: "50%", left: "50%",
