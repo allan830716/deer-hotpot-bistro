@@ -591,7 +591,7 @@ export default function Crem() {
 
       {/* ══ Section 4: 怎麼訂（靜態圖片）══════════════════════════════════ */}
       <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)", marginBottom: '-52px' }}>
-        <div className="container crem-container" style={{ maxWidth: "900px" }}>
+        <div className="container crem-container" style={{ maxWidth: "900px", marginBottom: '24px' }}>
           <div ref={refOrder} className="fade-up">
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
               <p style={{ color: goldFaint, fontSize: "0.62rem", letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: "0.75rem" }}>How To Order</p>
@@ -605,7 +605,7 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 5: CTA（視覺優化版）══════════════════════════════════ */}
-      <section style={{ padding: "6rem 2rem", textAlign: "center", backgroundColor: "#0A0807", position: "relative", overflow: "hidden", paddingBottom: '25px', paddingTop: '8px' }}>
+      <section style={{ padding: "6rem 2rem", textAlign: "center", backgroundColor: "#0A0807", position: "relative", overflow: "hidden", paddingTop: '8px', paddingBottom: '50px' }}>
         {/* 背景光暈裝飾 */}
         <div style={{
           position: "absolute", top: "50%", left: "50%",
@@ -630,7 +630,7 @@ export default function Crem() {
             開始預訂您的專屬「慶祝服務」
           </h2>
           <p className="crem-cta-sub" style={{ color: textSub, fontSize: "0.875rem", lineHeight: 1.9, marginBottom: "2.5rem" }}>
-            從選蛋糕到上桌，我們幫你安排好每一個細節。
+            從選蛋糕到上桌，幫您安排好每一個細節。
           </p>
 
           {/* 主 CTA 按鈕 */}
@@ -657,7 +657,7 @@ export default function Crem() {
 
           {/* 備注 */}
           <p style={{ color: "rgba(240,233,223,0.3)", fontSize: "0.72rem", marginTop: "2rem", letterSpacing: "0.04em" }}>
-            ＊預訂蛋糕請在 CRÈM 官網下單，請勿直接在初衷小鹿留言
+            ＊預訂蛋糕請在 CRÈM 官網下單
           </p>
         </div>
       </section>
