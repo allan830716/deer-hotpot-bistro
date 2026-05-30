@@ -32,7 +32,7 @@ function useFadeIn(threshold = 0.1) {
 const DEER_LOGO       = "/manus-storage/deer-logo-white_a35020cd.webp";
 const HERO_IMG        = "/manus-storage/crem-hero-new_b5d70f72.jpg";
 const CREM_LOGO       = "/manus-storage/crem-logo-white_f9b62a3f.webp";
-const ORDER_GUIDE_IMG = "/manus-storage/crem-order-guide_bdd840ee.webp";
+const ORDER_GUIDE_IMG = "/manus-storage/33333_eaeeb8d4.webp";
 
 // ── 流程步驟 ────────────────────────────────────────────────────────────────
 const FLOW_STEPS = [
@@ -254,13 +254,13 @@ export default function Crem() {
           to   { opacity: 1; transform: translateY(0); }
         }
         .ba-row-enter .ba-before {
-          animation: slideInLeft 0.45s ease forwards;
+          animation: slideInLeft 0.9s ease forwards;
         }
         .ba-row-enter .ba-arrow {
-          animation: fadeInUp 0.45s 0.1s ease both;
+          animation: fadeInUp 0.9s 0.2s ease both;
         }
         .ba-row-enter .ba-after {
-          animation: slideInRight 0.45s 0.05s ease forwards;
+          animation: slideInRight 0.9s 0.1s ease forwards;
         }
         .ba-row-enter .ba-before,
         .ba-row-enter .ba-arrow,
@@ -271,10 +271,9 @@ export default function Crem() {
         /* 手機版固定懸浮預訂按鈕 */
         @media (max-width: 767px) {
           .crem-float-btn {
-            display: flex !important;
+            display: block !important;
           }
-          /* 底部留白避免被懸浮按鈕運蓋 */
-          main { padding-bottom: 72px !important; }
+          /* 懸浮按鈕已改為右下角，不需要底部留白 */
         }
         @media (min-width: 768px) {
           .crem-float-btn { display: none !important; }
@@ -528,68 +527,34 @@ export default function Crem() {
           </p>
         </div>
       </section>
-      {/* 手機版固定懸浮預訂按鈕 */}
-      <div
+      {/* 手機版固定懸浮預訂按鈕（右下角，避開客服按鈕） */}
+      <a
         className="crem-float-btn"
+        href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: "none",
           position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 50,
-          padding: "0.75rem 1.25rem",
-          backgroundColor: "rgba(10,8,7,0.92)",
-          borderTop: "1px solid rgba(197,151,109,0.2)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "0.75rem",
+          bottom: "5.5rem",
+          right: "1.25rem",
+          zIndex: 40,
+          padding: "0.7rem 1.2rem",
+          background: "linear-gradient(135deg, rgba(197,151,109,0.9) 0%, rgba(160,115,70,0.9) 100%)",
+          border: "none",
+          color: "#0A0807",
+          fontSize: "0.78rem",
+          letterSpacing: "0.12em",
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 500,
+          textDecoration: "none",
+          borderRadius: "2px",
+          boxShadow: "0 4px 20px rgba(197,151,109,0.35)",
+          whiteSpace: "nowrap",
         }}
       >
-        <a
-          href="https://inline.app/booking/-LnGxVQiLowRUUBg2dlS:inline-live-1/-LnGxVUeNglvFM_8Rz2a?language=zh-tw"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            flex: 1,
-            textAlign: "center",
-            padding: "0.75rem 1rem",
-            border: "1px solid rgba(197,151,109,0.5)",
-            color: "rgba(197,151,109,0.85)",
-            fontSize: "0.8rem",
-            letterSpacing: "0.12em",
-            fontFamily: "'Noto Serif TC', serif",
-            fontWeight: 300,
-            textDecoration: "none",
-            borderRadius: "2px",
-          }}
-        >
-          立即訂位
-        </a>
-        <a
-          href="https://www.crem.tw/collections/%E5%88%9D%E8%A1%B7%E5%B0%8F%E9%B9%BF-x-cr%C3%A8m"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            flex: 1,
-            textAlign: "center",
-            padding: "0.75rem 1rem",
-            background: "linear-gradient(135deg, rgba(197,151,109,0.25) 0%, rgba(197,151,109,0.12) 100%)",
-            border: "1px solid rgba(197,151,109,0.7)",
-            color: "rgba(197,151,109,1)",
-            fontSize: "0.8rem",
-            letterSpacing: "0.12em",
-            fontFamily: "'Noto Serif TC', serif",
-            fontWeight: 300,
-            textDecoration: "none",
-            borderRadius: "2px",
-          }}
-        >
-          選 CRÈM 蛋糕
-        </a>
-      </div>
+        選 CRÈM 蛋糕
+      </a>
     </main>
   );
 }
