@@ -63,12 +63,12 @@ const CATEGORY_KEYS = [
 
 /* ── 酒水子分類（key 固定，pageIndex 固定，tKey 供 t() 翻譯） ──────────── */
 const DRINK_SUBCAT_KEYS = [
-  { key: "glass",     tKey: "menu.drink.glass",     pageIndex: 22 },
-  { key: "red",       tKey: "menu.drink.red",        pageIndex: 24 },
-  { key: "white",     tKey: "menu.drink.white",      pageIndex: 26 },
-  { key: "sparkling", tKey: "menu.drink.sparkling",  pageIndex: 28 },
-  { key: "beer",      tKey: "menu.drink.beer",       pageIndex: 29 },
-  { key: "juice",     tKey: "menu.drink.juice",      pageIndex: 31 },
+  { key: "glass",     tKey: "menu.drink.glass",     pageIndex: 24 },  // 紅白氣泡酒 → 第25頁（0-based: 24）
+  { key: "red",       tKey: "menu.drink.red",        pageIndex: 25 },  // 紅酒/瓶 → 第26頁（0-based: 25）
+  { key: "white",     tKey: "menu.drink.white",      pageIndex: 27 },  // 白酒/瓶 → 第28頁（0-based: 27）
+  { key: "sparkling", tKey: "menu.drink.sparkling",  pageIndex: 29 },  // 氣泡酒/瓶 → 第30頁（0-based: 29）
+  { key: "beer",      tKey: "menu.drink.beer",       pageIndex: 30 },  // 瓶酒 → 第31頁（0-based: 30）
+  { key: "juice",     tKey: "menu.drink.juice",      pageIndex: 32 },  // 果汁 → 第33頁（0-based: 32）
 ];
 
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
@@ -545,7 +545,7 @@ export default function Menu() {
                       <div
                         key={i}
                         style={{ width: `${100 / total}%`, flexShrink: 0, position: "relative" }}
-                        onClick={() => { if (!isMouseDragging.current) setLightboxSrc(page.src); }}
+                        onClick={() => { if (!isMouseDragging.current && window.innerWidth < 768) setLightboxSrc(page.src); }}
                       >
                         <img
                           src={page.src}
@@ -615,24 +615,49 @@ export default function Menu() {
                   );
                 })}
               </div>
-              <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", flexWrap: "wrap" }}>
-                {MENU_PAGES.map((page, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goTo(i)}
-                    aria-label={`${i + 1}`}
-                    style={{
-                      width: "36px", height: "36px", padding: 0,
-                      border: i === safeIndex ? "1px solid rgba(197,151,109,0.8)" : "1px solid rgba(197,151,109,0.15)",
-                      cursor: "pointer", overflow: "hidden",
-                      opacity: i === safeIndex ? 1 : 0.45,
-                      transition: "all 0.2s ease", flexShrink: 0,
-                      backgroundColor: "transparent",
-                    }}
-                  >
-                    <img src={page.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  </button>
-                ))}
+              {/* 分頁指示器：顯示目前頁碼 + 前後各 2 頁的跳頁點 */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                {/* 上一頁 */}
+                <button
+                  onClick={prev}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(197,151,109,0.5)", fontSize: "1.1rem", padding: "0.25rem 0.5rem", lineHeight: 1, transition: "color 0.2s" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(197,151,109,1)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(197,151,109,0.5)")}
+                >‹</button>
+                {/* 頁碼點 */}
+                {Array.from({ length: total }, (_, i) => {
+                  const dist = Math.abs(i - safeIndex);
+                  if (dist > 2 && i !== 0 && i !== total - 1) {
+                    if (dist === 3) return <span key={i} style={{ color: "rgba(197,151,109,0.25)", fontSize: "0.5rem", lineHeight: 1 }}>·</span>;
+                    return null;
+                  }
+                  const isActive = i === safeIndex;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => goTo(i)}
+                      aria-label={`第 ${i + 1} 頁`}
+                      style={{
+                        width: isActive ? "24px" : "6px",
+                        height: "6px",
+                        borderRadius: "3px",
+                        border: "none",
+                        padding: 0,
+                        cursor: "pointer",
+                        flexShrink: 0,
+                        backgroundColor: isActive ? "rgba(197,151,109,0.9)" : dist === 1 ? "rgba(197,151,109,0.35)" : "rgba(197,151,109,0.15)",
+                        transition: "all 0.3s ease",
+                      }}
+                    />
+                  );
+                })}
+                {/* 下一頁 */}
+                <button
+                  onClick={next}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(197,151,109,0.5)", fontSize: "1.1rem", padding: "0.25rem 0.5rem", lineHeight: 1, transition: "color 0.2s" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(197,151,109,1)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(197,151,109,0.5)")}
+                >›</button>
               </div>
             </div>
           )}
