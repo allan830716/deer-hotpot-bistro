@@ -238,8 +238,8 @@ function Navbar() {
           padding: "0 1.25rem",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", paddingLeft: "0" }}>
-          {/* Logo */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", width: "100%" }}>
+          {/* Logo — 靠左 */}
           <Link href="/">
             <img
               src="/manus-storage/deer-logo_88482511.webp"
@@ -248,8 +248,8 @@ function Navbar() {
             />
           </Link>
 
-          {/* Desktop Nav */}
-          <nav style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+          {/* Desktop Nav — 置中 */}
+          <nav style={{ display: "flex", gap: "1.75rem", alignItems: "center", justifyContent: "center" }}>
             {NAV_LINK_KEYS.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span
@@ -268,6 +268,10 @@ function Navbar() {
                 </span>
               </Link>
             ))}
+          </nav>
+
+          {/* 右側欄——CTA 按鈕 + 語言 + 購物車 */}
+          <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", justifyContent: "flex-end" }}>
             <NavCartBtn />
             <LanguageSwitcher />
             <Link href="/crem">
@@ -279,6 +283,7 @@ function Navbar() {
                   cursor: "pointer", transition: "all 0.2s ease",
                   border: location === "/crem" ? "1px solid rgba(197,151,109,0.6)" : "1px solid rgba(255,255,255,0.3)",
                   padding: "0.4rem 0.9rem",
+                  whiteSpace: "nowrap" as const,
                 }}
                 onMouseEnter={(e) => {
                   (e.target as HTMLElement).style.color = "rgba(240,233,223,1)";
@@ -302,13 +307,14 @@ function Navbar() {
                 letterSpacing: "0.18em", textTransform: "uppercase" as const,
                 color: "var(--deer-gold)", border: "1px solid rgba(197,151,109,0.5)",
                 padding: "0.5rem 1.25rem", transition: "all 0.2s ease", textDecoration: "none",
+                whiteSpace: "nowrap" as const,
               }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.1)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
             >
               {t("nav.reserve")}
             </a>
-          </nav>
+          </div>
 
         </div>
       </header>
