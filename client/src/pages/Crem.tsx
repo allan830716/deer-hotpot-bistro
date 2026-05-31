@@ -502,9 +502,51 @@ export default function Crem() {
           <h1 style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 200, fontSize: "clamp(1.75rem, 4vw, 2.75rem)", color: textMain, letterSpacing: "0.08em", lineHeight: 1.45, marginBottom: "1.25rem" }}>
             CRÈM 蛋糕上桌預訂
           </h1>
-          <p style={{ color: textSub, fontSize: "0.9rem", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto" }}>
+          <p style={{ color: textSub, fontSize: "0.9rem", lineHeight: 2, letterSpacing: "0.06em", maxWidth: "520px", margin: "0 auto 2rem" }}>
             由兩個品牌共創一場慶祝的完整設計。<br />從餐桌到蛋糕，讓每個重要時刻都更加完整。
           </p>
+          {/* Hero 雙按鈕 */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center" }}>
+            <a
+              href="#section-order"
+              style={{
+                display: "inline-block",
+                padding: "0.75rem 2rem",
+                border: "1px solid rgba(197,151,109,0.5)",
+                color: "rgba(197,151,109,0.9)",
+                fontSize: "0.8rem",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 300,
+                transition: "border-color 0.25s, color 0.25s, background 0.25s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(197,151,109,0.9)"; (e.currentTarget as HTMLAnchorElement).style.color = "rgba(197,151,109,1)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(197,151,109,0.5)"; (e.currentTarget as HTMLAnchorElement).style.color = "rgba(197,151,109,0.9)"; }}
+            >
+              如何預訂？
+            </a>
+            <a
+              href="https://www.crem.tw/collections/鮮奶油蛋糕-系列"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="crem-cta-btn"
+              style={{
+                padding: "0.75rem 2rem",
+                border: "1px solid rgba(197,151,109,0.7)",
+                backgroundColor: "rgba(197,151,109,0.12)",
+                color: gold,
+                fontSize: "0.8rem",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 300,
+              }}
+            >
+              前往 CRÈM 選蛋糕
+            </a>
+          </div>
         </div>
       </section>
 
@@ -601,7 +643,7 @@ export default function Crem() {
       </section>
 
       {/* ══ Section 4: 怎麼訂（靜態圖片）══════════════════════════════════ */}
-      <section className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)", marginBottom: '-52px' }}>
+      <section id="section-order" className="crem-section" style={{ padding: "5rem 0 4.5rem", borderBottom: "1px solid rgba(197,151,109,0.1)", marginBottom: '-52px' }}>
         <div className="container crem-container" style={{ maxWidth: "900px", marginBottom: '24px' }}>
           <div ref={refOrder} className="fade-up">
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
