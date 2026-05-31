@@ -249,7 +249,7 @@ function Navbar() {
           </Link>
 
           {/* Desktop Nav — 置中 */}
-          <nav style={{ display: "flex", gap: "1.75rem", alignItems: "center", justifyContent: "center" }}>
+          <nav style={{ display: "flex", gap: "2.5rem", alignItems: "center", justifyContent: "center" }}>
             {NAV_LINK_KEYS.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span
@@ -271,9 +271,11 @@ function Navbar() {
           </nav>
 
           {/* 右側欄——CTA 按鈕 + 語言 + 購物車 */}
-          <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", justifyContent: "flex-end" }}>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", justifyContent: "flex-end" }}>
             <NavCartBtn />
             <LanguageSwitcher />
+            {/* 分隔線 */}
+            <div style={{ width: "1px", height: "18px", backgroundColor: "rgba(197,151,109,0.25)", margin: "0 0.5rem" }} />
             <Link href="/crem">
               <span
                 style={{
