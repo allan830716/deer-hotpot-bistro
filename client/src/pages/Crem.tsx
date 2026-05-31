@@ -646,7 +646,7 @@ export default function Crem() {
 
           {/* 主 CTA 按鈕 */}
           <a
-            href="https://www.crem.tw/collections/%E9%AE%AE%E5%A5%B6%E6%B2%B9%E8%9B%8B%E7%B3%95-%E7%B3%BB%E5%88%97"
+            href="https://www.crem.tw/collections/鮮奶油蛋糕-系列"
             target="_blank"
             rel="noopener noreferrer"
             className="crem-cta-btn"
