@@ -615,24 +615,6 @@ export default function Menu() {
               <p style={{ fontFamily: "'Noto Serif TC', serif", fontWeight: 300, fontSize: "0.8125rem", color: "rgba(240,233,223,0.4)", letterSpacing: "0.08em", marginBottom: "1.25rem" }}>
                 {t(current.labelKey)} &nbsp;·&nbsp; {safeIndex + 1} / {total}
               </p>
-              <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", alignItems: "center", marginBottom: "1.5rem" }}>
-                {[-2, -1, 0, 1, 2].map((offset) => {
-                  const idx = safeIndex + offset;
-                  if (idx < 0 || idx >= total) return <span key={offset} style={{ width: "7px" }} />;
-                  return (
-                    <button
-                      key={idx}
-                      onClick={() => goTo(idx)}
-                      style={{
-                        width: offset === 0 ? "20px" : "7px", height: "7px",
-                        borderRadius: "4px", border: "none", cursor: "pointer", padding: 0,
-                        backgroundColor: offset === 0 ? "rgba(197,151,109,0.9)" : "rgba(255,255,255,0.3)",
-                        transition: "all 0.3s ease", flexShrink: 0,
-                      }}
-                    />
-                  );
-                })}
-              </div>
               {/* 分頁指示器：顯示目前頁碼 + 前後各 2 頁的跳頁點 */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
                 {/* 上一頁 */}
