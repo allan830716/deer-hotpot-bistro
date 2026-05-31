@@ -505,9 +505,34 @@ export default function Menu() {
       {/* ── 輪播主體 ── */}
       <section style={{ backgroundColor: "var(--deer-dark)", paddingBottom: "5rem" }}>
         <div className="container">
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: "0" }}>
+            {/* 左箭頭區塊 */}
+            <button
+              onClick={prev}
+              aria-label="prev"
+              style={{
+                flexShrink: 0,
+                width: "48px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "rgba(197,151,109,0.3)",
+                fontSize: "1.75rem",
+                transition: "color 0.25s ease",
+                padding: 0,
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = "rgba(197,151,109,0.9)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(197,151,109,0.3)")}
+            >
+              <svg width="20" height="36" viewBox="0 0 20 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 4 L4 18 L14 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
             {current && (
-              <div style={{ position: "relative", width: "100%", maxWidth: "640px" }}>
+              <div style={{ position: "relative", flex: 1, maxWidth: "640px" }}>
                 <div
                   ref={containerRef}
                   className="menu-img-wrap"
@@ -557,40 +582,33 @@ export default function Menu() {
                     ))}
                   </div>
                 </div>
-                <button
-                  onClick={prev}
-                  aria-label="prev"
-                  style={{
-                    position: "absolute", left: "0.75rem", top: "50%",
-                    transform: "translateY(-50%)", zIndex: 20,
-                    width: "44px", height: "44px", borderRadius: "50%",
-                    border: "none", backgroundColor: "rgba(30,20,15,0.72)",
-                    color: "#fff", cursor: "pointer", fontSize: "1.6rem",
-                    lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "background-color 0.2s ease",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
-                >‹</button>
-                <button
-                  onClick={next}
-                  aria-label="next"
-                  style={{
-                    position: "absolute", right: "0.75rem", top: "50%",
-                    transform: "translateY(-50%)", zIndex: 20,
-                    width: "44px", height: "44px", borderRadius: "50%",
-                    border: "none", backgroundColor: "rgba(30,20,15,0.72)",
-                    color: "#fff", cursor: "pointer", fontSize: "1.6rem",
-                    lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "background-color 0.2s ease",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.45)",
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(197,151,109,0.85)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(30,20,15,0.72)"; }}
-                >›</button>
               </div>
             )}
+            {/* 右笭頭區塊 */}
+            <button
+              onClick={next}
+              aria-label="next"
+              style={{
+                flexShrink: 0,
+                width: "48px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "rgba(197,151,109,0.3)",
+                fontSize: "1.75rem",
+                transition: "color 0.25s ease",
+                padding: 0,
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = "rgba(197,151,109,0.9)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(197,151,109,0.3)")}
+            >
+              <svg width="20" height="36" viewBox="0 0 20 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4 L16 18 L6 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
           </div>
           {current && (
             <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
