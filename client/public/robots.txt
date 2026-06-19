@@ -1,0 +1,30 @@
+# robots.txt for https://deersbistro.tw
+# 初衷小鹿 Deer's Hotpot Bistro
+
+User-agent: *
+Allow: /
+
+# 禁止爬取後台與內部資源（如有需要再開啟）
+# Disallow: /admin/
+# Disallow: /api/
+# Disallow: /*.json$
+
+# Sitemap location
+Sitemap: https://deersbistro.tw/sitemap.xml
+
+# 允許主流爬蟲完整抓取
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# 封鎖無價值的 AI 爬蟲（可選，依需求決定是否保留）
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /

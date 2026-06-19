@@ -1,0 +1,2700 @@
+/*
+ * 初衷小鹿 Deer's Hotpot Bistro — 全站設計系統
+ * ─────────────────────────────────────────────
+ * 主軸：體驗節奏（不是一頓火鍋，是一場有節奏的餐桌體驗）
+ * 色系：暖灰底 #F5F3EF · 深棕黑 #1A1210 · 木質棕 #6B4A32
+ * 字體：Noto Serif TC（主）· Cormorant Garamond（英文標題）
+ * 原則：大量留白、短句、克制、不推銷
+ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Google Fonts 已在 index.html 引入 ── */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  /* ── 初衷小鹿品牌色系 ── */
+  --deer-bg:        #F5F3EF;   /* 暖灰底（主背景） */
+  --deer-bg-dark:   #EDE9E2;   /* 暖灰底深版（交替區塊） */
+  --deer-text:      #1A1210;   /* 深棕黑（主文字） */
+  --deer-accent:    #6B4A32;   /* 木質棕（強調色） */
+  --deer-sub:       #8A8A8A;   /* 暖灰（輔助文字） */
+  --deer-muted:     #B5AFA6;   /* 更淡（裝飾線、次要） */
+  --deer-gold:      #C5976D;   /* 霧金（分隔線、hover） */
+  --deer-dark:      #0F0D0C;   /* 深色背景區塊 */
+  --deer-dark-text: #F0E9DF;   /* 深色區塊上的文字 */
+
+  /* ── Tailwind 語意色對應 ── */
+  --background:           oklch(0.972 0.006 68);   /* ≈ #F5F3EF */
+  --foreground:           oklch(0.14 0.018 30);    /* ≈ #1A1210 */
+  --card:                 oklch(0.972 0.006 68);
+  --card-foreground:      oklch(0.14 0.018 30);
+  --popover:              oklch(0.972 0.006 68);
+  --popover-foreground:   oklch(0.14 0.018 30);
+  --primary:              oklch(0.38 0.06 42);     /* ≈ #6B4A32 木質棕 */
+  --primary-foreground:   oklch(0.972 0.006 68);
+  --secondary:            oklch(0.92 0.008 68);
+  --secondary-foreground: oklch(0.14 0.018 30);
+  --muted:                oklch(0.92 0.008 68);
+  --muted-foreground:     oklch(0.56 0.008 60);
+  --accent:               oklch(0.38 0.06 42);
+  --accent-foreground:    oklch(0.972 0.006 68);
+  --destructive:          oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border:               oklch(0.86 0.01 60);
+  --input:                oklch(0.86 0.01 60);
+  --ring:                 oklch(0.38 0.06 42);
+  --radius:               0.25rem;  /* 極小圓角，維持成熟感 */
+}
+
+/* ── 全域基礎 ── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--deer-bg);
+    color: var(--deer-text);
+    font-family: "Noto Serif TC", "Noto Serif", serif;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Noto Serif TC", serif;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    color: var(--deer-text);
+  }
+
+  /* 英文標題使用 Cormorant Garamond */
+  .font-display {
+    font-family: "Cormorant Garamond", "Georgia", serif;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+  }
+
+  /* 英文小標 */
+  .font-label {
+    font-family: "Cormorant Garamond", "Georgia", serif;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  p {
+    color: var(--deer-sub);
+    line-height: 1.9;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href] {
+    @apply cursor-pointer;
+  }
+}
+
+/* ── 版面容器 ── */
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1200px;
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+
+  /* 窄容器（敘事段落用） */
+  .container-narrow {
+    width: 100%;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  /* ── Section 間距 ── */
+  .section {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+
+  .section-lg {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+  }
+
+  /* ── 品牌分隔線 ── */
+  .deer-divider {
+    width: 40px;
+    height: 1px;
+    background-color: var(--deer-gold);
+    margin: 2rem auto;
+  }
+
+  .deer-divider-left {
+    width: 40px;
+    height: 1px;
+    background-color: var(--deer-gold);
+    margin: 2rem 0;
+  }
+
+  /* ── 品牌按鈕 ── */
+  .btn-deer {
+    display: inline-block;
+    padding: 0.875rem 2.5rem;
+    border: 1px solid var(--deer-text);
+    background: transparent;
+    color: var(--deer-text);
+    font-family: "Noto Serif TC", serif;
+    font-weight: 300;
+    font-size: 0.875rem;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: background-color 0.35s ease, color 0.35s ease,
+      transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-deer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--deer-text);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: -1;
+  }
+
+  .btn-deer:hover {
+    background-color: var(--deer-text);
+    color: var(--deer-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 18, 16, 0.2);
+  }
+
+  .btn-deer:active {
+    transform: translateY(0);
+  }
+
+  .btn-deer-light {
+    display: inline-block;
+    padding: 0.875rem 2.5rem;
+    border: 1px solid var(--deer-dark-text);
+    background: transparent;
+    color: var(--deer-dark-text);
+    font-family: "Noto Serif TC", serif;
+    font-weight: 300;
+    font-size: 0.875rem;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: background-color 0.35s ease, color 0.35s ease,
+      transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-deer-light:hover {
+    background-color: var(--deer-dark-text);
+    color: var(--deer-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(240, 233, 223, 0.15);
+  }
+
+  .btn-deer-light:active {
+    transform: translateY(0);
+  }
+
+  /* ── 深色區塊 ── */
+  .bg-deer-dark {
+    background-color: var(--deer-dark);
+    color: var(--deer-dark-text);
+  }
+
+  .bg-deer-dark h1,
+  .bg-deer-dark h2,
+  .bg-deer-dark h3,
+  .bg-deer-dark h4 {
+    color: var(--deer-dark-text);
+  }
+
+  .bg-deer-dark p {
+    color: rgba(240, 233, 223, 0.65);
+  }
+
+  /* ── 導覽列 ── */
+  .nav-link {
+    font-family: "Noto Serif TC", serif;
+    font-weight: 300;
+    font-size: 0.8125rem;
+    letter-spacing: 0.1em;
+    color: var(--deer-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--deer-gold);
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  /* ── 文字動畫輔助 ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── inline 訂位 iframe 響應式容器 ── */
+.inline-booking-container {
+  /* 桌機：固定高度 800px */
+  height: 800px;
+}
+
+.inline-booking-container iframe {
+  height: 100%;
+  min-height: 800px;
+}
+
+@media (max-width: 768px) {
+  .inline-booking-container {
+    /* 手機：容器高度用縮放後的實際高度 */
+    height: 480px;
+    min-height: 400px;
+    overflow: hidden;
+  }
+  .inline-booking-container iframe {
+    /* 將 inline 頁面縮放為 75%，同時擴展寬度补償，讓內容看起來更小巧 */
+    width: 133%;
+    height: 640px;
+    transform: scale(0.75);
+    transform-origin: top left;
+    border: none;
+    display: block;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   商店頁面 /shop
+══════════════════════════════════════════════════════════════════════════ */
+.shop-page {
+  min-height: 100vh;
+  background-color: var(--deer-bg);
+  padding-top: 64px;
+}
+
+.shop-hero {
+  position: relative;
+  background-color: var(--deer-dark);
+  padding: 5rem 2rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.shop-hero-content {}
+
+.shop-hero-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 200;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--deer-dark-text);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.shop-hero-sub {
+  font-size: 0.875rem;
+  color: rgba(240, 233, 223, 0.5);
+  letter-spacing: 0.1em;
+}
+
+.cart-float-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: 1px solid rgba(197, 151, 109, 0.4);
+  color: var(--deer-gold);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.cart-float-btn:hover {
+  background: rgba(197, 151, 109, 0.1);
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--deer-gold);
+  color: var(--deer-dark);
+  font-size: 0.65rem;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shop-filter {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.15);
+}
+
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(197, 151, 109, 0.3);
+  background: transparent;
+  color: var(--deer-sub);
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  border-color: var(--deer-gold);
+  color: var(--deer-text);
+  background: rgba(197, 151, 109, 0.06);
+}
+
+.shop-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid rgba(197, 151, 109, 0.12);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 32px rgba(26, 18, 16, 0.08);
+  transform: translateY(-2px);
+}
+
+.product-img-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.04);
+}
+
+.product-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--deer-bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--deer-dark);
+  color: var(--deer-gold);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 0.25rem 0.625rem;
+}
+
+.product-badge-sale {
+  left: auto;
+  right: 1rem;
+  background: var(--deer-gold);
+  color: var(--deer-dark);
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-tags {
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.product-tag {
+  font-size: 0.65rem;
+  color: var(--deer-gold);
+  border: 1px solid rgba(197, 151, 109, 0.35);
+  padding: 0.125rem 0.5rem;
+  letter-spacing: 0.08em;
+}
+
+.product-name {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 1.0625rem;
+  color: var(--deer-text);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.product-desc {
+  font-size: 0.8125rem;
+  color: var(--deer-sub);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.product-price {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.25rem;
+  color: var(--deer-text);
+  letter-spacing: 0.04em;
+}
+
+.product-price-original {
+  font-size: 0.875rem;
+  color: var(--deer-muted);
+  text-decoration: line-through;
+}
+
+.product-add-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--deer-text);
+  color: var(--deer-bg);
+  border: none;
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.product-add-btn:hover:not(:disabled) {
+  background: var(--deer-accent);
+}
+
+.product-add-btn.added {
+  background: var(--deer-gold);
+  color: var(--deer-dark);
+}
+
+.product-add-btn:disabled {
+  background: var(--deer-muted);
+  cursor: not-allowed;
+}
+
+.shop-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem;
+  color: var(--deer-sub);
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(197, 151, 109, 0.2);
+  border-top-color: var(--deer-gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.shop-empty {
+  text-align: center;
+  padding: 4rem;
+  color: var(--deer-sub);
+  font-family: "Noto Serif TC", serif;
+}
+
+.shop-cta {
+  background: var(--deer-dark);
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.shop-cta-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 200;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--deer-dark-text);
+  letter-spacing: 0.1em;
+  margin: 1rem 0;
+}
+
+.shop-cta-sub {
+  font-size: 0.875rem;
+  color: rgba(240, 233, 223, 0.45);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.08em;
+}
+
+.btn-deer-outline {
+  display: inline-block;
+  padding: 0.875rem 2.5rem;
+  border: 1px solid rgba(197, 151, 109, 0.5);
+  background: transparent;
+  color: var(--deer-gold);
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease,
+    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.3s ease;
+}
+
+.btn-deer-outline:hover {
+  background: rgba(197, 151, 109, 0.1);
+  border-color: var(--deer-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(197, 151, 109, 0.15);
+}
+
+.btn-deer-outline:active {
+  transform: translateY(0);
+}
+
+.btn-deer-dark {
+  display: inline-block;
+  padding: 0.875rem 2.5rem;
+  border: 1px solid var(--deer-dark);
+  background: var(--deer-dark);
+  color: var(--deer-dark-text);
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease,
+    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.3s ease;
+}
+
+.btn-deer-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn-deer-dark:active {
+  transform: translateY(0);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   購物車頁面 /cart
+══════════════════════════════════════════════════════════════════════════ */
+.cart-page {
+  min-height: 100vh;
+  background: var(--deer-bg);
+  padding-top: 64px;
+}
+
+.cart-header {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.15);
+}
+
+.cart-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--deer-sub);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.cart-back-btn:hover { color: var(--deer-text); }
+
+.cart-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 200;
+  font-size: 1.5rem;
+  color: var(--deer-text);
+  letter-spacing: 0.1em;
+}
+
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  color: var(--deer-sub);
+  font-family: "Noto Serif TC", serif;
+}
+
+.cart-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .cart-layout { grid-template-columns: 1fr; }
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(197, 151, 109, 0.12);
+  padding: 1.25rem;
+}
+
+.cart-item-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cart-item-info { flex: 1; }
+
+.cart-item-name {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 0.9375rem;
+  color: var(--deer-text);
+  margin-bottom: 0.25rem;
+}
+
+.cart-item-price {
+  font-size: 0.8125rem;
+  color: var(--deer-sub);
+}
+
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(197, 151, 109, 0.3);
+  background: transparent;
+  color: var(--deer-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qty-btn:hover {
+  border-color: var(--deer-gold);
+  color: var(--deer-gold);
+}
+
+.qty-num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.125rem;
+  min-width: 24px;
+  text-align: center;
+  color: var(--deer-text);
+}
+
+.cart-item-subtotal {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.0625rem;
+  color: var(--deer-text);
+  min-width: 80px;
+  text-align: right;
+}
+
+.cart-remove-btn {
+  background: none;
+  border: none;
+  color: var(--deer-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.cart-remove-btn:hover { color: #e53e3e; }
+
+.cart-summary {
+  background: #fff;
+  border: 1px solid rgba(197, 151, 109, 0.15);
+  padding: 2rem;
+  position: sticky;
+  top: 80px;
+}
+
+.cart-summary-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 1.0625rem;
+  color: var(--deer-text);
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.15);
+}
+
+.cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--deer-sub);
+  margin-bottom: 0.75rem;
+}
+
+.cart-summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.25rem;
+  color: var(--deer-text);
+  padding-top: 1rem;
+  border-top: 1px solid rgba(197, 151, 109, 0.15);
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-form { margin-bottom: 1.5rem; }
+
+.checkout-form-title {
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.875rem;
+  color: var(--deer-sub);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  background: var(--deer-bg);
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.8125rem;
+  color: var(--deer-text);
+  outline: none;
+  margin-bottom: 0.625rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.checkout-input:focus { border-color: var(--deer-gold); }
+
+.checkout-textarea { resize: vertical; }
+
+.checkout-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--deer-dark);
+  color: var(--deer-dark-text);
+  border: none;
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-btn:hover:not(:disabled) { background: var(--deer-accent); }
+.checkout-btn:disabled { background: var(--deer-muted); cursor: not-allowed; }
+
+.checkout-note {
+  font-size: 0.7rem;
+  color: var(--deer-muted);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 訂單成功 */
+.order-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.order-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(197, 151, 109, 0.15);
+  color: var(--deer-gold);
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.order-success-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 200;
+  font-size: 1.75rem;
+  color: var(--deer-text);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.order-success-number {
+  font-size: 0.875rem;
+  color: var(--deer-gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.order-success-amount {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.25rem;
+  color: var(--deer-text);
+  margin-bottom: 1rem;
+}
+
+.order-success-note {
+  font-size: 0.8125rem;
+  color: var(--deer-sub);
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+}
+
+.order-success-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   管理後台 /admin
+══════════════════════════════════════════════════════════════════════════ */
+.admin-page {
+  min-height: 100vh;
+  background: #F8F6F2;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-nav {
+  background: var(--deer-dark);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.admin-nav-brand {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+}
+
+.admin-nav-logo {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 200;
+  font-size: 0.9375rem;
+  color: var(--deer-dark-text);
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+
+.admin-nav-sub {
+  font-size: 0.6rem;
+  color: rgba(197, 151, 109, 0.6);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.admin-nav-links {
+  display: flex;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.admin-nav-link {
+  font-size: 0.8125rem;
+  color: rgba(240, 233, 223, 0.55);
+  padding: 0.375rem 0.875rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+  color: var(--deer-gold);
+}
+
+.admin-nav-link-back {
+  font-size: 0.75rem;
+  color: rgba(197, 151, 109, 0.5);
+  margin-left: auto;
+}
+
+.admin-main {
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.admin-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: var(--deer-text);
+  letter-spacing: 0.08em;
+}
+
+.admin-subtitle {
+  font-size: 0.875rem;
+  color: var(--deer-sub);
+  margin-top: 0.25rem;
+}
+
+.admin-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: var(--deer-sub);
+  font-family: "Noto Serif TC", serif;
+}
+
+.admin-auth-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.admin-auth-gate h2 {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: var(--deer-text);
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.admin-stat-card {
+  background: #fff;
+  border: 1px solid rgba(197, 151, 109, 0.12);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.admin-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-stat-label {
+  font-size: 0.75rem;
+  color: var(--deer-sub);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.admin-stat-value {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.5rem;
+  color: var(--deer-text);
+}
+
+.admin-section-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: var(--deer-text);
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.admin-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.admin-quick-card {
+  background: #fff;
+  border: 1px solid rgba(197, 151, 109, 0.12);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-quick-card:hover {
+  border-color: rgba(197, 151, 109, 0.4);
+  box-shadow: 0 4px 16px rgba(26, 18, 16, 0.05);
+}
+
+.admin-quick-label {
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.9375rem;
+  color: var(--deer-text);
+  margin-bottom: 0.25rem;
+}
+
+.admin-quick-desc {
+  font-size: 0.75rem;
+  color: var(--deer-sub);
+}
+
+.admin-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--deer-dark);
+  color: var(--deer-dark-text);
+  border: none;
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-add-btn:hover { background: var(--deer-accent); }
+
+.admin-table-wrap {
+  background: #fff;
+  border: 1px solid rgba(197, 151, 109, 0.12);
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 1rem 1.25rem;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--deer-sub);
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.15);
+  background: #FAFAF8;
+}
+
+.admin-table td {
+  padding: 1rem 1.25rem;
+  color: var(--deer-text);
+  border-bottom: 1px solid rgba(197, 151, 109, 0.08);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: #FAFAF8; }
+
+.admin-row-inactive td { opacity: 0.5; }
+
+.admin-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-product-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.admin-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid;
+  background: transparent;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.admin-status-btn.active {
+  border-color: rgba(76, 175, 80, 0.5);
+  color: #4CAF50;
+}
+
+.admin-status-btn.inactive {
+  border-color: rgba(158, 158, 158, 0.4);
+  color: #9E9E9E;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(197, 151, 109, 0.2);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-action-btn.edit { color: var(--deer-gold); }
+.admin-action-btn.edit:hover { background: rgba(197, 151, 109, 0.1); }
+.admin-action-btn.delete { color: #e53e3e; }
+.admin-action-btn.delete:hover { background: rgba(229, 62, 62, 0.08); }
+
+.admin-empty {
+  padding: 3rem;
+  text-align: center;
+  color: var(--deer-sub);
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.875rem;
+}
+
+/* Admin Modal */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 13, 12, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.admin-modal {
+  background: #fff;
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.admin-modal-title {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 300;
+  font-size: 1.125rem;
+  color: var(--deer-text);
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.15);
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.admin-form-group label {
+  font-size: 0.75rem;
+  color: var(--deer-sub);
+  letter-spacing: 0.06em;
+}
+
+.admin-form-full { grid-column: 1 / -1; }
+
+.admin-form-checks {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.admin-check-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--deer-text);
+  cursor: pointer;
+}
+
+.admin-input {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  background: var(--deer-bg);
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.8125rem;
+  color: var(--deer-text);
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.admin-input:focus { border-color: var(--deer-gold); }
+.admin-textarea { resize: vertical; }
+
+.admin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(197, 151, 109, 0.15);
+}
+
+/* Orders */
+.admin-order-number {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.875rem;
+  color: var(--deer-gold);
+  letter-spacing: 0.04em;
+}
+
+.admin-order-status {
+  display: inline-block;
+  padding: 0.2rem 0.625rem;
+  border: 1px solid;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.admin-status-select {
+  padding: 0.375rem 0.625rem;
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  background: var(--deer-bg);
+  font-size: 0.8125rem;
+  color: var(--deer-text);
+  cursor: pointer;
+  outline: none;
+}
+
+/* Members */
+.admin-member-name {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 500;
+}
+
+.admin-role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.625rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.admin-role-badge.admin {
+  background: rgba(197, 151, 109, 0.15);
+  color: var(--deer-gold);
+  border: 1px solid rgba(197, 151, 109, 0.3);
+}
+
+.admin-role-badge.user {
+  background: rgba(138, 138, 138, 0.1);
+  color: var(--deer-sub);
+  border: 1px solid rgba(138, 138, 138, 0.2);
+}
+
+/* 導覽列商店連結 */
+.nav-shop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid rgba(197, 151, 109, 0.35);
+  color: var(--deer-gold);
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-shop-link:hover {
+  background: rgba(197, 151, 109, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   商店頁面 v2 — 黑底圓角設計
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.shop-page-v2 {
+  background-color: #0e0c0b;
+  min-height: 100vh;
+  color: #f0e9df;
+}
+
+/* Hero */
+.shop-hero-v2 {
+  position: relative;
+  padding: 7rem 0 4rem;
+  text-align: center;
+  background: linear-gradient(to bottom, #1a1210 0%, #0e0c0b 100%);
+  border-bottom: 1px solid rgba(197, 151, 109, 0.12);
+}
+
+.shop-hero-v2-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.shop-hero-v2-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 200;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #f0e9df;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+}
+
+.shop-hero-v2-sub {
+  font-size: 0.8125rem;
+  color: rgba(197, 151, 109, 0.7);
+  letter-spacing: 0.12em;
+}
+
+.shop-cart-float {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(197, 151, 109, 0.12);
+  border: 1px solid rgba(197, 151, 109, 0.3);
+  color: var(--deer-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.shop-cart-float:hover {
+  background: rgba(197, 151, 109, 0.2);
+  transform: scale(1.05);
+}
+
+.shop-cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--deer-gold);
+  color: #0e0c0b;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 分類篩選 */
+.shop-filter-v2 {
+  padding: 1.5rem 0;
+  background: #0e0c0b;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.08);
+}
+
+/* sticky 固定分類欄：考慮導覽列 64px 高度 */
+.shop-filter-sticky {
+  position: sticky;
+  top: 64px;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(14, 12, 11, 0.97);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+.shop-filter-v2-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* 下拉選單 */
+.shop-dropdown-wrap {
+  position: relative;
+}
+
+.shop-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: rgba(197, 151, 109, 0.08);
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  border-radius: 4px;
+  color: #f0e9df;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  min-width: 180px;
+  justify-content: space-between;
+}
+
+.shop-dropdown-btn:hover {
+  background: rgba(197, 151, 109, 0.14);
+  border-color: rgba(197, 151, 109, 0.4);
+}
+
+.shop-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 260px;
+  background: #1a1210;
+  border: 1px solid rgba(197, 151, 109, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: dropdownFadeIn 0.2s ease;
+  z-index: 100;
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.shop-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: none;
+  color: rgba(240, 233, 223, 0.7);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+  border-bottom: 1px solid rgba(197, 151, 109, 0.06);
+}
+
+.shop-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.shop-dropdown-item:hover {
+  background: rgba(197, 151, 109, 0.1);
+  color: #f0e9df;
+}
+
+.shop-dropdown-item.active {
+  background: rgba(197, 151, 109, 0.15);
+  color: var(--deer-gold);
+}
+
+.shop-dropdown-emoji {
+  font-size: 1rem;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.shop-dropdown-en {
+  font-size: 0.7rem;
+  color: rgba(197, 151, 109, 0.5);
+  margin-left: auto;
+  letter-spacing: 0.06em;
+}
+
+.shop-count-hint {
+  font-size: 0.75rem;
+  color: rgba(197, 151, 109, 0.45);
+  letter-spacing: 0.06em;
+}
+
+/* 商品網格 */
+.shop-grid-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.shop-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* 商品卡片 */
+.shop-card {
+  background: #161210;
+  border: 1px solid rgba(197, 151, 109, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.3s ease,
+    box-shadow 0.35s ease;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.shop-card.shop-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease,
+    border-color 0.3s ease, box-shadow 0.35s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(197, 151, 109, 0.3);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+/* 圖片 */
+.shop-card-img-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+}
+
+.shop-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.shop-card:hover .shop-card-img {
+  transform: scale(1.05);
+}
+
+.shop-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: rgba(197, 151, 109, 0.3);
+}
+
+/* 放大鏡圖示 */
+.shop-card-zoom {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(10, 8, 7, 0.65);
+  border: 1px solid rgba(197, 151, 109, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(197, 151, 109, 0.8);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.shop-card:hover .shop-card-zoom {
+  opacity: 1;
+}
+
+/* 徽章 */
+.shop-card-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+.shop-card-badge-featured {
+  background: rgba(197, 151, 109, 0.9);
+  color: #0e0c0b;
+}
+
+.shop-card-badge-sale {
+  background: rgba(200, 80, 60, 0.85);
+  color: #fff;
+  top: 0.75rem;
+  left: auto;
+  right: 0.75rem;
+}
+
+/* 資訊區 */
+.shop-card-body {
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.shop-card-tags {
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.shop-card-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  color: rgba(197, 151, 109, 0.7);
+  border-radius: 2px;
+}
+
+.shop-card-name {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: #f0e9df;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.shop-card-desc {
+  font-size: 0.78125rem;
+  color: rgba(240, 233, 223, 0.45);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.shop-card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.shop-card-price {
+  font-size: 1.0625rem;
+  color: var(--deer-gold);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.shop-card-price-original {
+  font-size: 0.8125rem;
+  color: rgba(240, 233, 223, 0.3);
+  text-decoration: line-through;
+}
+
+/* 按鈕組 */
+.shop-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.shop-card-btn-buy {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: var(--deer-gold);
+  color: #0e0c0b;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.shop-card-btn-buy:hover:not(:disabled) {
+  background: #d4a96a;
+  transform: translateY(-1px);
+}
+
+.shop-card-btn-buy:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.shop-card-btn-buy:disabled {
+  background: rgba(197, 151, 109, 0.2);
+  color: rgba(197, 151, 109, 0.4);
+  cursor: not-allowed;
+}
+
+.shop-card-btn-cart {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(197, 151, 109, 0.1);
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  border-radius: 4px;
+  color: var(--deer-gold);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.shop-card-btn-cart:hover:not(:disabled) {
+  background: rgba(197, 151, 109, 0.2);
+  border-color: rgba(197, 151, 109, 0.5);
+  transform: scale(1.05);
+}
+
+.shop-card-btn-cart.added {
+  background: rgba(100, 180, 120, 0.15);
+  border-color: rgba(100, 180, 120, 0.4);
+  color: #6db87a;
+}
+
+.shop-card-btn-cart:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Loading */
+.shop-loading-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 5rem 0;
+  color: rgba(197, 151, 109, 0.5);
+}
+
+.shop-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(197, 151, 109, 0.15);
+  border-top-color: rgba(197, 151, 109, 0.6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty */
+.shop-empty-v2 {
+  text-align: center;
+  padding: 5rem 0;
+  color: rgba(240, 233, 223, 0.3);
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+}
+
+/* 底部 CTA */
+.shop-cta-v2 {
+  text-align: center;
+  padding: 6rem 1.5rem;
+  background: #1a1210;
+  border-top: 1px solid rgba(197, 151, 109, 0.1);
+}
+
+.shop-cta-v2-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 200;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: #f0e9df;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.shop-cta-v2-sub {
+  font-size: 0.875rem;
+  color: rgba(240, 233, 223, 0.4);
+  letter-spacing: 0.06em;
+  margin-bottom: 2.5rem;
+}
+
+/* 響應式 */
+@media (max-width: 640px) {
+  .shop-grid-v2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+  }
+  .shop-card-body {
+    padding: 1rem;
+  }
+  .shop-card-name {
+    font-size: 0.875rem;
+  }
+  .shop-card-desc {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .shop-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   商品詳情頁 /shop/:id
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.product-detail-page {
+  background: #0e0c0b;
+  min-height: 100vh;
+  color: #f0e9df;
+  padding-bottom: 5rem;
+}
+
+.product-detail-loading,
+.product-detail-notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 60vh;
+  color: rgba(197, 151, 109, 0.5);
+  font-size: 0.875rem;
+}
+
+.product-detail-back {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 0;
+}
+
+.product-detail-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(197, 151, 109, 0.6);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.product-detail-back-btn:hover {
+  color: var(--deer-gold);
+}
+
+.product-detail-layout {
+  max-width: 1100px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* 圖片欄 */
+.product-detail-img-col {
+  position: sticky;
+  top: 5rem;
+}
+
+.product-detail-img-wrap {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+}
+
+.product-detail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.product-detail-img-wrap:hover .product-detail-img {
+  transform: scale(1.03);
+}
+
+.product-detail-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  color: rgba(197, 151, 109, 0.2);
+}
+
+.product-detail-badge-sale {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(200, 80, 60, 0.85);
+  color: #fff;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  border-radius: 3px;
+}
+
+.product-detail-badge-featured {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(197, 151, 109, 0.9);
+  color: #0e0c0b;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  border-radius: 3px;
+}
+
+/* 資訊欄 */
+.product-detail-info-col {
+  padding-top: 0.5rem;
+}
+
+.product-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 1.25rem;
+}
+
+.product-detail-name {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 200;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: #f0e9df;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.product-detail-stars {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-stars-label {
+  font-size: 0.75rem;
+  color: rgba(197, 151, 109, 0.5);
+  letter-spacing: 0.06em;
+  margin-left: 0.5rem;
+}
+
+.product-detail-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-price {
+  font-size: 1.75rem;
+  color: var(--deer-gold);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.product-detail-price-original {
+  font-size: 1rem;
+  color: rgba(240, 233, 223, 0.3);
+  text-decoration: line-through;
+}
+
+.product-detail-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(197, 151, 109, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-desc {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 300;
+  font-size: 0.9375rem;
+  color: rgba(240, 233, 223, 0.65);
+  line-height: 2;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-stock-ok {
+  font-size: 0.8125rem;
+  color: rgba(100, 200, 120, 0.7);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-stock-out {
+  font-size: 0.8125rem;
+  color: rgba(200, 80, 60, 0.7);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+/* 數量控制 */
+.product-detail-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-qty-label {
+  font-size: 0.8125rem;
+  color: rgba(240, 233, 223, 0.5);
+  letter-spacing: 0.06em;
+  width: 2.5rem;
+}
+
+.product-detail-qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid rgba(197, 151, 109, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.product-detail-qty-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(197, 151, 109, 0.06);
+  border: none;
+  color: rgba(197, 151, 109, 0.7);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.product-detail-qty-btn:hover {
+  background: rgba(197, 151, 109, 0.14);
+  color: var(--deer-gold);
+}
+
+.product-detail-qty-num {
+  width: 48px;
+  text-align: center;
+  font-size: 0.9375rem;
+  color: #f0e9df;
+  border-left: 1px solid rgba(197, 151, 109, 0.12);
+  border-right: 1px solid rgba(197, 151, 109, 0.12);
+}
+
+/* 按鈕組 */
+.product-detail-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.product-detail-btn-buy {
+  padding: 0.875rem 1.5rem;
+  background: var(--deer-gold);
+  color: #0e0c0b;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.product-detail-btn-buy:hover:not(:disabled) {
+  background: #d4a96a;
+  transform: translateY(-1px);
+}
+
+.product-detail-btn-buy:disabled {
+  background: rgba(197, 151, 109, 0.2);
+  color: rgba(197, 151, 109, 0.4);
+  cursor: not-allowed;
+}
+
+.product-detail-btn-cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(197, 151, 109, 0.3);
+  border-radius: 4px;
+  color: rgba(197, 151, 109, 0.8);
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.product-detail-btn-cart:hover:not(:disabled) {
+  background: rgba(197, 151, 109, 0.08);
+  border-color: rgba(197, 151, 109, 0.5);
+  color: var(--deer-gold);
+}
+
+.product-detail-btn-cart.added {
+  background: rgba(100, 180, 120, 0.1);
+  border-color: rgba(100, 180, 120, 0.4);
+  color: #6db87a;
+}
+
+.product-detail-btn-cart:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 備注 */
+.product-detail-note {
+  border-top: 1px solid rgba(197, 151, 109, 0.1);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-detail-note p {
+  font-size: 0.75rem;
+  color: rgba(240, 233, 223, 0.3);
+  letter-spacing: 0.04em;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .product-detail-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .product-detail-img-col {
+    position: static;
+  }
+}
+
+/* ── CRÈM 雙欄響應式 ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .crem-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+}
+
+/* ── CRÈM 步驟手機版：2欄排列 ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .crem-steps-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    max-width: 100% !important;
+  }
+  .crem-step-item {
+    padding: 2rem 1.25rem !important;
+  }
+  .crem-step-num {
+    font-size: 1.75rem !important;
+  }
+  .crem-step-label {
+    font-size: 1rem !important;
+  }
+  .crem-step-desc {
+    font-size: 0.8125rem !important;
+    line-height: 1.8 !important;
+    color: rgba(240,233,223,0.55) !important;
+  }
+  /* 圖片上的文字在手機版隱藏 */
+  .crem-img-overlay-text {
+    display: none !important;
+  }
+  /* 手機版圖片下方文字區塊顯示 */
+  .crem-mobile-title {
+    display: block !important;
+  }
+}
+@media (min-width: 641px) {
+  /* 電腦版隱藏手機版文字區塊 */
+  .crem-mobile-title {
+    display: none !important;
+  }
+}
+
+/* ── CRÈM 說明文字手機版優化 ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .crem-collab-sub {
+    display: block;
+    font-size: 0.8rem !important;
+    color: rgba(240,233,223,0.35) !important;
+    margin-top: 0.5rem;
+  }
+}
+
+/* ── Awards 獎項排版：手機版上圖下文 ─────────────────────────────── */
+.awards-item-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.awards-item-grid > div:first-child {
+  width: 100% !important;
+  max-width: 280px;
+  margin: 0 auto 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .awards-item-grid {
+    grid-template-columns: auto 1fr !important;
+  }
+
+  .awards-item-grid > div:first-child {
+    width: clamp(160px, 25vw, 280px) !important;
+    margin: 0;
+  }
+}
+
+/* ── CRÈM 預訂流程、痛點、關於區塊 ────────────────────────────────────────────────── */
+
+/* 痛點格子 */
+.crem-pain-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.crem-pain-item {
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(197, 151, 109, 0.15);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.crem-pain-x {
+  color: rgba(197, 151, 109, 0.5);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.crem-pain-text {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 300;
+  font-size: clamp(0.75rem, 2.2vw, 0.875rem);
+  color: rgba(240, 233, 223, 0.55);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
+/* S 型流程圖 */
+.crem-s-flow {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.crem-s-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(197, 151, 109, 0.1);
+  border: 1px solid rgba(197, 151, 109, 0.1);
+}
+
+.crem-s-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1.5rem;
+  background: rgba(10, 8, 7, 0.6);
+  transition: background 0.3s ease;
+}
+
+.crem-s-card:hover {
+  background: rgba(197, 151, 109, 0.04);
+}
+
+.crem-s-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(197, 151, 109, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  background: rgba(197, 151, 109, 0.05);
+}
+
+/* S 型曲線連接區 */
+.crem-s-curve-wrap {
+  padding: 0 1rem;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.crem-s-curve-svg {
+  width: 100%;
+  height: 80px;
+}
+
+/* 手機版自適應 */
+@media (max-width: 767px) {
+  .crem-pain-grid {
+    grid-template-columns: 1fr;
+  }
+  .crem-s-row {
+    grid-template-columns: 1fr;
+  }
+  .crem-s-curve-wrap {
+    display: none;
+  }
+}
+
+/* ── 交通與停車頁面 Transport ─────────────────────────────────────────────────── */
+.transport-card-btn:hover {
+  border-color: rgba(197, 151, 109, 0.35) !important;
+  background: rgba(197, 151, 109, 0.04) !important;
+}
+
+/* 桌機版：4 欄排列 */
+@media (min-width: 768px) {
+  .transport-overview-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* 停車卡片 hover */
+.parking-card:hover {
+  border-color: rgba(197, 151, 109, 0.3) !important;
+}
+
+/* 桌機版停車卡片：3 欄 */
+@media (min-width: 768px) {
+  .parking-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* 決策引導 hover */
+.decision-row:hover {
+  padding-left: 0.5rem !important;
+}
+.decision-row:hover p:last-child {
+  color: var(--deer-accent) !important;
+}
+
+/* 手機底部 Sticky 快速按鈕 */
+.transport-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 0;
+  z-index: 100;
+  background: var(--deer-dark);
+  border-top: 1px solid rgba(197, 151, 109, 0.2);
+  padding: 0.625rem 0.75rem;
+  padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
+}
+
+.transport-sticky-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  font-weight: 300;
+  cursor: pointer;
+  border: none;
+  padding: 0.625rem 0.25rem;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.transport-sticky-primary {
+  background: var(--deer-gold);
+  color: #1A1210;
+  margin-right: 0.5rem;
+}
+
+.transport-sticky-primary:hover {
+  background: #D4A97D;
+  color: #1A1210;
+}
+
+.transport-sticky-secondary {
+  background: transparent;
+  color: rgba(240, 233, 223, 0.7);
+  border: 1px solid rgba(197, 151, 109, 0.25);
+  margin-left: 0.25rem;
+}
+
+.transport-sticky-secondary:hover {
+  background: rgba(197, 151, 109, 0.08);
+  color: var(--deer-dark-text);
+}
+
+/* 桌機版隱藏 Sticky Bar（不需要） */
+@media (min-width: 768px) {
+  .transport-sticky-bar {
+    display: none;
+  }
+}
+
+/* ── LINE 客服懸浮按鈕脈衝動畫 ─────────────────────────────────────────── */
+/* 雷達波：從按鈕本體大小向外擴散到 2 倍，同時透明度從 1 降到 0 */
+@keyframes line-radar {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ── CRÈM 頁面：輪播 CTA 按鈕（只在手機版顯示）── */
+.crem-carousel-cta {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .crem-carousel-cta {
+    display: none;
+  }
+  /* 電腦版輪播箭頭顯示 */
+  .crem-carousel-arrow {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 767px) {
+  /* 手機版輪播箭頭隱藏（改用滑動） */
+  .crem-carousel-arrow {
+    display: none !important;
+  }
+  /* 手機版輪播外層移除 padding（箭頭已隱藏） */
+  .crem-carousel-outer {
+    padding: 0 !important;
+  }
+}
