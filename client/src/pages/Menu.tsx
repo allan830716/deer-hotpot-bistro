@@ -458,8 +458,14 @@ export default function Menu() {
     isMouseDragging.current = false;
   };
 
-  const offsetPx = containerWidth > 0 ? -(safeIndex * containerWidth) + dragDelta : 0;
-  const trackTranslate = `translateX(${offsetPx}px)`;
+  // 用百分比計算 translate，不依賴 JS 量測容器寬度（避免初始化延遲導致 offsetPx=0）
+  // 軌道總寬 = total * 100%，每張圖片佔 (100/total)%
+  // 所以跳到第 safeIndex 張需要移動 safeIndex * (100/total)% 的軌道寬度
+  // 但軌道寬是容器的 total 倍，所以用 calc() 混合 px drag delta
+  const slidePercent = safeIndex * (100 / total); // 佔軌道寬度的百分比
+  const trackTranslate = dragDelta !== 0
+    ? `translateX(calc(-${slidePercent}% + ${dragDelta}px))`
+    : `translateX(-${slidePercent}%)`;
 
   return (
     <main style={{ paddingTop: "80px", backgroundColor: "var(--deer-dark)", minHeight: "100vh" }}>
