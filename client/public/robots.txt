@@ -1,30 +1,51 @@
 # robots.txt for https://deersbistro.tw
 # 初衷小鹿 Deer's Hotpot Bistro
+# Last updated: 2026-06-22
 
+# ── 允許所有爬蟲完整抓取 ──────────────────────────────────────────────────
 User-agent: *
 Allow: /
 
-# 禁止爬取後台與內部資源（如有需要再開啟）
-# Disallow: /admin/
-# Disallow: /api/
-# Disallow: /*.json$
-
-# Sitemap location
-Sitemap: https://deersbistro.tw/sitemap.xml
-
-# 允許主流爬蟲完整抓取
+# ── Google ────────────────────────────────────────────────────────────────
 User-agent: Googlebot
 Allow: /
 
 User-agent: Googlebot-Image
 Allow: /
 
+# ── Bing ──────────────────────────────────────────────────────────────────
 User-agent: bingbot
 Allow: /
 
-# 封鎖無價值的 AI 爬蟲（可選，依需求決定是否保留）
+# ── OpenAI / ChatGPT ──────────────────────────────────────────────────────
+# 允許 ChatGPT 爬取，讓初衷小鹿出現在 AI 推薦結果中（GEO 優化）
 User-agent: GPTBot
-Disallow: /
+Allow: /
 
-User-agent: CCBot
-Disallow: /
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# ── Google AI / Gemini ────────────────────────────────────────────────────
+User-agent: Google-Extended
+Allow: /
+
+# ── Perplexity ────────────────────────────────────────────────────────────
+User-agent: PerplexityBot
+Allow: /
+
+# ── Anthropic / Claude ────────────────────────────────────────────────────
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# ── Meta AI ───────────────────────────────────────────────────────────────
+User-agent: FacebookBot
+Allow: /
+
+# ── Sitemap ───────────────────────────────────────────────────────────────
+Sitemap: https://deersbistro.tw/sitemap.xml
