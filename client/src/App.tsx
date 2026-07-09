@@ -24,6 +24,70 @@ import NotFound from "./pages/NotFound";
 import { ShoppingCart, Globe } from "lucide-react";
 import { useLanguage, type Language } from "./contexts/LanguageContext";
 
+// ── 颱風公告跑馬燈 ──────────────────────────────────────────────────────────
+function AnnouncementBanner() {
+  const [visible, setVisible] = React.useState(true);
+  if (!visible) return null;
+  const msg = "📣 強颱巴威來臨，7/10 營業時間將於今晚 7/9，19:00–22:00 公告";
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 300,
+        backgroundColor: "rgba(139,69,19,0.97)",
+        borderBottom: "1px solid rgba(197,151,109,0.4)",
+        height: "36px",
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          whiteSpace: "nowrap",
+          animation: "marquee 22s linear infinite",
+          fontSize: "0.8rem",
+          letterSpacing: "0.06em",
+          color: "#FFF8EE",
+          fontFamily: "'Noto Serif TC', serif",
+          fontWeight: 300,
+          paddingRight: "6rem",
+        }}
+      >
+        {msg}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{msg}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{msg}
+      </div>
+      <button
+        onClick={() => setVisible(false)}
+        style={{
+          position: "absolute",
+          right: "0.75rem",
+          background: "transparent",
+          border: "none",
+          color: "rgba(255,248,238,0.7)",
+          cursor: "pointer",
+          fontSize: "1rem",
+          lineHeight: 1,
+          padding: "0.25rem 0.5rem",
+        }}
+        aria-label="關閉公告"
+      >
+        ✕
+      </button>
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 const NAV_LINK_KEYS = [
   { href: "/", key: "nav.home" },
   { href: "/brand", key: "nav.brand" },
@@ -220,7 +284,7 @@ function Navbar() {
       <header
         className="hidden md:flex"
         style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+          position: "fixed", top: "36px", left: 0, right: 0, zIndex: 200,
           height: "64px",
           alignItems: "center",
           backgroundColor: scrolled ? "rgba(26,18,16,0.97)" : "rgba(26,18,16,0.88)",
@@ -317,7 +381,7 @@ function Navbar() {
       <div
         className="md:hidden"
         style={{
-          position: "fixed", top: 0, left: 0, right: 0,
+          position: "fixed", top: "36px", left: 0, right: 0,
           height: "64px",
           zIndex: 205,
           backgroundColor: "rgba(10,8,7,0.72)",
@@ -333,7 +397,7 @@ function Navbar() {
           alt="初衷小鹿"
           className="md:hidden"
           style={{
-            position: "fixed", top: "6px", left: "1rem",
+            position: "fixed", top: "42px", left: "1rem",
             zIndex: 210, height: "52px", width: "auto",
             filter: "brightness(1.05)", cursor: "pointer",
           }}
@@ -345,7 +409,7 @@ function Navbar() {
         className="md:hidden"
         onClick={() => setMenuOpen(!menuOpen)}
         style={{
-          position: "fixed", top: "1rem", right: "1.25rem",
+          position: "fixed", top: "calc(36px + 1rem)", right: "1.25rem",
           zIndex: 210, background: "none", border: "none",
           cursor: "pointer", padding: "0.5rem",
         }}
@@ -976,6 +1040,7 @@ export default function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
             <Toaster />
+            <AnnouncementBanner />
             <Navbar />
             <Router />
             <Footer />
