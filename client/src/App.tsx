@@ -28,7 +28,7 @@ import { useLanguage, type Language } from "./contexts/LanguageContext";
 function AnnouncementBanner() {
   const [visible, setVisible] = React.useState(true);
   if (!visible) return null;
-  const msg = "7/10（五）正常營業，訂位與用餐時段皆照常進行。雨天適合慢慢吃鍋，把時間留給重要的人。";
+  const msg = "7/11（六）晚餐正常營業。午餐公休一日";
   return (
     <div
       style={{
