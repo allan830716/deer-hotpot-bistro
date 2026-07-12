@@ -24,70 +24,6 @@ import NotFound from "./pages/NotFound";
 import { ShoppingCart, Globe } from "lucide-react";
 import { useLanguage, type Language } from "./contexts/LanguageContext";
 
-// ── 颱風公告跑馬燈 ──────────────────────────────────────────────────────────
-function AnnouncementBanner() {
-  const [visible, setVisible] = React.useState(true);
-  if (!visible) return null;
-  const msg = "7/11（六）晚餐正常營業。午餐公休一日";
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 300,
-        backgroundColor: "rgba(139,69,19,0.97)",
-        borderBottom: "1px solid rgba(197,151,109,0.4)",
-        height: "36px",
-        display: "flex",
-        alignItems: "center",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          whiteSpace: "nowrap",
-          animation: "marquee 22s linear infinite",
-          fontSize: "0.8rem",
-          letterSpacing: "0.06em",
-          color: "#FFF8EE",
-          fontFamily: "'Noto Serif TC', serif",
-          fontWeight: 300,
-          paddingRight: "6rem",
-        }}
-      >
-        {msg}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{msg}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{msg}
-      </div>
-      <button
-        onClick={() => setVisible(false)}
-        style={{
-          position: "absolute",
-          right: "0.75rem",
-          background: "transparent",
-          border: "none",
-          color: "rgba(255,248,238,0.7)",
-          cursor: "pointer",
-          fontSize: "1rem",
-          lineHeight: 1,
-          padding: "0.25rem 0.5rem",
-        }}
-        aria-label="關閉公告"
-      >
-        ✕
-      </button>
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
-        }
-      `}</style>
-    </div>
-  );
-}
-
 const NAV_LINK_KEYS = [
   { href: "/", key: "nav.home" },
   { href: "/brand", key: "nav.brand" },
@@ -1040,7 +976,6 @@ export default function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
             <Toaster />
-            <AnnouncementBanner />
             <Navbar />
             <Router />
             <Footer />
