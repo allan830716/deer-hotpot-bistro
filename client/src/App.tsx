@@ -220,7 +220,7 @@ function Navbar() {
       <header
         className="hidden md:flex"
         style={{
-          position: "fixed", top: "36px", left: 0, right: 0, zIndex: 200,
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
           height: "64px",
           alignItems: "center",
           backgroundColor: scrolled ? "rgba(26,18,16,0.97)" : "rgba(26,18,16,0.88)",
@@ -317,7 +317,7 @@ function Navbar() {
       <div
         className="md:hidden"
         style={{
-          position: "fixed", top: "36px", left: 0, right: 0,
+          position: "fixed", top: 0, left: 0, right: 0,
           height: "64px",
           zIndex: 205,
           backgroundColor: "rgba(10,8,7,0.72)",
@@ -333,7 +333,7 @@ function Navbar() {
           alt="初衷小鹿"
           className="md:hidden"
           style={{
-            position: "fixed", top: "42px", left: "1rem",
+            position: "fixed", top: "6px", left: "1rem",
             zIndex: 210, height: "52px", width: "auto",
             filter: "brightness(1.05)", cursor: "pointer",
           }}
@@ -345,7 +345,7 @@ function Navbar() {
         className="md:hidden"
         onClick={() => setMenuOpen(!menuOpen)}
         style={{
-          position: "fixed", top: "calc(36px + 1rem)", right: "1.25rem",
+          position: "fixed", top: "1rem", right: "1.25rem",
           zIndex: 210, background: "none", border: "none",
           cursor: "pointer", padding: "0.5rem",
         }}
