@@ -7,6 +7,7 @@
 
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import googleReviews from "@/data/googleReviews.json";
 
 // ── CDN 圖片 ────────────────────────────────────────────────────────────────
 const AWARDS_HERO = "/images/triangler_DeersHotpotBistro19_a3f32aa8.jpg";
@@ -105,7 +106,7 @@ export default function Awards() {
   const ref4 = useFadeIn(0.1);
   const ref5 = useFadeIn(0.1);
   const ref6 = useFadeIn(0.1);
-  const placeData = { rating: 4.6, totalRatings: 1693 };
+  const placeData = { rating: googleReviews.rating, totalRatings: googleReviews.totalRatings };
   const MEDIA_LINKS_I18N = [
     {
       pub: "Vogue Taiwan",

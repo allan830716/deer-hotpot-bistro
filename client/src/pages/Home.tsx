@@ -15,6 +15,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import googleReviews from "@/data/googleReviews.json";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -406,8 +407,8 @@ function TrustSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const ratingRef  = useRef<HTMLSpanElement>(null);
   const { t } = useLanguage();
-  const rating = 4.6;
-  const totalRatings = 1693;
+  const rating = googleReviews.rating;
+  const totalRatings = googleReviews.totalRatings;
   const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
 
   useEffect(() => {

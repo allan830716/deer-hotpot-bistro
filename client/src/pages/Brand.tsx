@@ -5,6 +5,7 @@
 
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import googleReviews from "@/data/googleReviews.json";
 
 const HERO_IMG = "/images/space_J_brand_3b560a56.jpg";
 
@@ -98,8 +99,8 @@ export default function Brand() {
   const commitmentsRef = useFadeIn(0);
   const quoteRef       = useFadeIn(0);
 
-  const liveRating = 4.6;
-  const liveTotal  = 1693;
+  const liveRating = googleReviews.rating;
+  const liveTotal  = googleReviews.totalRatings;
   const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
 
   const BRAND_COMMITMENTS: CommitmentItem[] = [
