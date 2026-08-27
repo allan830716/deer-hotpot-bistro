@@ -99,7 +99,7 @@ export default function Brand() {
   const quoteRef       = useFadeIn(0);
 
   const liveRating = 4.6;
-  const liveTotal  = 1593;
+  const liveTotal  = 1693;
   const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
 
   const BRAND_COMMITMENTS: CommitmentItem[] = [

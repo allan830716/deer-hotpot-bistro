@@ -105,7 +105,7 @@ export default function Awards() {
   const ref4 = useFadeIn(0.1);
   const ref5 = useFadeIn(0.1);
   const ref6 = useFadeIn(0.1);
-  const placeData = { rating: 4.6, totalRatings: 1593 };
+  const placeData = { rating: 4.6, totalRatings: 1693 };
   const MEDIA_LINKS_I18N = [
     {
       pub: "Vogue Taiwan",

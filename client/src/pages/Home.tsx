@@ -407,7 +407,7 @@ function TrustSection() {
   const ratingRef  = useRef<HTMLSpanElement>(null);
   const { t } = useLanguage();
   const rating = 4.6;
-  const totalRatings = 1593;
+  const totalRatings = 1693;
   const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/aWRwfie8rDpdxK277";
 
   useEffect(() => {
